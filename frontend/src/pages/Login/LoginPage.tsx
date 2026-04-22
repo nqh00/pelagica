@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Page from '../Page';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -59,6 +59,7 @@ const LoginPage = () => {
     const [quickConnectError, setQuickConnectError] = useState<string | null>(null);
     const [isPolling, setIsPolling] = useState(false);
     const [quickConnectApproved, setQuickConnectApproved] = useState(false);
+    const initiatingQuickConnectRef = useRef(false);
 
     const quickConnectStatus = useQuickConnectStatus(
         getServerUrl() || '',
@@ -113,7 +114,8 @@ const LoginPage = () => {
             console.error('Quick Connect initiation error:', error);
             setQuickConnectError(t('quick_connect_failed'));
         }
-    }, [quickConnectInitiate, t]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [t]);
 
     const handleQuickConnectAuthenticated = useCallback(async () => {
         if (!quickConnectSecret || quickConnectApproved) return;
@@ -137,8 +139,11 @@ const LoginPage = () => {
     }, [quickConnectSecret, quickConnectAuthenticate, navigate, t, quickConnectApproved]);
 
     useEffect(() => {
-        if (step === 'quickconnect' && !quickConnectCode) {
-            initiateQuickConnect();
+        if (step === 'quickconnect' && !quickConnectCode && !initiatingQuickConnectRef.current) {
+            initiatingQuickConnectRef.current = true;
+            initiateQuickConnect().finally(() => {
+                initiatingQuickConnectRef.current = false;
+            });
         }
     }, [quickConnectCode, step, initiateQuickConnect]);
 
@@ -419,6 +424,7 @@ const LoginPage = () => {
                                 setQuickConnectError(null);
                                 setIsPolling(false);
                                 setQuickConnectApproved(false);
+                                initiatingQuickConnectRef.current = false;
                             }}
                             disabled={loggingIn}
                         >

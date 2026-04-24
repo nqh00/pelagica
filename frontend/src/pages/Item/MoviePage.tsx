@@ -118,7 +118,7 @@ const MoviePage = ({ item, config }: MoviePageProps) => {
                     <DescriptionItem
                         label={t('studios')}
                         items={studios.map((studio) => ({
-                            link: null,
+                            link: `/item/${studio.Id}`,
                             name: studio.Name!,
                         }))}
                     />

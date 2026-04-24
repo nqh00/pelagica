@@ -24,7 +24,7 @@ const StudioDisplay = ({
 
     return (
         <Link
-            to={`/library?library=${item.id}`}
+            to={`/item/${item.id}`}
             key={item.id}
             className={'group w-min min-w-48 lg:min-w-64 2xl:min-w-80'}
         >

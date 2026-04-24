@@ -14,6 +14,7 @@ import BoxSetPage from './BoxSetPage';
 import MusicAlbumPage from './MusicAlbumPage';
 import PlaylistPage from './PlaylistPage';
 import GenrePage from './GenrePage';
+import StudioPage from './StudioPage';
 
 const ItemPageSkeleton = memo(() => {
     return (
@@ -128,6 +129,8 @@ const ItemPage = () => {
                             return <PlaylistPage item={item} config={config} />;
                         case 'Genre':
                             return <GenrePage item={item} />;
+                        case 'Studio':
+                            return <StudioPage item={item} />;
                         default:
                             return (
                                 <p>

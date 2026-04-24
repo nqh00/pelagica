@@ -160,7 +160,7 @@ const SeriesPage = ({ item, config }: SeriesPageProps) => {
                     <DescriptionItem
                         label={t('studios')}
                         items={studios.map((studio) => ({
-                            link: null,
+                            link: `/item/${studio.Id}`,
                             name: studio.Name!,
                         }))}
                     />

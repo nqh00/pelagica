@@ -342,3 +342,21 @@ export function getItemImageUrl(
         return '';
     }
 }
+
+export function getDownloadurl(itemId: string) {
+    try {
+        const server = getServerUrl();
+        const token = getAccessToken();
+
+        if (!server || !token) return '';
+
+        const url = new URL(server);
+        url.pathname = `/Items/${itemId}/Download`;
+        url.searchParams.append('MediaSourceId', itemId);
+        url.searchParams.append('ApiKey', token);
+
+        return url.toString();
+    } catch {
+        return '';
+    }
+}

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useTranslation } from 'react-i18next';
 import Page from '../Page';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -626,6 +625,7 @@ const SettingsPage = () => {
     const [watchedStateBadgeSearch, setWatchedStateBadgeSearch] = useState(false);
     const [episodeDisplay, setEpisodeDisplay] = useState<'grid' | 'row'>('row');
     const [showWatchlistButton, setShowWatchlistButton] = useState(false);
+    const [showDownloadButton, setShowDownloadButton] = useState(false);
     const [favoriteButton, setFavoriteButton] = useState<string[]>([]);
     const [detailBadges, setDetailBadges] = useState<string[]>([]);
     const [homeScreenSections, setHomeScreenSections] = useState<HomeScreenSection[]>([]);
@@ -673,6 +673,7 @@ const SettingsPage = () => {
         setWatchedStateBadgeSearch(config?.watchedStateBadgeSearch || false);
         setEpisodeDisplay(config?.itemPage?.episodeDisplay || 'row');
         setShowWatchlistButton(config?.itemPage?.showWatchlistButton || false);
+        setShowDownloadButton(config?.itemPage?.showDownloadButton || false);
         setFavoriteButton(config?.itemPage?.favoriteButton || []);
         setDetailBadges(config?.itemPage?.detailBadges || []);
         setHomeScreenSections(config?.homeScreenSections || []);
@@ -691,6 +692,7 @@ const SettingsPage = () => {
         config?.watchedStateBadgeSearch,
         config?.itemPage?.episodeDisplay,
         config?.itemPage?.showWatchlistButton,
+        config?.itemPage?.showDownloadButton,
         config?.itemPage?.favoriteButton,
         config?.itemPage?.detailBadges,
         config?.homeScreenSections,
@@ -778,6 +780,7 @@ const SettingsPage = () => {
                         ...config.itemPage,
                         episodeDisplay,
                         showWatchlistButton,
+                        showDownloadButton,
                         favoriteButton:
                             favoriteButton.length > 0 ? (favoriteButton as BaseItemKind[]) : [],
                         detailBadges:
@@ -1156,6 +1159,11 @@ const SettingsPage = () => {
                         label={t('show_watchlist_button_label')}
                         checked={showWatchlistButton}
                         onChange={setShowWatchlistButton}
+                    />
+                    <BooleanInput
+                        label={t('show_download_button_label')}
+                        checked={showDownloadButton}
+                        onChange={setShowDownloadButton}
                     />
                     <MultiSelectInput
                         label={t('favorite_button_types_label')}

@@ -24,6 +24,7 @@ import FavoriteButton from '../../components/FavoriteButton';
 import { getUserId } from '@/utils/localstorageCredentials';
 import PlayStateButton from '../../components/PlayStateButton';
 import ItemAdminButton from '@/components/ItemAdminButton';
+import ItemDownloadButton from '../../components/ItemDownloadButton';
 
 interface EpisodePageProps {
     item: BaseItemDto;
@@ -128,6 +129,10 @@ const EpisodePage = ({ item, config }: EpisodePageProps) => {
                             }
                         />
                         <PlayStateButton itemId={item.Id || ''} userId={getUserId() || ''} />
+                        <ItemDownloadButton
+                            item={item}
+                            showDownloadButton={config.itemPage?.showDownloadButton}
+                        />
                         <MediaInfoDialog streams={item.MediaStreams || []} />
                         <ItemAdminButton item={item} />
                     </div>

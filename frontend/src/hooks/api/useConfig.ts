@@ -186,6 +186,8 @@ export interface ItemPageSettings {
     detailBadges?: DetailBadge[];
     /** The item types to show the favorite button for. Empty array means no favorite button */
     favoriteButton?: BaseItemKind[];
+    /** Whether to show the download button on item pages */
+    showDownloadButton?: boolean;
     /** Whether to show the watchlist button to add items to the kefintweaks watchlist */
     showWatchlistButton?: boolean;
 }
@@ -235,6 +237,7 @@ const DEFAULT_ITEM_PAGE_SETTINGS: ItemPageSettings = {
     detailBadges: ['ReleaseYear', 'CommunityRating', 'AgeRating', 'EpisodeNumber'],
     favoriteButton: ['Movie', 'Series'],
     showWatchlistButton: true,
+    showDownloadButton: true,
 };
 
 const DEFAULT_CONFIG: AppConfig = {

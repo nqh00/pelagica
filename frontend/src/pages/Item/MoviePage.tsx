@@ -19,6 +19,7 @@ import { getUserId } from '@/utils/localstorageCredentials';
 import ItemAdminButton from '@/components/ItemAdminButton';
 import { useState } from 'react';
 import { TrailerButton } from '../../components/TrailerButton';
+import ItemDownloadButton from '../../components/ItemDownloadButton';
 
 interface MoviePageProps {
     item: BaseItemDto;
@@ -88,6 +89,10 @@ const MoviePage = ({ item, config }: MoviePageProps) => {
                             showWatchlistButton={config.itemPage?.showWatchlistButton}
                         />
                         <PlayStateButton itemId={item.Id || ''} userId={getUserId() || ''} />
+                        <ItemDownloadButton
+                            item={item}
+                            showDownloadButton={config.itemPage?.showDownloadButton}
+                        />
                         <MediaInfoDialog streams={item.MediaStreams || []} />
                         <ItemAdminButton item={item} />
                     </div>

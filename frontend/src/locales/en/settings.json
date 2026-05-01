@@ -137,5 +137,6 @@
     "link_icon_label": "Icon",
     "link_icon_placeholder": "Pick an icon",
     "link_icon_search_placeholder": "Search icons...",
-    "section_type_studios": "Studios"
+    "section_type_studios": "Studios",
+    "show_download_button_label": "Show Download Button"
 }

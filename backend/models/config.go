@@ -60,6 +60,7 @@ type HomeScreenSection struct {
 type ItemPageSettings struct {
 	DetailBadges        []DetailBadge  `json:"detailBadges,omitempty"`
 	EpisodeDisplay      EpisodeDisplay `json:"episodeDisplay,omitempty"`
+	ShowDownloadButton  *bool          `json:"showDownloadButton,omitempty"`
 	FavoriteButton      []BaseItemKind `json:"favoriteButton"`
 	ShowWatchlistButton *bool          `json:"showWatchlistButton,omitempty"`
 	DeleteButton        []BaseItemKind `json:"deleteButton,omitempty"`

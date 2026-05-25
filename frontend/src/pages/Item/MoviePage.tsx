@@ -2,15 +2,13 @@ import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import BaseMediaPage from './BaseMediaPage';
 import DescriptionItem from './DescriptionItem';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
-import { ImageOff, Play, ChevronDown, Check } from 'lucide-react';
+import { ImageOff } from 'lucide-react';
 import PeopleRow from './PeopleRow';
-import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { Skeleton } from '@/components/ui/skeleton';
 import MoreLikeThisRow from './MoreLikeThisRow';
 import type { AppConfig } from '@/hooks/api/useConfig';
 import DetailBadges from './DetailBadges';
-import { Link } from 'react-router';
 import MediaInfoDialog from '../../components/MediaInfoDialog';
 import FavoriteButton from '../../components/FavoriteButton';
 import WatchListButton from '../../components/WatchlistButton';
@@ -20,6 +18,7 @@ import ItemAdminButton from '@/components/ItemAdminButton';
 import { useState } from 'react';
 import { TrailerButton } from '../../components/TrailerButton';
 import ItemDownloadButton from '../../components/ItemDownloadButton';
+import SourcePickerButton from '@/components/SourcePickerButton';
 
 interface MoviePageProps {
     item: BaseItemDto;
@@ -29,8 +28,6 @@ interface MoviePageProps {
 const MoviePage = ({ item, config }: MoviePageProps) => {
     const { t } = useTranslation('item');
     const [postersFailed, setPostersFailed] = useState(false);
-    const [selectedSource, setSelectedSource] = useState(item.MediaSources?.[0]);
-    const [sourcePickerOpen, setSourcePickerOpen] = useState(false);
 
     const writers =
         item.People?.filter((person) => person.Type === 'Writer').filter((person) => person.Name) ||
@@ -73,39 +70,13 @@ const MoviePage = ({ item, config }: MoviePageProps) => {
                     <h2 className="text-4xl sm:text-5xl font-bold mt-2">{item.Name}</h2>
                     <DetailBadges item={item} appConfig={config} />
                     <div className="mt-1 flex items-center gap-2">
-                        <div className="relative inline-flex">
-                            <Button className={item.MediaSources && item.MediaSources.length > 1 ? 'rounded-r-none w-min' : 'w-min'} asChild>
-                                <Link to={`/play/${selectedSource?.Id ?? item.Id}`}>
-                                    <Play />
-                                    {isCurrentlyPlaying ? t('resume') : t('play')}
-                                </Link>
-                            </Button>
-                            {item.MediaSources && item.MediaSources.length > 1 && (
-                                <>
-                                    <div className="w-px bg-black/20 self-stretch" />
-                                    <Button className="rounded-l-none px-2" onClick={() => setSourcePickerOpen(o => !o)}>
-                                        <ChevronDown className="h-4 w-4" />
-                                    </Button>
-                                    {sourcePickerOpen && (
-                                        <div className="absolute top-full left-0 mt-1 z-50 min-w-64 rounded-lg border bg-popover shadow-md py-1">
-                                            {item.MediaSources.map(src => (
-                                                <button
-                                                    key={src.Id}
-                                                    className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent"
-                                                    onClick={() => { setSelectedSource(src); setSourcePickerOpen(false); }}
-                                                >
-                                                    <Check className={`h-4 w-4 shrink-0 ${src.Id === selectedSource?.Id ? 'opacity-100' : 'opacity-0'}`} />
-                                                    <span className="flex-1 text-left truncate">{src.Name}</span>
-                                                    <span className="text-xs text-muted-foreground shrink-0">
-                                                        {src.Size ? `${(src.Size / 1e9).toFixed(1)} GB` : null}
-                                                    </span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </div>
+                        <SourcePickerButton
+                            itemId={item.Id || ''}
+                            mediaSources={item.MediaSources}
+                            isCurrentlyPlaying={Boolean(isCurrentlyPlaying)}
+                            playLabel={t('play')}
+                            resumeLabel={t('resume')}
+                        />
                         <TrailerButton item={item} />
                         <FavoriteButton
                             item={item}

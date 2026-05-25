@@ -1,8 +1,7 @@
 import type { AppConfig } from '@/hooks/api/useConfig';
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import BaseMediaPage from './BaseMediaPage';
-import { Button } from '@/components/ui/button';
-import { Dot, ImageOff, Play, ChevronDown, Check } from 'lucide-react';
+import { Dot, ImageOff } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getPrimaryImageUrl, getThumbUrl } from '@/utils/jellyfinUrls';
 import DetailBadges from './DetailBadges';
@@ -17,7 +16,6 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import PeopleRow from './PeopleRow';
-import { Link } from 'react-router';
 import JellyfinItemKindIcon from '@/components/JellyfinItemKindIcon';
 import MediaInfoDialog from '../../components/MediaInfoDialog';
 import FavoriteButton from '../../components/FavoriteButton';
@@ -25,6 +23,8 @@ import { getUserId } from '@/utils/localstorageCredentials';
 import PlayStateButton from '../../components/PlayStateButton';
 import ItemAdminButton from '@/components/ItemAdminButton';
 import ItemDownloadButton from '../../components/ItemDownloadButton';
+import SourcePickerButton from '@/components/SourcePickerButton';
+import { Link } from 'react-router';
 
 interface EpisodePageProps {
     item: BaseItemDto;
@@ -36,8 +36,6 @@ const EpisodePage = ({ item, config }: EpisodePageProps) => {
     const [imageError, setImageError] = useState<boolean>(false);
     const [selectedSeason, setSelectedSeason] = useState<string | null>(null);
     const { data: seasons, isLoading: isLoadingSeasons } = useSeasons(item.SeriesId || '');
-    const [selectedSource, setSelectedSource] = useState(item.MediaSources?.[0]);
-    const [sourcePickerOpen, setSourcePickerOpen] = useState(false);
 
     const effectiveSelectedSeason =
         selectedSeason ||
@@ -119,39 +117,13 @@ const EpisodePage = ({ item, config }: EpisodePageProps) => {
                     <h2 className="text-4xl sm:text-5xl font-bold -mt-2">{item.Name}</h2>
                     <DetailBadges item={item} appConfig={config} />
                     <div className="mt-1 flex items-center gap-2">
-                        <div className="relative inline-flex">
-                            <Button className={item.MediaSources && item.MediaSources.length > 1 ? 'rounded-r-none w-min' : 'w-min'} asChild>
-                                <Link to={`/play/${selectedSource?.Id ?? item.Id}`}>
-                                    <Play />
-                                    {isCurrentlyPlaying ? t('resume') : t('play')}
-                                </Link>
-                            </Button>
-                            {item.MediaSources && item.MediaSources.length > 1 && (
-                                <>
-                                    <div className="w-px bg-black/20 self-stretch" />
-                                    <Button className="rounded-l-none px-2" onClick={() => setSourcePickerOpen(o => !o)}>
-                                        <ChevronDown className="h-4 w-4" />
-                                    </Button>
-                                    {sourcePickerOpen && (
-                                        <div className="absolute top-full left-0 mt-1 z-50 min-w-64 rounded-lg border bg-popover shadow-md py-1">
-                                            {item.MediaSources.map(src => (
-                                                <button
-                                                    key={src.Id}
-                                                    className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent"
-                                                    onClick={() => { setSelectedSource(src); setSourcePickerOpen(false); }}
-                                                >
-                                                    <Check className={`h-4 w-4 shrink-0 ${src.Id === selectedSource?.Id ? 'opacity-100' : 'opacity-0'}`} />
-                                                    <span className="flex-1 text-left truncate">{src.Name}</span>
-                                                    <span className="text-xs text-muted-foreground shrink-0">
-                                                        {src.Size ? `${(src.Size / 1e9).toFixed(1)} GB` : null}
-                                                    </span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </div>
+                        <SourcePickerButton
+                            itemId={item.Id || ''}
+                            mediaSources={item.MediaSources}
+                            isCurrentlyPlaying={isCurrentlyPlaying}
+                            playLabel={t('play')}
+                            resumeLabel={t('resume')}
+                        />
                         <FavoriteButton
                             item={item}
                             showFavoriteButton={

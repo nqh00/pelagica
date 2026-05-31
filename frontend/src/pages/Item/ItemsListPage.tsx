@@ -11,7 +11,7 @@ import {
     Star,
     ImageOff,
 } from 'lucide-react';
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import ItemPagination from '@/components/ItemPagination';
@@ -120,7 +120,6 @@ export interface ItemsListPageProps {
 
 const ItemsListPage = ({ item, useItems, renderItemOverlay }: ItemsListPageProps) => {
     const { t } = useTranslation(['item', 'library']);
-    const pageRef = useRef<HTMLDivElement>(null);
     const [searchParams, setSearchParams] = useSearchParams();
     const pageParam = parseInt(searchParams.get('page') ?? '0', 10);
     const sortByParam = (searchParams.get('sortBy') as ItemSortBy) || DEFAULT_SORT_BY;
@@ -168,12 +167,6 @@ const ItemsListPage = ({ item, useItems, renderItemOverlay }: ItemsListPageProps
         startIndex: page * pageSize,
     });
 
-    useEffect(() => {
-        if (pageRef.current && !loadingItems && items?.items?.length) {
-            pageRef.current.scrollIntoView({ block: 'start' });
-        }
-    }, [items?.items, loadingItems]);
-
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
         updateSearchParams(newPage);
@@ -196,7 +189,7 @@ const ItemsListPage = ({ item, useItems, renderItemOverlay }: ItemsListPageProps
         'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-9';
 
     return (
-        <div ref={pageRef}>
+        <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                 <h1 className="text-3xl font-bold">{item.Name}</h1>
                 <ButtonGroup>

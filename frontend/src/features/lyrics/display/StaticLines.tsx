@@ -1,49 +1,27 @@
 import type { LyricLine } from '@jellyfin/sdk/lib/generated-client/models';
-import { cn } from '@/lib/utils';
-import type { LyricLineState } from '../types';
+import { useTranslation } from 'react-i18next';
+import { useLyricsEdgePadding } from '../hooks/useLyricsEdgePadding';
+import LyricsScrollArea from './LyricsScrollArea';
+import { staticLineClassName } from './lyricsLineStyles';
 
 interface StaticLinesProps {
     lines: LyricLine[];
 }
 
 const StaticLines = ({ lines }: StaticLinesProps) => {
+    const { t } = useTranslation('player');
+    const { containerRef, edgePadding } = useLyricsEdgePadding();
+
     return (
-        <div className="flex flex-col gap-4 px-4 py-6">
+        <LyricsScrollArea containerRef={containerRef} edgePadding={edgePadding}>
+            <p className="text-xs text-muted-foreground">{t('unsyncedLyrics')}</p>
             {lines.map((line, index) => (
-                <p
-                    key={`${index}-${line.Text}`}
-                    className="text-base leading-relaxed text-foreground/90 whitespace-pre-wrap"
-                >
+                <p key={`${index}-${line.Text}`} className={staticLineClassName}>
                     {line.Text}
                 </p>
             ))}
-        </div>
+        </LyricsScrollArea>
     );
 };
 
 export default StaticLines;
-
-export function getLineState(index: number, activeIndex: number): LyricLineState {
-    if (activeIndex < 0) {
-        return 'future';
-    }
-
-    if (index < activeIndex) {
-        return 'past';
-    }
-
-    if (index === activeIndex) {
-        return 'active';
-    }
-
-    return 'future';
-}
-
-export function getLineClassName(state: LyricLineState): string {
-    return cn(
-        'w-full text-left transition-all duration-300 whitespace-pre-wrap',
-        state === 'active' && 'text-xl font-semibold text-foreground scale-[1.02]',
-        state === 'past' && 'text-base text-muted-foreground/45',
-        state === 'future' && 'text-base text-muted-foreground/75',
-    );
-}

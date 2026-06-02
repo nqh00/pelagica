@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import type { ProcessedLyrics } from '../types';
 import StaticLines from './StaticLines';
 import SyncedLines from './SyncedLines';
@@ -10,8 +9,6 @@ interface LyricsDisplayProps {
 }
 
 const LyricsDisplay = ({ lyrics, currentTime, onLineClick }: LyricsDisplayProps) => {
-    const { t } = useTranslation('player');
-
     if (lyrics.isSynced) {
         return (
             <SyncedLines
@@ -23,12 +20,7 @@ const LyricsDisplay = ({ lyrics, currentTime, onLineClick }: LyricsDisplayProps)
         );
     }
 
-    return (
-        <div className="h-full overflow-y-auto overscroll-contain">
-            <p className="px-4 pt-4 text-xs text-muted-foreground">{t('unsyncedLyrics')}</p>
-            <StaticLines lines={lyrics.lines} />
-        </div>
-    );
+    return <StaticLines lines={lyrics.lines} />;
 };
 
 export default LyricsDisplay;

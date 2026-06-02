@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { LyricLine } from '@jellyfin/sdk/lib/generated-client/models';
 import { lyricsAutoScrollGraceMs } from '../constants';
+import { useLyricsEdgePadding } from './useLyricsEdgePadding';
 import { applyOffset, getActiveLineIndex } from '../utils/lyrics';
 
 interface UseSyncedLyricsOptions {
@@ -18,11 +19,10 @@ export function useSyncedLyrics({
 }: UseSyncedLyricsOptions) {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
-    const [edgePadding, setEdgePadding] = useState(0);
     const lineRefs = useRef<(HTMLElement | null)[]>([]);
-    const containerRef = useRef<HTMLDivElement>(null);
     const graceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const isProgrammaticScrollRef = useRef(false);
+    const { containerRef, edgePadding } = useLyricsEdgePadding(enabled);
 
     const clearGraceTimer = useCallback(() => {
         if (graceTimerRef.current) {
@@ -40,24 +40,6 @@ export function useSyncedLyrics({
         const adjustedTime = applyOffset(currentTime, offset);
         setActiveIndex(getActiveLineIndex(adjustedTime, lines));
     }, [currentTime, enabled, lines, offset]);
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) {
-            return;
-        }
-
-        const updatePadding = () => {
-            setEdgePadding(Math.max(container.clientHeight / 2 - 24, 0));
-        };
-
-        updatePadding();
-
-        const observer = new ResizeObserver(updatePadding);
-        observer.observe(container);
-
-        return () => observer.disconnect();
-    }, [enabled, lines.length]);
 
     useEffect(() => clearGraceTimer, [clearGraceTimer]);
 
@@ -84,7 +66,7 @@ export function useSyncedLyrics({
                 isProgrammaticScrollRef.current = false;
             }, 100);
         },
-        [activeIndex],
+        [activeIndex, containerRef],
     );
 
     useEffect(() => {

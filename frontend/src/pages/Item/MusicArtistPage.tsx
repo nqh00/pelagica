@@ -175,7 +175,6 @@ const MusicArtistPage = ({ item, config }: MusicArtistPageProps) => {
                                     <Button
                                         size="default"
                                         className={cn(
-                                            'rounded-full px-4 sm:px-6',
                                             onPalette && 'bg-white text-black hover:bg-white/90'
                                         )}
                                         onClick={handlePlayArtist}

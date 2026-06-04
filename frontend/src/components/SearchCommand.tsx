@@ -28,7 +28,7 @@ export const SearchCommand = () => {
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const [, startTransition] = useTransition();
     const itemTypes: BaseItemKind[] =
-        searchMode === 'music' ? ['MusicAlbum', 'Audio'] : ['Movie', 'Series'];
+        searchMode === 'music' ? ['MusicAlbum', 'Audio', 'MusicArtist'] : ['Movie', 'Series'];
     const {
         data: results,
         isLoading,

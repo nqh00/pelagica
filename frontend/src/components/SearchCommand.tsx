@@ -17,6 +17,7 @@ import { Calendar, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import JellyfinItemKindIcon from './JellyfinItemKindIcon';
 import { Badge } from './ui/badge';
+import type { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models/base-item-kind';
 
 export const SearchCommand = () => {
     const { t } = useTranslation('search');
@@ -26,7 +27,7 @@ export const SearchCommand = () => {
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const [, startTransition] = useTransition();
-    const itemTypes = searchMode === 'music' ? ['MusicAlbum', 'Audio'] : ['Movie', 'Series'];
+    const itemTypes: BaseItemKind[] = searchMode === 'music' ? ['MusicAlbum', 'Audio'] : ['Movie', 'Series'];
     const {
         data: results,
         isLoading,

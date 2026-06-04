@@ -27,7 +27,8 @@ export const SearchCommand = () => {
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState('');
     const [, startTransition] = useTransition();
-    const itemTypes: BaseItemKind[] = searchMode === 'music' ? ['MusicAlbum', 'Audio'] : ['Movie', 'Series'];
+    const itemTypes: BaseItemKind[] =
+        searchMode === 'music' ? ['MusicAlbum', 'Audio'] : ['Movie', 'Series'];
     const {
         data: results,
         isLoading,
@@ -114,13 +115,19 @@ export const SearchCommand = () => {
                                 value={item.Name!}
                                 onSelect={() => {
                                     if (item.Type === 'Audio') {
-                                        loadTrack({
-                                            id: item.Id || '',
-                                            title: item.Name || '',
-                                            artist: item.ArtistItems?.[0]?.Name || item.Artists?.[0] || 'Unknown',
-                                            albumId: item.AlbumId || item.ParentId || '',
-                                            albumName: item.Album || '',
-                                        }, true);
+                                        loadTrack(
+                                            {
+                                                id: item.Id || '',
+                                                title: item.Name || '',
+                                                artist:
+                                                    item.ArtistItems?.[0]?.Name ||
+                                                    item.Artists?.[0] ||
+                                                    'Unknown',
+                                                albumId: item.AlbumId || item.ParentId || '',
+                                                albumName: item.Album || '',
+                                            },
+                                            true
+                                        );
                                         closeSearch();
                                     } else {
                                         navigate(`/item/${item.Id}`);
@@ -129,9 +136,13 @@ export const SearchCommand = () => {
                                 }}
                             >
                                 <div className="flex items-start gap-3 w-full">
-                                    <div className={`relative overflow-hidden rounded-md shrink-0 ${
-                                        item.Type === 'MusicAlbum' || item.Type === 'Audio' ? 'w-13 h-13' : 'w-13 h-20'
-                                    }`}>
+                                    <div
+                                        className={`relative overflow-hidden rounded-md shrink-0 ${
+                                            item.Type === 'MusicAlbum' || item.Type === 'Audio'
+                                                ? 'w-13 h-13'
+                                                : 'w-13 h-20'
+                                        }`}
+                                    >
                                         <img
                                             src={`${posterUrls[item.Id!]}?maxWidth=96&maxHeight=144&quality=85`}
                                             alt={item.Name || ''}
@@ -147,14 +158,20 @@ export const SearchCommand = () => {
                                             </p>
                                             <Badge variant={'outline'} className="flex ml-2">
                                                 <JellyfinItemKindIcon kind={item.Type!} />
-                                                {item.Type === 'Audio' ? t('song') : item.Type === 'MusicAlbum' ? t('album') : item.Type}
+                                                {item.Type === 'Audio'
+                                                    ? t('song')
+                                                    : item.Type === 'MusicAlbum'
+                                                      ? t('album')
+                                                      : item.Type}
                                             </Badge>
                                         </div>
                                         <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                                            {(item.Type === 'MusicAlbum' || item.Type === 'Audio') ? (
+                                            {item.Type === 'MusicAlbum' || item.Type === 'Audio' ? (
                                                 <>
                                                     {item.Artists && item.Artists.length > 0 && (
-                                                        <span className="line-clamp-1">{item.Artists.join(', ')}</span>
+                                                        <span className="line-clamp-1">
+                                                            {item.Artists.join(', ')}
+                                                        </span>
                                                     )}
                                                     {item.ProductionYear && (
                                                         <div className="flex items-center gap-1">
@@ -174,7 +191,9 @@ export const SearchCommand = () => {
                                                     {item.CommunityRating && (
                                                         <div className="flex items-center gap-1">
                                                             <Star className="h-3! w-3!" />
-                                                            <span>{item.CommunityRating.toFixed(1)}</span>
+                                                            <span>
+                                                                {item.CommunityRating.toFixed(1)}
+                                                            </span>
                                                         </div>
                                                     )}
                                                 </>

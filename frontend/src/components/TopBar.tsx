@@ -608,7 +608,9 @@ const TopBar = ({ overlay = false }: { overlay?: boolean }) => {
                         <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => window.open(config.streamystatsUrl, '_blank')}
+                            onClick={() =>
+                                window.open(config.streamystatsUrl, '_blank', 'noopener,noreferrer')
+                            }
                         >
                             <ChartLine className="h-4 w-4" />
                             Streamystats
@@ -620,7 +622,7 @@ const TopBar = ({ overlay = false }: { overlay?: boolean }) => {
                             key={i}
                             variant="ghost"
                             size="sm"
-                            onClick={() => window.open(link.url, '_blank')}
+                            onClick={() => window.open(link.url, '_blank', 'noopener,noreferrer')}
                         >
                             <DynamicIcon
                                 name={(link.icon || 'link-2') as IconName}

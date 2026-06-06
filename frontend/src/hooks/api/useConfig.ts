@@ -253,7 +253,7 @@ const DEFAULT_CONFIG: AppConfig = {
     homeScreenSections: [
         {
             type: 'mediaBar',
-            size: 'large',
+            size: 'xlarge',
             items: {
                 sortBy: ['Random'],
                 types: ['Movie', 'Series'],

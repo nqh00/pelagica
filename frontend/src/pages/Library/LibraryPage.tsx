@@ -53,7 +53,7 @@ const DEFAULT_POSTER_ASPECT_RATIO = '2/3';
 
 const ITEM_POSTER_ASPECT_RATIOS: Partial<Record<CollectionType, string>> = {
     music: 'square',
-    musicvideos: '16/9',
+    musicvideos: 'video',
 };
 
 type GridConfig = { cols: string; breakpoints: [number, number][] };
@@ -169,7 +169,7 @@ const LibraryContent = ({
                 <div className={`w-full gap-4 mt-2 grid ${gridCols}`}>
                     {Array.from({ length: pageSize }).map((_, i) => (
                         <div key={i} className="p-0 m-0">
-                            <div className={`relative w-full ${posterAspectRatio} overflow-hidden rounded-md`}>
+                            <div className={`relative w-full aspect-${posterAspectRatio} overflow-hidden rounded-md`}>
                                 <Skeleton className="w-full h-full" />
                             </div>
                             <Skeleton className="mt-2 h-4 w-3/4" />

@@ -13,7 +13,7 @@ tasks:
       - install-frontend
     dir: frontend
     cmds:
-      - pnpm run dev -- --host
+      - pnpm exec vite --host {{if .MODE}}--mode {{.MODE}}{{end}}
 
   backend:
     desc: Start Go backend

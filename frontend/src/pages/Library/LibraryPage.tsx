@@ -234,37 +234,62 @@ const LibraryPage = () => {
     const { t } = useTranslation('library');
     const { data: libraries } = useUserViews();
     const [searchParams, setSearchParams] = useSearchParams();
-    const sortByParam = (searchParams.get('sortBy') as ItemSortBy) || 'Name';
-    const sortOrderParam = (searchParams.get('sortOrder') as SortOrder) || 'Ascending';
-    const [sortBy, setSortBy] = useState<ItemSortBy>(sortByParam);
-    const [sortOrder, setSortOrder] = useState<SortOrder>(sortOrderParam);
-    const pageParam = parseInt(searchParams.get('page') ?? '0', 10);
-    const [page, setPage] = useState<number>(Number.isNaN(pageParam) ? 0 : pageParam);
 
-    const firstLibraryId = libraries?.Items?.[0]?.Id ?? '';
+    const sortBy = (searchParams.get('sortBy') as ItemSortBy) || 'Name';
+    const sortOrder = (searchParams.get('sortOrder') as SortOrder) || 'Ascending';
+    const page = Number(searchParams.get('page') ?? '0') || 0;
+
     const libraryIdFromUrl = searchParams.get('library') || '';
-    const activeLibraryId =
-        libraryIdFromUrl && libraries?.Items?.some((library) => library.Id === libraryIdFromUrl)
-            ? libraryIdFromUrl
-            : firstLibraryId;
 
-    const handleLibraryChange = (libraryId: string) => {
-        setPage(0);
-        setSearchParams({ library: libraryId, page: '0', sortBy, sortOrder });
+    const libraryItems = useMemo(() => {
+        return (
+            libraries?.Items?.filter((library) =>
+                SUPPORTED_LIBRARY_COLLECTION_TYPES.includes(library.CollectionType!)
+            ) ?? []
+        );
+    }, [libraries]);
+
+    const activeLibraryId = useMemo(() => {
+        if (!libraryItems.length) return libraryIdFromUrl;
+
+        const exists = libraryItems.some(l => l.Id === libraryIdFromUrl);
+        return exists ? libraryIdFromUrl : libraryItems[0]?.Id ?? '';
+    }, [libraryItems, libraryIdFromUrl]);
+
+    const updateParams = (updates: Record<string, string>) => {
+        const next = new URLSearchParams(searchParams);
+        for (const [key, value] of Object.entries(updates)) {
+            next.set(key, value);
+        }
+        setSearchParams(next, { replace: true });
     };
 
-    const libraryItems = libraries?.Items?.filter((library) =>
-        SUPPORTED_LIBRARY_COLLECTION_TYPES.includes(library.CollectionType!)
-    );
-
-    useEffect(() => {
-        setSearchParams({
-            library: activeLibraryId,
-            page: String(page),
-            sortBy,
-            sortOrder,
+    const handleLibraryChange = (libraryId: string) => {
+        updateParams({
+            library: libraryId,
+            page: '0',
         });
-    }, [activeLibraryId, page, sortBy, sortOrder, setSearchParams]);
+    };
+
+    const handleSortByChange = (value: string) => {
+        updateParams({
+            sortBy: value,
+            page: '0',
+        });
+    };
+
+    const handleSortOrderChange = (value: string) => {
+        updateParams({
+            sortOrder: value,
+            page: '0',
+        });
+    };
+
+    const handlePageChange = (p: number) => {
+        updateParams({
+            page: String(p),
+        });
+    };
 
     return (
         <Page title={t('title')} requiresAuth className="flex-1">
@@ -278,10 +303,8 @@ const LibraryPage = () => {
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                    <Select
-                        onValueChange={handleLibraryChange}
-                        value={activeLibraryId}
-                    >
+
+                    <Select onValueChange={handleLibraryChange} value={activeLibraryId}>
                         <SelectTrigger size="sm" className="w-full sm:hidden">
                             <SelectValue placeholder={t('select_library')} />
                         </SelectTrigger>
@@ -294,41 +317,66 @@ const LibraryPage = () => {
                             ))}
                         </SelectContent>
                     </Select>
+
                     <ButtonGroup>
-                        <Select onValueChange={(v) => setSortBy(v as ItemSortBy)} value={sortBy}>
+                        <Select onValueChange={handleSortByChange} value={sortBy}>
                             <SelectTrigger size="sm">
                                 <SelectValue placeholder="Sort" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="Name"><CaseSensitive />{t('sort_name')}</SelectItem>
-                                <SelectItem value="DateCreated"><CalendarPlus />{t('sort_date_added')}</SelectItem>
-                                <SelectItem value="PremiereDate"><Calendar />{t('sort_premiere_date')}</SelectItem>
-                                <SelectItem value="CommunityRating"><Star />{t('sort_community_rating')}</SelectItem>
-                                <SelectItem value="Runtime"><Clock />{t('sort_runtime')}</SelectItem>
+                                <SelectItem value="Name">
+                                    <CaseSensitive />
+                                    {t('sort_name')}
+                                </SelectItem>
+                                <SelectItem value="DateCreated">
+                                    <CalendarPlus />
+                                    {t('sort_date_added')}
+                                </SelectItem>
+                                <SelectItem value="PremiereDate">
+                                    <Calendar />
+                                    {t('sort_premiere_date')}
+                                </SelectItem>
+                                <SelectItem value="CommunityRating">
+                                    <Star />
+                                    {t('sort_community_rating')}
+                                </SelectItem>
+                                <SelectItem value="Runtime">
+                                    <Clock />
+                                    {t('sort_runtime')}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
-                        <Select onValueChange={(v) => setSortOrder(v as SortOrder)} value={sortOrder}>
+
+                        <Select onValueChange={handleSortOrderChange} value={sortOrder}>
                             <SelectTrigger size="sm">
                                 <SelectValue placeholder="Order" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="Ascending"><ArrowUpNarrowWideIcon />{t('ascending')}</SelectItem>
-                                <SelectItem value="Descending"><ArrowDownWideNarrow />{t('descending')}</SelectItem>
+                                <SelectItem value="Ascending">
+                                    <ArrowUpNarrowWideIcon />
+                                    {t('ascending')}
+                                </SelectItem>
+                                <SelectItem value="Descending">
+                                    <ArrowDownWideNarrow />
+                                    {t('descending')}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </ButtonGroup>
                 </div>
+
                 {libraryItems?.map((library) => {
                     if (!library.Id) return null;
+
                     return (
-                        <TabsContent key={library.Id} value={library.Id ?? ''}>
+                        <TabsContent key={library.Id} value={library.Id}>
                             <LibraryContent
                                 key={`${library.Id}-${sortBy}-${sortOrder}`}
                                 libraryId={library.Id}
                                 sortBy={sortBy}
                                 sortOrder={sortOrder}
                                 page={page}
-                                onPageChange={setPage}
+                                onPageChange={handlePageChange}
                                 collectionType={library.CollectionType as CollectionType}
                             />
                         </TabsContent>

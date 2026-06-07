@@ -172,26 +172,30 @@ const EpisodePage = ({ item, config }: EpisodePageProps) => {
                     title={
                         <div className="flex items-center gap-4">
                             <h3 className="text-3xl font-bold">{t('episodes')}</h3>
-                            <Select
-                                value={effectiveSelectedSeason || ''}
-                                onValueChange={(value) => setSelectedSeason(value || null)}
-                                disabled={isLoadingSeasons || !seasons || seasons.length === 0}
-                            >
-                                <SelectTrigger>
-                                    <SelectValue placeholder={t('select_season')} />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {seasons?.map((season) => (
-                                        <SelectItem
-                                            key={season.Id}
-                                            value={season.Id || ''}
-                                            onSelect={() => setSelectedSeason(season.Id || null)}
-                                        >
-                                            {season.Name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            {seasons && seasons.length > 1 && (
+                                <Select
+                                    value={effectiveSelectedSeason || ''}
+                                    onValueChange={(value) => setSelectedSeason(value || null)}
+                                    disabled={isLoadingSeasons || !seasons || seasons.length === 0}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder={t('select_season')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {seasons?.map((season) => (
+                                            <SelectItem
+                                                key={season.Id}
+                                                value={season.Id || ''}
+                                                onSelect={() =>
+                                                    setSelectedSeason(season.Id || null)
+                                                }
+                                            >
+                                                {season.Name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
                         </div>
                     }
                     seasonsLoading={isLoadingSeasons}

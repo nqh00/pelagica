@@ -1,8 +1,5 @@
 import { getBackdropUrl, getLogoUrl } from '@/utils/jellyfinUrls';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
 
 interface BaseMediaPageProps {
     itemId: string;
@@ -23,7 +20,6 @@ const BaseMediaPage = ({
     topPaddingMinHeight = '45dvh',
     logo,
 }: BaseMediaPageProps) => {
-    const navigate = useNavigate();
     const [failedBackdrop, setFailedBackdrop] = useState(false);
     const [failedLogo, setFailedLogo] = useState(false);
     const [isBgLoaded, setIsBgLoaded] = useState(false);
@@ -36,14 +32,6 @@ const BaseMediaPage = ({
 
     return (
         <div className="relative">
-            <Button
-                variant="ghost"
-                size="icon"
-                className="fixed top-20 left-4 z-50 bg-background/50 hover:bg-background/80 backdrop-blur-md rounded-full shadow-md"
-                onClick={() => navigate(-1)}
-            >
-                <ArrowLeft className="w-5 h-5" />
-            </Button>
             <div className="absolute top-0 left-0 h-[75vh] md:h-[85vh] w-full -z-10 overflow-hidden pointer-events-none select-none">
                 {!failedBackdrop && (
                     <div className="relative w-full h-full">

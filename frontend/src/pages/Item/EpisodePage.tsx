@@ -60,7 +60,7 @@ const EpisodePage = ({ item, config }: EpisodePageProps) => {
             showLogo={false}
             topPadding={false}
         >
-            <div className="pt-24 sm:pt-32 pb-12 px-4 sm:px-12 mx-auto w-full flex flex-col gap-12">
+            <div className="pt-24 sm:pt-32 pb-12 mx-auto w-full flex flex-col gap-12">
                 {/* Hero Row */}
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start relative z-10 w-full">
                     {/* Left Column (Thumbnail) */}

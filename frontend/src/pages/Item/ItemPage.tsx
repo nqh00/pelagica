@@ -25,7 +25,7 @@ const ItemPageSkeleton = memo(() => {
             <div className="absolute top-0 left-0 h-[75vh] md:h-[85vh] w-full -z-10 bg-muted/10 animate-pulse" />
 
             {/* Main Content */}
-            <div className="pt-24 sm:pt-32 pb-12 px-4 sm:px-12 mx-auto w-full flex flex-col gap-12">
+            <div className="pt-24 sm:pt-32 pb-12 mx-auto w-full flex flex-col gap-12">
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start relative z-10 w-full animate-pulse">
                     {/* Left Column (Poster) */}
                     <div className="w-48 sm:w-64 md:w-72 lg:w-80 shrink-0 mx-auto lg:mx-0">

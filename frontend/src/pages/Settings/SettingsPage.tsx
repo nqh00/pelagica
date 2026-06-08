@@ -634,6 +634,7 @@ const SettingsPage = () => {
     const { config, loading, error } = useConfig();
     const { updateConfig, loading: updating } = useUpdateConfig();
     const [serverAddress, setServerAddress] = useState('');
+    const [seerUrl, setSeerUrl] = useState('');
     const [streamystatsUrl, setStreamystatsUrl] = useState('');
     const [showStreamystatsButton, setShowStreamystatsButton] = useState(false);
     const [watchedStateBadgeHomeScreen, setWatchedStateBadgeHomeScreen] = useState(false);
@@ -682,6 +683,7 @@ const SettingsPage = () => {
 
     useEffect(() => {
         setServerAddress(config?.serverAddress || '');
+        setSeerUrl(config?.seerUrl || '');
         setStreamystatsUrl(config?.streamystatsUrl || '');
         setShowStreamystatsButton(config?.showStreamystatsButton || false);
         setWatchedStateBadgeHomeScreen(config?.watchedStateBadgeHomeScreen || false);
@@ -701,6 +703,7 @@ const SettingsPage = () => {
         setLinks(config?.links || []);
     }, [
         config?.serverAddress,
+        config?.seerUrl,
         config?.streamystatsUrl,
         config?.showStreamystatsButton,
         config?.watchedStateBadgeHomeScreen,
@@ -782,6 +785,7 @@ const SettingsPage = () => {
                 await updateConfig({
                     ...config,
                     serverAddress,
+                    seerUrl,
                     streamystatsUrl,
                     showStreamystatsButton,
                     watchedStateBadgeHomeScreen,
@@ -1014,6 +1018,16 @@ const SettingsPage = () => {
                         onChange={setServerAddress}
                         placeholder={t('server_address_placeholder')}
                         description={t('server_address_description')}
+                    />
+                    <h2 className="mt-6 mb-2 text-xl font-semibold leading-none tracking-tight">
+                        {t('seer_integration')}
+                    </h2>
+                    <p className="mb-2 text-sm text-muted-foreground">{t('seer_description')}</p>
+                    <StringInput
+                        label={t('seer_url_label')}
+                        value={seerUrl}
+                        onChange={setSeerUrl}
+                        placeholder={t('seer_url_placeholder')}
                     />
                     <h2 className="mt-6 mb-2 text-xl font-semibold leading-none tracking-tight">
                         Streamystats

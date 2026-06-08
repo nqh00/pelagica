@@ -142,5 +142,9 @@
     "show_download_button_label": "Show Download Button",
     "usage_statistics_label": "Allow anonymous usage statistics collection",
     "usage_statistics": "Usage Statistics",
-    "usage_statistics_description": "We have no way to know how many people use Pelagica unless you tell us. Opting in sends a daily ping with your version and a random ID. That's it."
+    "usage_statistics_description": "We have no way to know how many people use Pelagica unless you tell us. Opting in sends a daily ping with your version and a random ID. That's it.",
+    "seer_integration": "Seer Integration",
+    "seer_description": "Access Seer-powered recommendations, search for titles, and send media requests straight from Pelagica.",
+    "seer_url_label": "Seer URL",
+    "seer_url_placeholder": "http://your-seer-server"
 }

@@ -63,6 +63,9 @@ func main() {
 	api.Get("/stats-consent", handlers.GetStatsConsent)
 	api.Post("/stats-consent", handlers.PostStatsConsent)
 
+	api.Get("/seer/movie/:tmdbId", handlers.GetSeerMovie)
+	api.Get("/seer/movie/:tmdbId/recommendations", handlers.GetSeerMovieRecommendations)
+
 	log.Println("Server starting on " + getPort())
 	log.Fatal(app.Listen(getPort()))
 }

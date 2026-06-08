@@ -73,6 +73,7 @@ const EpisodeComponent = memo(
                                     {ticksToReadableTime(episode.RunTimeTicks)}
                                 </Badge>
                             )}
+                            <div className="absolute inset-0 rounded-md pointer-events-none poster-card-outline z-20" />
                         </div>
                     )}
                     {progress > 0 && (

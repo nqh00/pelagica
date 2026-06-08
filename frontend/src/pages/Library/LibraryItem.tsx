@@ -70,6 +70,7 @@ const LibraryItem = ({
                                 </div>
                             </div>
                         )}
+                        <div className="absolute inset-0 rounded-md pointer-events-none poster-card-outline z-20" />
                     </>
                 ) : (
                     <div className="w-full h-full bg-muted flex items-center justify-center rounded-md">

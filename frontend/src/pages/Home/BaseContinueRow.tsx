@@ -112,6 +112,7 @@ export function BaseContinueRow({
                                                       <Play className="w-6 h-6 text-white fill-white" />
                                                   </div>
                                               </div>
+                                              <div className="absolute inset-0 rounded-md pointer-events-none poster-card-outline z-20" />
                                           </div>
                                           <p className="mt-2 text-sm line-clamp-1 text-ellipsis break-all">
                                               {getTitleLineText(item, titleLine, t)}

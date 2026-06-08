@@ -43,7 +43,6 @@ const GenreItem = ({
                         <ImageOff className="text-4xl text-muted-foreground" />
                     </div>
                 )}
-
                 <div
                     className="absolute inset-0 rounded-md z-10"
                     style={{
@@ -51,9 +50,7 @@ const GenreItem = ({
                         opacity: 0.35,
                     }}
                 />
-
                 <div className="absolute inset-0 z-20 rounded-md bg-linear-to-t from-black/80 via-black/40 to-transparent" />
-
                 <div className="absolute bottom-2 left-2 right-2 z-30">
                     <p
                         className={

@@ -82,6 +82,7 @@ const ScrollableSectionPoster = ({
                     item={item}
                     show={config?.watchedStateBadgeHomeScreen || false}
                 />
+                <div className="absolute inset-0 rounded-md pointer-events-none poster-card-outline z-20" />
             </div>
             <p className="mt-2 text-sm line-clamp-1 text-ellipsis break-all max-w-36 lg:max-w-44 2xl:max-w-52">
                 {itemName || item?.Name || ''}

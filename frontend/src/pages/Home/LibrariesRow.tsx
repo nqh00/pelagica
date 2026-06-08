@@ -38,6 +38,7 @@ const LibraryDisplay = ({ item }: { item: BaseItemDto }) => {
                         />
                     </div>
                 )}
+                <div className="absolute inset-0 rounded-md pointer-events-none poster-card-outline z-20" />
             </div>
         </Link>
     );

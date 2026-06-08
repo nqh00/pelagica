@@ -48,6 +48,7 @@ const MovieTvItem = ({ item }: { item: BaseItemDto }) => {
                     </div>
                 )}
                 <WatchedStateBadge item={item} show={config?.watchedStateBadgeSearch || false} />
+                <div className="absolute inset-0 rounded-md pointer-events-none poster-card-outline z-20" />
             </div>
             <p className="mt-2 text-sm line-clamp-1 text-ellipsis break-all">
                 {item.Name || 'No Title'}

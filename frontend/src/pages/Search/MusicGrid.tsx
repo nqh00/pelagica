@@ -41,6 +41,7 @@ const MusicItem = ({ item }: { item: BaseItemDto }) => {
                         <Music className="text-4xl text-muted-foreground" />
                     </div>
                 )}
+                <div className="absolute inset-0 rounded-md pointer-events-none poster-card-outline z-20" />
             </div>
             <p className="mt-2 text-sm line-clamp-1 text-ellipsis break-all">
                 {item.Name || 'No Title'}

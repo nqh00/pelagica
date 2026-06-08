@@ -1,5 +1,4 @@
 import SectionScroller from '@/components/SectionScroller';
-import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { DetailField, SectionItemsConfig } from '@/hooks/api/useConfig';
 import { useRowItems } from '@/hooks/api/useRowItems';
@@ -7,7 +6,7 @@ import { Link } from 'react-router';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { getEndsAt, ticksToReadableTime } from '@/utils/timeConversion';
-import { Star } from 'lucide-react';
+import { ChevronRight, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import ScrollableSectionPoster from '@/components/ScrollableSectionPoster';
@@ -126,15 +125,18 @@ const ItemsRow = ({ title, allLink, items, detailFields }: ItemsRowProps) => {
         ((recentItems && recentItems.length > 0) || isLoading) && (
             <SectionScroller
                 className="max-w-full"
-                title={<h2 className="text-2xl font-bold flex items-center gap-2">{title}</h2>}
-                additionalButtons={
-                    <>
-                        {allLink && (
-                            <Button variant={'outline'} asChild>
-                                <Link to={allLink}>{t('view_all')}</Link>
-                            </Button>
-                        )}
-                    </>
+                title={
+                    allLink ? (
+                        <Link
+                            to={allLink}
+                            className="flex items-center gap-1 group cursor-pointer w-fit transition-colors"
+                        >
+                            <h2 className="text-2xl font-bold">{title}</h2>
+                            <ChevronRight className="w-7 h-7 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                    ) : (
+                        <h2 className="text-2xl font-bold flex items-center gap-2">{title}</h2>
+                    )
                 }
                 items={
                     recentItems

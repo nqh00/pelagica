@@ -136,6 +136,7 @@ const HomePage = () => {
                                                                     'MusicAlbum',
                                                                 ],
                                                             }}
+                                                            allLink={`/library?library=${view.Id}&page=0&sortBy=DateCreated&sortOrder=Descending`}
                                                             detailFields={getDetailFieldsForCollectionType(
                                                                 view.CollectionType
                                                             )}

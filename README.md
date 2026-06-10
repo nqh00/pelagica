@@ -4,6 +4,21 @@ Pelagica is an alternative web frontend for [Jellyfin](https://jellyfin.org) bui
 
 ![Home](./.github/assets/home.webp)
 
+## Table of Contents
+
+- [Features](#features)
+- [Demo](#demo)
+- [Docker Installation](#docker-installation)
+- [Custom Themes](#custom-themes)
+- [Discord](#discord)
+- [Localization](#localization)
+- [Development Setup](#development-setup)
+- [Contributing](#contributing)
+- [What does that name mean?](#what-does-that-name-mean)
+- [Acknowledgements](#acknowledgements)
+- [Disclaimer](#disclaimer)
+- [License](#license)
+
 ## Features
 
 - **Customizable Sections:** Tailor your homepage with sections like "Continue Watching", "Recently Added", or completely custom queries.
@@ -53,9 +68,11 @@ You can find a live demo of Pelagica at:
 
 https://demo.pelagica.app/
 
-You can use the `demo.jellyfin.org/stable` server with the `demo` user to test, or use your own Jellyfin server if it is publicly accessible. If you are experiencing issues with the Jellyfin demo server, this is because of cors restrictions on that server.
+The demo instance has the `jellyfin.streamyfin.app` server with a username preconfigured, so you just have to click "Login" to test it out. If your own Jellyfin server is publicly accessible, you can also use that by entering the server URL and your credentials.
 
-For production use, it is highly recommended to self-host Pelagica using Docker or another method.
+For production use, you should self-host Pelagica using Docker or another method.
+
+Thank you to [Streamyfin](https://streamyfin.app/) for providing a demo Jellyfin server for testing!
 
 ## Docker Installation
 

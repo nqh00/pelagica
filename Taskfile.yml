@@ -49,3 +49,8 @@ tasks:
       - go.sum
     cmds:
       - go mod download
+      
+  stats:
+    desc: Count the amount of lines of code
+    cmds:
+      - cloc . --exclude-dir=dist,node_modules --not-match-f="(pnpm-lock|package-lock|yarn\.lock)"

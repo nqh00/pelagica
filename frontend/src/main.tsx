@@ -27,6 +27,9 @@ const SearchPage = lazy(() => import('./pages/Search/SearchPage.tsx'));
 const ThemeBrowserPage = lazy(() => import('./pages/ThemeBrowser/ThemeBrowserPage.tsx'));
 const NotFoundPage = lazy(() => import('./pages/NotFound/NotFoundPage.tsx'));
 const PhotoViewerPage = lazy(() => import('./pages/PhotoViewer/PhotoViewerPage.tsx'));
+const MusicLayout = lazy(() => import('./pages/Music/MusicLayout.tsx'));
+const MusicMainContent = lazy(() => import('./pages/Music/MusicMainContent.tsx'));
+const MusicAlbumView = lazy(() => import('./pages/Music/MusicAlbumView.tsx'));
 
 const queryClient = new QueryClient();
 
@@ -54,6 +57,10 @@ createRoot(document.getElementById('root')!).render(
                                 <Route path="/browse-themes" element={<ThemeBrowserPage />} />
                                 <Route path="/search" element={<SearchPage />} />
                                 <Route path="/photo/:itemId" element={<PhotoViewerPage />} />
+                                <Route path="/music" element={<MusicLayout />}>
+                                    <Route index element={<MusicMainContent />} />
+                                    <Route path="album/:itemId" element={<MusicAlbumView />} />
+                                </Route>
                                 <Route path="*" element={<NotFoundPage />} />
                             </Routes>
                         </Suspense>

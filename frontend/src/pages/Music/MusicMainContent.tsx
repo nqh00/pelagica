@@ -35,18 +35,18 @@ const SongRow = ({
         className="flex items-center gap-3 px-3 py-2 hover:bg-accent/50 rounded-md cursor-pointer group transition-colors"
         onClick={onPlay}
     >
-        <div className="w-8 h-8 relative shrink-0">
+        <div className="w-10 h-10 relative shrink-0">
             <img
                 src={getPrimaryImageUrl(song.AlbumId || song.Id || '', {
-                    width: 64,
-                    height: 64,
+                    width: 80,
+                    height: 80,
                 })}
                 alt={song.Name || ''}
-                className="w-8 h-8 rounded object-cover"
+                className="w-10 h-10 rounded object-cover"
                 loading="lazy"
             />
             <div className="absolute inset-0 bg-black/50 rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <Play className="w-3.5 h-3.5 text-white" />
+                <Play className="w-4 h-4 text-white" />
             </div>
         </div>
         <div className="flex flex-col min-w-0 flex-1">
@@ -133,7 +133,7 @@ const AlbumsGrid = ({
 }) => {
     if (isLoading) {
         return (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
                 {[...Array(12)].map((_, i) => (
                     <div key={i}>
                         <Skeleton className="aspect-square w-full rounded-md" />
@@ -150,7 +150,7 @@ const AlbumsGrid = ({
     }
 
     return (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
             {albums.map((album) => (
                 <Link
                     key={album.Id}
@@ -168,7 +168,7 @@ const AlbumsGrid = ({
                             loading="lazy"
                         />
                     </div>
-                    <span className="text-sm mt-1.5 truncate">{album.Name}</span>
+                    <span className="text-sm mt-2 truncate">{album.Name}</span>
                     <span className="text-xs text-muted-foreground truncate">
                         {album.ArtistItems?.[0]?.Name || album.AlbumArtist || ''}
                     </span>
@@ -189,7 +189,7 @@ const ArtistsGrid = ({
 }) => {
     if (isLoading) {
         return (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
                 {[...Array(12)].map((_, i) => (
                     <div key={i} className="flex flex-col items-center">
                         <Skeleton className="aspect-square w-full rounded-full" />
@@ -205,7 +205,7 @@ const ArtistsGrid = ({
     }
 
     return (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
             {artists.map((artist) => (
                 <Link
                     key={artist.Id}
@@ -223,9 +223,7 @@ const ArtistsGrid = ({
                             loading="lazy"
                         />
                     </div>
-                    <span className="text-sm mt-1.5 truncate text-center w-full">
-                        {artist.Name}
-                    </span>
+                    <span className="text-sm mt-2 truncate text-center w-full">{artist.Name}</span>
                 </Link>
             ))}
         </div>
@@ -245,7 +243,7 @@ const PlaylistsGrid = ({
 }) => {
     if (isLoading) {
         return (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
                 {[...Array(6)].map((_, i) => (
                     <div key={i}>
                         <Skeleton className="aspect-square w-full rounded-md" />
@@ -261,7 +259,7 @@ const PlaylistsGrid = ({
     }
 
     return (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
             {playlists.map((playlist) => (
                 <Link
                     key={playlist.Id}
@@ -279,7 +277,7 @@ const PlaylistsGrid = ({
                             loading="lazy"
                         />
                     </div>
-                    <span className="text-sm mt-1.5 truncate">{playlist.Name}</span>
+                    <span className="text-sm mt-2 truncate">{playlist.Name}</span>
                     {playlist.ChildCount !== undefined && (
                         <span className="text-xs text-muted-foreground">
                             {tracksLabel(playlist.ChildCount || 0)}
@@ -341,13 +339,13 @@ const SearchResults = ({ searchTerm }: { searchTerm: string }) => {
                             >
                                 <img
                                     src={getPrimaryImageUrl(artist.Id || '', {
-                                        width: 128,
-                                        height: 128,
+                                        width: 160,
+                                        height: 160,
                                     })}
                                     alt={artist.Name || ''}
-                                    className="w-16 h-16 rounded-full object-cover group-hover:opacity-75 transition-opacity"
+                                    className="w-20 h-20 rounded-full object-cover group-hover:opacity-75 transition-opacity"
                                 />
-                                <span className="text-xs mt-1 truncate max-w-16">
+                                <span className="text-sm mt-1.5 truncate max-w-20">
                                     {artist.Name}
                                 </span>
                             </Link>
@@ -369,14 +367,16 @@ const SearchResults = ({ searchTerm }: { searchTerm: string }) => {
                             >
                                 <img
                                     src={getPrimaryImageUrl(album.Id || '', {
-                                        width: 128,
-                                        height: 128,
+                                        width: 200,
+                                        height: 200,
                                     })}
                                     alt={album.Name || ''}
-                                    className="w-24 h-24 rounded-md object-cover group-hover:opacity-75 transition-opacity"
+                                    className="w-32 h-32 rounded-md object-cover group-hover:opacity-75 transition-opacity"
                                 />
-                                <span className="text-xs mt-1 truncate max-w-24">{album.Name}</span>
-                                <span className="text-xs text-muted-foreground truncate max-w-24">
+                                <span className="text-sm mt-1.5 truncate max-w-32">
+                                    {album.Name}
+                                </span>
+                                <span className="text-xs text-muted-foreground truncate max-w-32">
                                     {album.ArtistItems?.[0]?.Name}
                                 </span>
                             </Link>
@@ -463,21 +463,21 @@ const MusicMainContent = () => {
                                     to={`/music/album/${album.Id}`}
                                     className="group flex flex-col shrink-0"
                                 >
-                                    <div className="relative w-28 h-28 overflow-hidden rounded-md">
+                                    <div className="relative w-36 h-36 overflow-hidden rounded-md">
                                         <img
                                             src={getPrimaryImageUrl(album.Id || '', {
-                                                width: 200,
-                                                height: 200,
+                                                width: 288,
+                                                height: 288,
                                             })}
                                             alt={album.Name || ''}
-                                            className="w-28 h-28 object-cover group-hover:opacity-75 group-hover:scale-105 transition-all transform-gpu"
+                                            className="w-36 h-36 object-cover group-hover:opacity-75 group-hover:scale-105 transition-all transform-gpu"
                                             loading="lazy"
                                         />
                                     </div>
-                                    <span className="text-xs mt-1 truncate max-w-28">
+                                    <span className="text-sm mt-1.5 truncate max-w-36">
                                         {album.Name}
                                     </span>
-                                    <span className="text-[11px] text-muted-foreground truncate max-w-28">
+                                    <span className="text-xs text-muted-foreground truncate max-w-36">
                                         {album.ArtistItems?.[0]?.Name || album.AlbumArtist || ''}
                                     </span>
                                 </Link>
@@ -487,7 +487,7 @@ const MusicMainContent = () => {
                     {isLoadingRecent && (
                         <div className="flex gap-3">
                             {[...Array(8)].map((_, i) => (
-                                <Skeleton key={i} className="w-28 h-28 rounded-md shrink-0" />
+                                <Skeleton key={i} className="w-36 h-36 rounded-md shrink-0" />
                             ))}
                         </div>
                     )}

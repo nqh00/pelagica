@@ -19,7 +19,7 @@ const SidebarSection = ({
     children: React.ReactNode;
 }) => (
     <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
             {icon}
             {title}
         </div>
@@ -48,11 +48,11 @@ const SidebarItem = ({
                 <img
                     src={imageUrl}
                     alt={name}
-                    className="w-8 h-8 rounded object-cover shrink-0"
+                    className="w-10 h-10 rounded object-cover shrink-0"
                     loading="lazy"
                 />
             ) : icon ? (
-                <div className="w-8 h-8 rounded bg-muted flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded bg-muted flex items-center justify-center shrink-0">
                     {icon}
                 </div>
             ) : null}
@@ -118,7 +118,7 @@ const MusicLeftSidebar = () => {
 
     return (
         <aside className="w-64 shrink-0 flex flex-col gap-4 overflow-y-auto h-full pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-thumb]:rounded-full">
-            <SidebarSection title={t('playlists')} icon={<ListMusic className="w-3.5 h-3.5" />}>
+            <SidebarSection title={t('playlists')} icon={<ListMusic className="w-4 h-4" />}>
                 {isLoadingPlaylists ? (
                     <div className="flex flex-col gap-1 px-3">
                         {[...Array(3)].map((_, i) => (
@@ -147,7 +147,7 @@ const MusicLeftSidebar = () => {
                 )}
             </SidebarSection>
 
-            <SidebarSection title={t('favorite_artists')} icon={<Mic2 className="w-3.5 h-3.5" />}>
+            <SidebarSection title={t('favorite_artists')} icon={<Mic2 className="w-4 h-4" />}>
                 {isLoadingArtists ? (
                     <div className="flex flex-col gap-1 px-3">
                         {[...Array(3)].map((_, i) => (
@@ -171,7 +171,7 @@ const MusicLeftSidebar = () => {
                 )}
             </SidebarSection>
 
-            <SidebarSection title={t('favorite_albums')} icon={<Disc3 className="w-3.5 h-3.5" />}>
+            <SidebarSection title={t('favorite_albums')} icon={<Disc3 className="w-4 h-4" />}>
                 {isLoadingAlbums ? (
                     <div className="flex flex-col gap-1 px-3">
                         {[...Array(3)].map((_, i) => (
@@ -196,7 +196,7 @@ const MusicLeftSidebar = () => {
                 )}
             </SidebarSection>
 
-            <SidebarSection title={t('favorite_songs')} icon={<Heart className="w-3.5 h-3.5" />}>
+            <SidebarSection title={t('favorite_songs')} icon={<Heart className="w-4 h-4" />}>
                 {isLoadingSongs ? (
                     <div className="flex flex-col gap-1 px-3">
                         {[...Array(3)].map((_, i) => (

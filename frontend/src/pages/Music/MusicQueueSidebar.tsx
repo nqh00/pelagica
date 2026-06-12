@@ -11,8 +11,8 @@ const MusicQueueSidebar = () => {
     if (queue.length === 0) {
         return (
             <aside className="w-72 shrink-0 flex flex-col h-full pl-2">
-                <div className="flex items-center gap-2 px-3 py-1.5 mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    <ListMusic className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2 px-3 py-1.5 mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                    <ListMusic className="w-4 h-4" />
                     {t('queue')}
                 </div>
                 <div className="flex-1 flex items-center justify-center">
@@ -25,8 +25,8 @@ const MusicQueueSidebar = () => {
     return (
         <aside className="w-72 shrink-0 flex flex-col h-full pl-2">
             <div className="flex items-center justify-between px-3 py-1.5 mb-2">
-                <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    <ListMusic className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                    <ListMusic className="w-4 h-4" />
                     {t('queue_count', { count: queue.length })}
                 </div>
             </div>
@@ -47,7 +47,7 @@ const MusicQueueSidebar = () => {
                                     height: 64,
                                 })}
                                 alt={track.title}
-                                className="w-8 h-8 rounded object-cover shrink-0"
+                                className="w-10 h-10 rounded object-cover shrink-0"
                                 loading="lazy"
                             />
                             <div className="flex flex-col min-w-0 flex-1">

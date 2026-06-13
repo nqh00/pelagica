@@ -4,7 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import type { Resource } from 'i18next';
 
 const localeModules = import.meta.glob<{ default: Record<string, unknown> }>(
-    './locales/*//*.json',
+    './locales/*/*.json',
     { eager: true }
 );
 

@@ -250,7 +250,7 @@ const BaseMusicListPage = ({
                                 <img
                                     src={getPrimaryImageUrl(
                                         item.Id!,
-                                        undefined,
+                                        { width: 300, height: 300 },
                                         item.ImageTags?.Primary
                                     )}
                                     alt={item.Name + ' Cover'}

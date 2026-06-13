@@ -108,7 +108,13 @@ export function BaseContinueRow({
                                                       role="button"
                                                       onClick={(e) => {
                                                           e.preventDefault();
-                                                          navigate(buildPlayerUrl(item.Id!, location.pathname + location.search));
+                                                          navigate(
+                                                              buildPlayerUrl(
+                                                                  item.Id!,
+                                                                  location.pathname +
+                                                                      location.search
+                                                              )
+                                                          );
                                                       }}
                                                   >
                                                       <Play className="w-6 h-6 text-white fill-white" />

@@ -43,7 +43,12 @@ const SourcePickerButton = ({
     return (
         <ButtonGroup className="relative inline-flex">
             <Button className={hasMultipleSources ? 'rounded-r-none w-min' : 'w-min'} asChild>
-                <Link to={buildPlayerUrl(selectedSource?.Id ?? itemId, location.pathname + location.search)}>
+                <Link
+                    to={buildPlayerUrl(
+                        selectedSource?.Id ?? itemId,
+                        location.pathname + location.search
+                    )}
+                >
                     <Play />
                     {isCurrentlyPlaying ? resumeLabel : playLabel}
                 </Link>

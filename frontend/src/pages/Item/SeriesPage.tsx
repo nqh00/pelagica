@@ -131,7 +131,12 @@ const SeriesPage = ({ item, config }: SeriesPageProps) => {
                                     className="w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 py-2 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-200 ease-out"
                                     asChild
                                 >
-                                    <Link to={buildPlayerUrl(episodeToContinue.Id!, location.pathname + location.search)}>
+                                    <Link
+                                        to={buildPlayerUrl(
+                                            episodeToContinue.Id!,
+                                            location.pathname + location.search
+                                        )}
+                                    >
                                         <Play />
                                         {episodeToContinue.UserData?.PlaybackPositionTicks
                                             ? t('continue_episode', {

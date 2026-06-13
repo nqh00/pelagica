@@ -57,7 +57,7 @@ const SeriesPage = ({ item, config }: SeriesPageProps) => {
         seasons && seasons.length > 0
             ? seasons.find((s) => s.IndexNumber === 1)?.Id || seasons[0]?.Id
             : undefined;
-    const { data: firstSeasonEpisodes } = useEpisodes(firstSeasonId);
+    const { data: firstSeasonEpisodes } = useEpisodes(item.Id || null, firstSeasonId);
 
     const episodeToContinue =
         firstSeasonEpisodes?.find(
@@ -211,6 +211,7 @@ const SeriesPage = ({ item, config }: SeriesPageProps) => {
                             </div>
                         }
                         seasonsLoading={isLoading}
+                        seriesId={item.Id || null}
                         seasonId={effectiveSelectedSeason}
                         episodeDisplay={config.itemPage?.episodeDisplay || 'row'}
                     />

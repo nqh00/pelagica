@@ -4,7 +4,8 @@ import { getPrimaryImageUrl, getLogoUrl } from '@/utils/jellyfinUrls';
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { ImageOff, Play } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
+import { buildPlayerUrl } from '@/utils/playerUrl';
 import {
     Select,
     SelectContent,
@@ -39,6 +40,7 @@ interface SeriesPageProps {
 
 const SeriesPage = ({ item, config }: SeriesPageProps) => {
     const { t } = useTranslation('item');
+    const location = useLocation();
     const [selectedSeason, setSelectedSeason] = useState<string | null>(null);
     const { data: seasons, isLoading, error } = useSeasons(item.Id || '');
     const [posterFailed, setPosterFailed] = useState(false);
@@ -129,7 +131,7 @@ const SeriesPage = ({ item, config }: SeriesPageProps) => {
                                     className="w-fit bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 py-2 shadow-lg hover:scale-105 active:scale-95 transition-transform duration-200 ease-out"
                                     asChild
                                 >
-                                    <Link to={`/play/${episodeToContinue.Id}`}>
+                                    <Link to={buildPlayerUrl(episodeToContinue.Id!, location.pathname + location.search)}>
                                         <Play />
                                         {episodeToContinue.UserData?.PlaybackPositionTicks
                                             ? t('continue_episode', {

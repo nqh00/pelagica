@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Search, Play, X, UserRound } from 'lucide-react';
+import { Search, Play, X, UserRound, Disc3 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -122,6 +122,33 @@ const SongList = ({
     );
 };
 
+const AlbumCover = ({ album }: { album: BaseItemDto }) => {
+    const [imageError, setImageError] = useState(false);
+
+    if (imageError) {
+        return (
+            <div className="relative aspect-square overflow-hidden rounded-md bg-muted flex items-center justify-center">
+                <Disc3 className="w-1/2 h-1/2 text-muted-foreground" strokeWidth={1.5} />
+            </div>
+        );
+    }
+
+    return (
+        <div className="relative aspect-square overflow-hidden rounded-md">
+            <img
+                src={getPrimaryImageUrl(album.Id || '', {
+                    width: 200,
+                    height: 200,
+                })}
+                alt={album.Name || ''}
+                className="w-full h-full object-cover group-hover:opacity-75 group-hover:scale-105 transition-all transform-gpu"
+                loading="lazy"
+                onError={() => setImageError(true)}
+            />
+        </div>
+    );
+};
+
 const AlbumsGrid = ({
     albums,
     isLoading,
@@ -157,17 +184,7 @@ const AlbumsGrid = ({
                     to={`/music/album/${album.Id}`}
                     className="group flex flex-col"
                 >
-                    <div className="relative aspect-square overflow-hidden rounded-md">
-                        <img
-                            src={getPrimaryImageUrl(album.Id || '', {
-                                width: 200,
-                                height: 200,
-                            })}
-                            alt={album.Name || ''}
-                            className="w-full h-full object-cover group-hover:opacity-75 group-hover:scale-105 transition-all transform-gpu"
-                            loading="lazy"
-                        />
-                    </div>
+                    <AlbumCover album={album} />
                     <span className="text-sm mt-2 truncate">{album.Name}</span>
                     <span className="text-xs text-muted-foreground truncate">
                         {album.ArtistItems?.[0]?.Name || album.AlbumArtist || ''}

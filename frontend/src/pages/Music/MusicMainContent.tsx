@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Search, Play, X } from 'lucide-react';
+import { Search, Play, X, UserRound } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -178,6 +178,33 @@ const AlbumsGrid = ({
     );
 };
 
+const ArtistAvatar = ({ artist }: { artist: BaseItemDto }) => {
+    const [imageError, setImageError] = useState(false);
+
+    if (imageError) {
+        return (
+            <div className="relative aspect-square w-full overflow-hidden rounded-full bg-muted flex items-center justify-center">
+                <UserRound className="w-1/2 h-1/2 text-muted-foreground" strokeWidth={1.5} />
+            </div>
+        );
+    }
+
+    return (
+        <div className="relative aspect-square w-full overflow-hidden rounded-full">
+            <img
+                src={getPrimaryImageUrl(artist.Id || '', {
+                    width: 200,
+                    height: 200,
+                })}
+                alt={artist.Name || ''}
+                className="w-full h-full object-cover group-hover:opacity-75 group-hover:scale-105 transition-all transform-gpu"
+                loading="lazy"
+                onError={() => setImageError(true)}
+            />
+        </div>
+    );
+};
+
 const ArtistsGrid = ({
     artists,
     isLoading,
@@ -212,17 +239,7 @@ const ArtistsGrid = ({
                     to={`/music/artist/${artist.Id}`}
                     className="group flex flex-col items-center"
                 >
-                    <div className="relative aspect-square w-full overflow-hidden rounded-full">
-                        <img
-                            src={getPrimaryImageUrl(artist.Id || '', {
-                                width: 200,
-                                height: 200,
-                            })}
-                            alt={artist.Name || ''}
-                            className="w-full h-full object-cover group-hover:opacity-75 group-hover:scale-105 transition-all transform-gpu"
-                            loading="lazy"
-                        />
-                    </div>
+                    <ArtistAvatar artist={artist} />
                     <span className="text-sm mt-2 truncate text-center w-full">{artist.Name}</span>
                 </Link>
             ))}

@@ -282,6 +282,7 @@ const MusicArtistPage = ({ item, config }: MusicArtistPageProps) => {
                     useItems={useArtistItems}
                     itemAspectClass="aspect-square"
                     listTitle={t('albums')}
+                    getItemUrl={(album) => `/music/album/${album.Id}`}
                 />
             </section>
 

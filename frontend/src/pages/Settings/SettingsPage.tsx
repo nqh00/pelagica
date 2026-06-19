@@ -334,9 +334,7 @@ const SectionEditor = ({
                                     value: l,
                                     label: l,
                                 }))}
-                                selected={
-                                    ((editedSection as any).detailLine || []) as string[]
-                                }
+                                selected={((editedSection as any).detailLine || []) as string[]}
                                 onChange={(selected) =>
                                     setEditedSection({
                                         ...editedSection,

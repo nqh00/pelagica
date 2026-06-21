@@ -35,11 +35,14 @@ export interface SectionItemsConfig {
     isUnplayed?: boolean;
 }
 
+export const MEDIABAR_SIZES = ['small', 'medium', 'large', 'xlarge'] as const;
+export type MediabarSize = (typeof MEDIABAR_SIZES)[number];
+
 /** A large carousel banner showcasing featured media with backdrop images */
 export interface MediaBarSection extends BaseHomeScreenSection {
     type: 'mediaBar';
     /** Size of the media bar carousel */
-    size?: 'small' | 'medium' | 'large' | 'xlarge';
+    size?: MediabarSize;
     /** Configuration for which items to display in the carousel */
     items?: SectionItemsConfig;
     /** Whether to show the favorite button on the media bar items */

@@ -20,8 +20,7 @@ import type { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models/bas
 import { getPrimaryImageUrl } from '../utils/jellyfinUrls';
 import { cn } from '@/lib/utils';
 
-const isMac =
-    typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 
 const SEARCH_MODES: {
     mode: SearchMode;
@@ -116,7 +115,10 @@ export const SearchCommand = () => {
                         variant={searchMode === mode ? 'secondary' : 'ghost'}
                         size="sm"
                         aria-pressed={searchMode === mode}
-                        className={cn('h-8 flex-1 justify-between px-2.5', searchMode !== mode && 'text-muted-foreground')}
+                        className={cn(
+                            'h-8 flex-1 justify-between px-2.5',
+                            searchMode !== mode && 'text-muted-foreground'
+                        )}
                         onClick={() => setSearchMode(mode)}
                     >
                         <span className="flex items-center gap-1.5">

@@ -1,8 +1,11 @@
 export const EQUALIZER_PRESET_STORAGE_KEY = 'music_equalizer_preset';
 export const SLEEP_FADE_STORAGE_KEY = 'music_sleep_fade_enabled';
+export const SLEEP_FADE_DURATION_STORAGE_KEY = 'music_sleep_fade_duration_minutes';
 export const CUSTOM_PRESETS_STORAGE_KEY = 'music_equalizer_custom_presets';
 
-export const SLEEP_FADE_DURATION_MS = 20 * 60 * 1000;
+export const DEFAULT_SLEEP_FADE_DURATION_MINUTES = 20;
+export const MIN_SLEEP_FADE_DURATION_MINUTES = 1;
+export const MAX_SLEEP_FADE_DURATION_MINUTES = 180;
 export const CUSTOM_PRESET_GAIN_MIN = -12;
 export const CUSTOM_PRESET_GAIN_MAX = 12;
 
@@ -181,6 +184,28 @@ export function loadStoredSleepFadeEnabled(): boolean {
     if (typeof window === 'undefined') return false;
 
     return localStorage.getItem(SLEEP_FADE_STORAGE_KEY) === 'true';
+}
+
+export function clampSleepFadeDurationMinutes(minutes: number): number {
+    return Math.min(
+        MAX_SLEEP_FADE_DURATION_MINUTES,
+        Math.max(MIN_SLEEP_FADE_DURATION_MINUTES, Math.round(minutes))
+    );
+}
+
+export function loadStoredSleepFadeDurationMinutes(): number {
+    if (typeof window === 'undefined') return DEFAULT_SLEEP_FADE_DURATION_MINUTES;
+
+    const stored = localStorage.getItem(SLEEP_FADE_DURATION_STORAGE_KEY);
+    const parsed = stored ? Number(stored) : DEFAULT_SLEEP_FADE_DURATION_MINUTES;
+
+    return Number.isFinite(parsed)
+        ? clampSleepFadeDurationMinutes(parsed)
+        : DEFAULT_SLEEP_FADE_DURATION_MINUTES;
+}
+
+export function sleepFadeMinutesToMs(minutes: number): number {
+    return clampSleepFadeDurationMinutes(minutes) * 60 * 1000;
 }
 
 export function lerp(start: number, end: number, progress: number): number {

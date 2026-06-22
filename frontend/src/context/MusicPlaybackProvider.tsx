@@ -11,14 +11,18 @@ import { usePlaybackStop } from '@/hooks/api/usePlaybackStop';
 import { useMediaSession } from '@/hooks/useMediaSession';
 import {
     EQUALIZER_PRESET_STORAGE_KEY,
+    SLEEP_FADE_DURATION_STORAGE_KEY,
     SLEEP_FADE_STORAGE_KEY,
+    clampSleepFadeDurationMinutes,
     getCustomPresetId,
     isCustomPresetSelection,
     loadStoredCustomPresets,
     loadStoredPreset,
+    loadStoredSleepFadeDurationMinutes,
     loadStoredSleepFadeEnabled,
     resolvePresetBands,
     saveCustomPresets,
+    sleepFadeMinutesToMs,
     type CustomEqualizerPreset,
     type EqualizerBand,
     type EqualizerSelection,
@@ -50,6 +54,9 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
         loadStoredPreset(loadStoredCustomPresets())
     );
     const [sleepFadeEnabled, setSleepFadeEnabledState] = useState(loadStoredSleepFadeEnabled);
+    const [sleepFadeDurationMinutes, setSleepFadeDurationMinutesState] = useState(
+        loadStoredSleepFadeDurationMinutes
+    );
     const [equalizerPreviewBands, setEqualizerPreviewBands] = useState<EqualizerBand[] | null>(
         null
     );
@@ -131,11 +138,17 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
         pauseRef.current();
     }, []);
 
+    const sleepFadeDurationMs = useMemo(
+        () => sleepFadeMinutesToMs(sleepFadeDurationMinutes),
+        [sleepFadeDurationMinutes]
+    );
+
     const { equalizerAvailable, resumeContext, resetSleepFadeSession } = useAudioEqualizer({
         audioRef,
         bands: activeEqualizerBands,
         isSleepPreset,
         sleepFadeEnabled,
+        sleepFadeDurationMs,
         volume,
         isPlaying,
         onSleepFadeComplete,
@@ -185,6 +198,22 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
         setSleepFadeEnabledState(enabled);
         localStorage.setItem(SLEEP_FADE_STORAGE_KEY, enabled.toString());
     }, []);
+
+    const startSleepFade = useCallback(
+        (minutes: number) => {
+            const clamped = clampSleepFadeDurationMinutes(minutes);
+            setSleepFadeDurationMinutesState(clamped);
+            localStorage.setItem(SLEEP_FADE_DURATION_STORAGE_KEY, clamped.toString());
+            setEqualizerPresetState('sleep');
+            localStorage.setItem(EQUALIZER_PRESET_STORAGE_KEY, 'sleep');
+            setSleepFadeEnabled(true);
+        },
+        [setSleepFadeEnabled]
+    );
+
+    const stopSleepFade = useCallback(() => {
+        setSleepFadeEnabled(false);
+    }, [setSleepFadeEnabled]);
 
     const internalLoadTrack = useCallback(
         (track: MusicPlaybackTrack, autoPlay = false) => {
@@ -409,7 +438,9 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
         deleteCustomEqualizerPreset,
         setEqualizerPreviewBands,
         sleepFadeEnabled,
-        setSleepFadeEnabled,
+        startSleepFade,
+        stopSleepFade,
+        sleepFadeDurationMinutes,
         equalizerAvailable,
         shuffle,
         toggleShuffle,

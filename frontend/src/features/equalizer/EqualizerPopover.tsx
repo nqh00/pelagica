@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Check, Pencil, Plus, SlidersHorizontal, Trash2 } from 'lucide-react';
+import { Check, ChevronRight, Pencil, Plus, SlidersHorizontal, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import {
     BUILT_IN_PRESET_IDS,
+    DEFAULT_SLEEP_FADE_DURATION_MINUTES,
+    clampSleepFadeDurationMinutes,
     createCustomPresetSelection,
     createDefaultCustomPreset,
+    type BuiltInEqualizerPresetId,
     type CustomEqualizerPreset,
     type EqualizerBand,
     type EqualizerSelection,
 } from './presets';
 import { BUILT_IN_PRESET_ICONS, CUSTOM_PRESET_ICON } from './presetIcons';
 import CustomPresetEditor from './CustomPresetEditor';
+import SleepModePanel from './SleepModePanel';
 
 interface EqualizerPopoverProps {
     preset: EqualizerSelection;
@@ -24,7 +27,9 @@ interface EqualizerPopoverProps {
     onDeleteCustomPreset: (id: string) => void;
     onPreviewBandsChange: (bands: EqualizerBand[] | null) => void;
     sleepFadeEnabled: boolean;
-    onSleepFadeChange: (enabled: boolean) => void;
+    onStartSleepFade: (minutes: number) => void;
+    onStopSleepFade: () => void;
+    sleepFadeDurationMinutes: number;
     equalizerAvailable: boolean;
     className?: string;
 }
@@ -41,12 +46,18 @@ const EqualizerPopover = ({
     onDeleteCustomPreset,
     onPreviewBandsChange,
     sleepFadeEnabled,
-    onSleepFadeChange,
+    onStartSleepFade,
+    onStopSleepFade,
+    sleepFadeDurationMinutes,
     equalizerAvailable,
     className,
 }: EqualizerPopoverProps) => {
     const { t } = useTranslation('player');
     const [editorState, setEditorState] = useState<EditorState | null>(null);
+    const [sleepPanelOpen, setSleepPanelOpen] = useState(false);
+    const [sleepDraftMinutes, setSleepDraftMinutes] = useState(DEFAULT_SLEEP_FADE_DURATION_MINUTES);
+
+    const isSleepRunning = preset === 'sleep' && sleepFadeEnabled;
     const isActive = preset !== 'flat' || sleepFadeEnabled;
 
     useEffect(() => {
@@ -58,22 +69,50 @@ const EqualizerPopover = ({
         onPreviewBandsChange(editorState.preset.bands);
     }, [editorState, onPreviewBandsChange]);
 
-    const closeEditor = () => {
+    const closeAll = () => {
         setEditorState(null);
+        setSleepPanelOpen(false);
         onPreviewBandsChange(null);
+    };
+
+    const openSleepPanel = () => {
+        setEditorState(null);
+        setSleepDraftMinutes(sleepFadeDurationMinutes);
+        setSleepPanelOpen(true);
+    };
+
+    const handleBuiltInPresetClick = (id: BuiltInEqualizerPresetId) => {
+        if (id === 'sleep') {
+            openSleepPanel();
+            return;
+        }
+
+        if (sleepFadeEnabled) {
+            onStopSleepFade();
+        }
+        onPresetChange(id);
     };
 
     const handleSaveEditor = () => {
         if (!editorState) return;
+        if (sleepFadeEnabled) {
+            onStopSleepFade();
+        }
         onSaveCustomPreset(editorState.preset);
         onPresetChange(createCustomPresetSelection(editorState.preset.id));
-        closeEditor();
+        closeAll();
+    };
+
+    const handleStartSleepFade = () => {
+        const minutes = clampSleepFadeDurationMinutes(sleepDraftMinutes);
+        setSleepDraftMinutes(minutes);
+        onStartSleepFade(minutes);
     };
 
     return (
         <Popover
             onOpenChange={(open) => {
-                if (!open) closeEditor();
+                if (!open) closeAll();
             }}
         >
             <PopoverTrigger asChild>
@@ -104,7 +143,16 @@ const EqualizerPopover = ({
                             setEditorState({ mode: editorState.mode, preset: nextPreset })
                         }
                         onSave={handleSaveEditor}
-                        onCancel={closeEditor}
+                        onCancel={closeAll}
+                    />
+                ) : sleepPanelOpen ? (
+                    <SleepModePanel
+                        durationMinutes={sleepDraftMinutes}
+                        isRunning={isSleepRunning}
+                        onDurationChange={setSleepDraftMinutes}
+                        onStart={handleStartSleepFade}
+                        onStop={onStopSleepFade}
+                        onBack={() => setSleepPanelOpen(false)}
                     />
                 ) : (
                     <>
@@ -113,6 +161,7 @@ const EqualizerPopover = ({
                             {BUILT_IN_PRESET_IDS.map((id) => {
                                 const Icon = BUILT_IN_PRESET_ICONS[id];
                                 const isSelected = preset === id;
+                                const isSleep = id === 'sleep';
 
                                 return (
                                     <li key={id}>
@@ -122,18 +171,22 @@ const EqualizerPopover = ({
                                                 'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-accent',
                                                 isSelected && 'bg-accent'
                                             )}
-                                            onClick={() => onPresetChange(id)}
+                                            onClick={() => handleBuiltInPresetClick(id)}
                                         >
                                             <Icon className="size-4 shrink-0 text-muted-foreground" />
                                             <span className="flex-1 text-left">
                                                 {t(`equalizerPresets.${id}`)}
                                             </span>
-                                            <Check
-                                                className={cn(
-                                                    'size-4 shrink-0',
-                                                    isSelected ? 'opacity-100' : 'opacity-0'
-                                                )}
-                                            />
+                                            {isSleep ? (
+                                                <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+                                            ) : (
+                                                <Check
+                                                    className={cn(
+                                                        'size-4 shrink-0',
+                                                        isSelected ? 'opacity-100' : 'opacity-0'
+                                                    )}
+                                                />
+                                            )}
                                         </button>
                                     </li>
                                 );
@@ -164,7 +217,12 @@ const EqualizerPopover = ({
                                                     <button
                                                         type="button"
                                                         className="flex min-w-0 flex-1 items-center gap-2 px-2 py-1.5 text-sm"
-                                                        onClick={() => onPresetChange(selection)}
+                                                        onClick={() => {
+                                                            if (sleepFadeEnabled) {
+                                                                onStopSleepFade();
+                                                            }
+                                                            onPresetChange(selection);
+                                                        }}
                                                     >
                                                         <Icon className="size-4 shrink-0 text-muted-foreground" />
                                                         <span className="truncate text-left">
@@ -231,22 +289,6 @@ const EqualizerPopover = ({
                             <Plus className="size-4" />
                             {t('customPresetNew')}
                         </Button>
-
-                        {preset === 'sleep' && (
-                            <div className="mt-3 flex items-center justify-between gap-3 border-t pt-3">
-                                <div className="min-w-0 flex-1">
-                                    <p className="text-sm font-medium">{t('sleepFade')}</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {t('sleepFadeDescription')}
-                                    </p>
-                                </div>
-                                <Switch
-                                    checked={sleepFadeEnabled}
-                                    onCheckedChange={onSleepFadeChange}
-                                    aria-label={t('sleepFade')}
-                                />
-                            </div>
-                        )}
 
                         {!equalizerAvailable && (
                             <p className="mt-3 border-t pt-3 text-xs text-muted-foreground">

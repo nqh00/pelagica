@@ -34,7 +34,9 @@ export interface MusicPlaybackContextType {
     deleteCustomEqualizerPreset: (id: string) => void;
     setEqualizerPreviewBands: (bands: EqualizerBand[] | null) => void;
     sleepFadeEnabled: boolean;
-    setSleepFadeEnabled: (enabled: boolean) => void;
+    startSleepFade: (minutes: number) => void;
+    stopSleepFade: () => void;
+    sleepFadeDurationMinutes: number;
     equalizerAvailable: boolean;
     shuffle: boolean;
     toggleShuffle: () => void;

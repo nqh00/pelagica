@@ -60,7 +60,9 @@ const MusicPlayerBar = () => {
         deleteCustomEqualizerPreset,
         setEqualizerPreviewBands,
         sleepFadeEnabled,
-        setSleepFadeEnabled,
+        startSleepFade,
+        stopSleepFade,
+        sleepFadeDurationMinutes,
         equalizerAvailable,
         clearPlayback,
     } = useMusicPlayback();
@@ -251,7 +253,9 @@ const MusicPlayerBar = () => {
                             onDeleteCustomPreset={deleteCustomEqualizerPreset}
                             onPreviewBandsChange={setEqualizerPreviewBands}
                             sleepFadeEnabled={sleepFadeEnabled}
-                            onSleepFadeChange={setSleepFadeEnabled}
+                            onStartSleepFade={startSleepFade}
+                            onStopSleepFade={stopSleepFade}
+                            sleepFadeDurationMinutes={sleepFadeDurationMinutes}
                             equalizerAvailable={equalizerAvailable}
                         />
                     </div>
@@ -366,7 +370,9 @@ const MusicPlayerBar = () => {
                             onDeleteCustomPreset={deleteCustomEqualizerPreset}
                             onPreviewBandsChange={setEqualizerPreviewBands}
                             sleepFadeEnabled={sleepFadeEnabled}
-                            onSleepFadeChange={setSleepFadeEnabled}
+                            onStartSleepFade={startSleepFade}
+                            onStopSleepFade={stopSleepFade}
+                            sleepFadeDurationMinutes={sleepFadeDurationMinutes}
                             equalizerAvailable={equalizerAvailable}
                         />
                         <Button

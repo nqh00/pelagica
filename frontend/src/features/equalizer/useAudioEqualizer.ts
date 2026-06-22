@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import {
-    SLEEP_FADE_DURATION_MS,
     SLEEP_FADE_HIGH_SHELF_END,
     SLEEP_FADE_HIGH_SHELF_START,
     SLEEP_FADE_LOWPASS_END,
@@ -14,6 +13,7 @@ interface UseAudioEqualizerOptions {
     bands: EqualizerBand[];
     isSleepPreset: boolean;
     sleepFadeEnabled: boolean;
+    sleepFadeDurationMs: number;
     volume: number;
     isPlaying: boolean;
     onSleepFadeComplete?: () => void;
@@ -41,6 +41,7 @@ export function useAudioEqualizer({
     bands,
     isSleepPreset,
     sleepFadeEnabled,
+    sleepFadeDurationMs,
     volume,
     isPlaying,
     onSleepFadeComplete,
@@ -172,8 +173,8 @@ export function useAudioEqualizer({
     const getFadeProgress = useCallback(() => {
         if (!sleepFadeStartedAtRef.current) return 0;
         const elapsed = Date.now() - sleepFadeStartedAtRef.current;
-        return Math.min(1, elapsed / SLEEP_FADE_DURATION_MS);
-    }, []);
+        return Math.min(1, elapsed / sleepFadeDurationMs);
+    }, [sleepFadeDurationMs]);
 
     const resetSleepFadeSession = useCallback(() => {
         sleepFadeStartedAtRef.current = null;
@@ -210,6 +211,12 @@ export function useAudioEqualizer({
             resetSleepFadeSession();
         }
     }, [isSleepPreset, sleepFadeEnabled, resetSleepFadeSession, startSleepFadeSession]);
+
+    useEffect(() => {
+        if (!isSleepPreset || !sleepFadeEnabled) return;
+        resetSleepFadeSession();
+        startSleepFadeSession();
+    }, [sleepFadeDurationMs, isSleepPreset, sleepFadeEnabled, resetSleepFadeSession, startSleepFadeSession]);
 
     useEffect(() => {
         initGraph();

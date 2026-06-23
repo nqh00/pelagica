@@ -20,6 +20,7 @@ import type { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models/bas
 import { getPrimaryImageUrl } from '../utils/jellyfinUrls';
 import { getItemUrl } from '@/utils/itemUrl';
 import { cn } from '@/lib/utils';
+import { getItemFallbackIcon } from '@/utils/itemFallbackIcon';
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -36,8 +37,6 @@ const SEARCH_MODES: {
 const ItemDescription = ({ item }: { item: BaseItemDto }) => {
     const isMusicItem = item.Type === 'MusicAlbum' || item.Type === 'Audio';
     const isMusicArtist = item.Type === 'MusicArtist';
-
-    console.log('ItemDescription item:', item);
 
     return (
         <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
@@ -71,6 +70,42 @@ const ItemDescription = ({ item }: { item: BaseItemDto }) => {
                 </>
             )}
         </div>
+    );
+};
+
+const SearchResultImage = ({
+    src,
+    alt,
+    type,
+    className,
+}: {
+    src: string;
+    alt: string;
+    type?: string;
+    className: string;
+}) => {
+    const [imageError, setImageError] = useState(false);
+    const FallbackIcon = getItemFallbackIcon(type);
+
+    if (imageError || !src) {
+        return (
+            <div className={cn(className, 'bg-muted flex items-center justify-center rounded-md')}>
+                <FallbackIcon className="w-1/2 h-1/2 text-muted-foreground" strokeWidth={1.5} />
+            </div>
+        );
+    }
+
+    return (
+        <>
+            <img
+                src={src}
+                alt={alt}
+                className={cn(className, 'object-cover rounded-md')}
+                loading="lazy"
+                onError={() => setImageError(true)}
+            />
+            <Skeleton className="absolute bottom-0 left-0 right-0 top-0 -z-1" />
+        </>
     );
 };
 
@@ -234,13 +269,12 @@ export const SearchCommand = () => {
                                         <div
                                             className={`relative overflow-hidden shrink-0 ${posterClass}`}
                                         >
-                                            <img
+                                            <SearchResultImage
                                                 src={posterUrls[item.Id!]}
                                                 alt={item.Name || ''}
-                                                className="w-full h-full object-cover rounded-md"
-                                                loading="lazy"
+                                                type={item.Type}
+                                                className="w-full h-full"
                                             />
-                                            <Skeleton className="absolute bottom-0 left-0 right-0 top-0 -z-1" />
                                         </div>
                                         <div className="flex flex-col justify-start min-w-0 flex-1">
                                             <div className="flex items-center">

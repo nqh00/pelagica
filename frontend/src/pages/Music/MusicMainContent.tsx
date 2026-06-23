@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { Search, Play, X, UserRound, Disc3 } from 'lucide-react';
+import { Search, Play, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemFallbackIcon } from '@/utils/itemFallbackIcon';
 import { getItemUrl } from '@/utils/itemUrl';
 import { ticksToReadableMusicTime } from '@/utils/timeConversion';
 import { useMusicPlayback } from '@/hooks/useMusicPlayback';
@@ -125,11 +126,12 @@ const SongList = ({
 
 const AlbumCover = ({ album }: { album: BaseItemDto }) => {
     const [imageError, setImageError] = useState(false);
+    const FallbackIcon = getItemFallbackIcon(album.Type);
 
     if (imageError) {
         return (
             <div className="relative aspect-square overflow-hidden rounded-md bg-muted flex items-center justify-center">
-                <Disc3 className="w-1/2 h-1/2 text-muted-foreground" strokeWidth={1.5} />
+                <FallbackIcon className="w-1/2 h-1/2 text-muted-foreground" strokeWidth={1.5} />
             </div>
         );
     }
@@ -198,11 +200,12 @@ const AlbumsGrid = ({
 
 const ArtistAvatar = ({ artist }: { artist: BaseItemDto }) => {
     const [imageError, setImageError] = useState(false);
+    const FallbackIcon = getItemFallbackIcon(artist.Type);
 
     if (imageError) {
         return (
             <div className="relative aspect-square w-full overflow-hidden rounded-full bg-muted flex items-center justify-center">
-                <UserRound className="w-1/2 h-1/2 text-muted-foreground" strokeWidth={1.5} />
+                <FallbackIcon className="w-1/2 h-1/2 text-muted-foreground" strokeWidth={1.5} />
             </div>
         );
     }

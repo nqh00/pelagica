@@ -20,6 +20,7 @@ import type { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models/bas
 import { getPrimaryImageUrl } from '../utils/jellyfinUrls';
 import { getItemUrl } from '@/utils/itemUrl';
 import { cn } from '@/lib/utils';
+import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
 
@@ -31,6 +32,47 @@ const SEARCH_MODES: {
     { mode: 'movies-tv', icon: Clapperboard, shortcut: isMac ? '⌘K' : 'Ctrl+K' },
     { mode: 'music', icon: Music, shortcut: isMac ? '⌘M' : 'Ctrl+M' },
 ];
+
+const ItemDescription = ({ item }: { item: BaseItemDto }) => {
+    const isMusicItem = item.Type === 'MusicAlbum' || item.Type === 'Audio';
+    const isMusicArtist = item.Type === 'MusicArtist';
+
+    console.log('ItemDescription item:', item);
+
+    return (
+        <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+            {isMusicItem && (
+                <>
+                    {item.Artists && item.Artists.length > 0 && (
+                        <span className="line-clamp-1">{item.Artists.join(', ')}</span>
+                    )}
+                    {item.ProductionYear && (
+                        <div className="flex items-center gap-1">
+                            <Calendar className="h-3! w-3!" />
+                            <span>{item.ProductionYear}</span>
+                        </div>
+                    )}
+                </>
+            )}
+            {!isMusicItem && !isMusicArtist && (
+                <>
+                    {item.ProductionYear && (
+                        <div className="flex items-center gap-1">
+                            <Calendar className="h-3! w-3!" />
+                            <span>{item.ProductionYear}</span>
+                        </div>
+                    )}
+                    {item.CommunityRating && (
+                        <div className="flex items-center gap-1">
+                            <Star className="h-3! w-3!" />
+                            <span>{item.CommunityRating.toFixed(1)}</span>
+                        </div>
+                    )}
+                </>
+            )}
+        </div>
+    );
+};
 
 export const SearchCommand = () => {
     const { t } = useTranslation('search');
@@ -210,44 +252,7 @@ export const SearchCommand = () => {
                                                     {t('itemtype_' + item.Type?.toLowerCase())}
                                                 </Badge>
                                             </div>
-                                            <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                                                {item.Type === 'MusicAlbum' ||
-                                                item.Type === 'Audio' ? (
-                                                    <>
-                                                        {item.Artists &&
-                                                            item.Artists.length > 0 && (
-                                                                <span className="line-clamp-1">
-                                                                    {item.Artists.join(', ')}
-                                                                </span>
-                                                            )}
-                                                        {item.ProductionYear && (
-                                                            <div className="flex items-center gap-1">
-                                                                <Calendar className="h-3! w-3!" />
-                                                                <span>{item.ProductionYear}</span>
-                                                            </div>
-                                                        )}
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        {item.ProductionYear && (
-                                                            <div className="flex items-center gap-1">
-                                                                <Calendar className="h-3! w-3!" />
-                                                                <span>{item.ProductionYear}</span>
-                                                            </div>
-                                                        )}
-                                                        {item.CommunityRating && (
-                                                            <div className="flex items-center gap-1">
-                                                                <Star className="h-3! w-3!" />
-                                                                <span>
-                                                                    {item.CommunityRating.toFixed(
-                                                                        1
-                                                                    )}
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </div>
+                                            <ItemDescription item={item} />
                                             {item.Overview && item.Type !== 'MusicAlbum' && (
                                                 <p className="text-xs text-muted-foreground line-clamp-1 mt-2">
                                                     {item.Overview}

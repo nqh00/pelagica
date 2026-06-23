@@ -243,7 +243,7 @@ export const SearchCommand = () => {
                                                 </>
                                             )}
                                         </div>
-                                        {item.Overview && (
+                                        {item.Overview && item.Type !== 'MusicAlbum' && (
                                             <p className="text-xs text-muted-foreground line-clamp-1 mt-2">
                                                 {item.Overview}
                                             </p>

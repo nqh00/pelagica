@@ -1,6 +1,7 @@
 import SectionScroller from '@/components/SectionScroller';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import type { BaseItemPerson } from '@jellyfin/sdk/lib/generated-client/models';
 import { ImageOff } from 'lucide-react';
 import { useState, useCallback, memo } from 'react';
@@ -47,7 +48,7 @@ const PeopleRow = memo(
                 items={
                     people?.map((person) => (
                         <Link
-                            to={`/person/${person.Id}`}
+                            to={getItemUrl('Person', person.Id)}
                             key={`${person.Id}-${person.Type}-${person.Role}`}
                             className="group min-w-30 w-30"
                         >

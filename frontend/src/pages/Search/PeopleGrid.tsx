@@ -1,5 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { User } from 'lucide-react';
 import { useState } from 'react';
@@ -22,7 +23,7 @@ const PersonItem = ({ item }: { item: BaseItemDto }) => {
     );
 
     return (
-        <Link to={`/person/${item.Id}`} key={item.Id} className="p-0 m-0">
+        <Link to={getItemUrl(item.Type, item.Id)} key={item.Id} className="p-0 m-0">
             <div className="relative w-full aspect-square overflow-hidden rounded-full group">
                 {!posterError ? (
                     <>

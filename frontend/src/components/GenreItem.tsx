@@ -1,5 +1,6 @@
 import type { GenreWithItem } from '@/hooks/api/genres/useGenresWithItems';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { Skeleton } from './ui/skeleton';
@@ -22,7 +23,7 @@ const GenreItem = ({
 
     return (
         <Link
-            to={`/genre/${genreWithItem.id}`}
+            to={getItemUrl('Genre', genreWithItem.id)}
             key={genreWithItem.id}
             className={`p-0 m-0 ${className || ''}`}
         >

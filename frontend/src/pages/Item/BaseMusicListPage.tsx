@@ -1,5 +1,6 @@
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import { usePageBackground } from '@/hooks/usePageBackground';
 import { Link } from 'react-router';
 import { ticksToReadableMusicTime, ticksToReadableTime } from '@/utils/timeConversion';
@@ -275,7 +276,7 @@ const BaseMusicListPage = ({
                                         (artist) => (
                                             <Link
                                                 key={artist.Id}
-                                                to={`/music/artist/${artist.Id}`}
+                                                to={getItemUrl('MusicArtist', artist.Id)}
                                                 className="bg-accent/20 rounded-full text-sm"
                                             >
                                                 {artist.Name}

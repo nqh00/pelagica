@@ -18,6 +18,7 @@ import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import type { BaseItemKind } from '@jellyfin/sdk/lib/generated-client/models/base-item-kind';
 import { getPrimaryImageUrl } from '../utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import { cn } from '@/lib/utils';
 
 const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -173,7 +174,7 @@ export const SearchCommand = () => {
                                         );
                                         closeSearch();
                                     } else {
-                                        navigate(`/item/${item.Id}`);
+                                        navigate(getItemUrl(item.Type, item.Id));
                                         closeSearch();
                                     }
                                 }}

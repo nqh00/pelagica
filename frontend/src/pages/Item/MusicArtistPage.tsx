@@ -8,6 +8,7 @@ import { useArtistAlbumCount, useArtistItems, useArtistTracks } from '@/hooks/ap
 import { useImagePalette } from '@/hooks/useImagePalette';
 import { useMusicPlayback } from '@/hooks/useMusicPlayback';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import { cn } from '@/lib/utils';
 import FavoriteButton from '@/components/FavoriteButton';
 import ItemAdminButton from '@/components/ItemAdminButton';
@@ -282,7 +283,7 @@ const MusicArtistPage = ({ item, config }: MusicArtistPageProps) => {
                     useItems={useArtistItems}
                     itemAspectClass="aspect-square"
                     listTitle={t('albums')}
-                    getItemUrl={(album) => `/music/album/${album.Id}`}
+                    getItemUrl={(album) => getItemUrl(album.Type, album.Id)}
                 />
             </section>
 

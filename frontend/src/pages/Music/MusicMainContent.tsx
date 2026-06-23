@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import { ticksToReadableMusicTime } from '@/utils/timeConversion';
 import { useMusicPlayback } from '@/hooks/useMusicPlayback';
 import { useTranslation } from 'react-i18next';
@@ -181,7 +182,7 @@ const AlbumsGrid = ({
             {albums.map((album) => (
                 <Link
                     key={album.Id}
-                    to={`/music/album/${album.Id}`}
+                    to={getItemUrl(album.Type, album.Id)}
                     className="group flex flex-col"
                 >
                     <AlbumCover album={album} />
@@ -253,7 +254,7 @@ const ArtistsGrid = ({
             {artists.map((artist) => (
                 <Link
                     key={artist.Id}
-                    to={`/music/artist/${artist.Id}`}
+                    to={getItemUrl(artist.Type, artist.Id)}
                     className="group flex flex-col items-center"
                 >
                     <ArtistAvatar artist={artist} />
@@ -368,7 +369,7 @@ const SearchResults = ({ searchTerm }: { searchTerm: string }) => {
                         {artists.map((artist) => (
                             <Link
                                 key={artist.Id}
-                                to={`/music/artist/${artist.Id}`}
+                                to={getItemUrl(artist.Type, artist.Id)}
                                 className="flex flex-col items-center shrink-0 group"
                             >
                                 <img
@@ -396,7 +397,7 @@ const SearchResults = ({ searchTerm }: { searchTerm: string }) => {
                         {albums.map((album) => (
                             <Link
                                 key={album.Id}
-                                to={`/music/album/${album.Id}`}
+                                to={getItemUrl(album.Type, album.Id)}
                                 className="flex flex-col shrink-0 group"
                             >
                                 <img
@@ -494,7 +495,7 @@ const MusicMainContent = () => {
                             items={recentAlbums.map((album) => (
                                 <Link
                                     key={album.Id}
-                                    to={`/music/album/${album.Id}`}
+                                    to={getItemUrl(album.Type, album.Id)}
                                     className="group flex flex-col shrink-0"
                                 >
                                     <div className="relative w-36 h-36 overflow-hidden rounded-md">

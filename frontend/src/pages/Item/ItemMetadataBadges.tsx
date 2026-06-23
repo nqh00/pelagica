@@ -1,5 +1,6 @@
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { Link } from 'react-router';
+import { getItemUrl } from '@/utils/itemUrl';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import ItemBadge from './ItemBadge';
@@ -67,7 +68,7 @@ const ItemMetadataBadges = ({ item }: ItemMetadataBadgesProps) => {
                     <div className="flex flex-wrap gap-1.5">
                         {visible('genres', genres).map((genre) => (
                             <ItemBadge key={genre.Name} asChild>
-                                <Link to={`/genre/${genre.Id}`}>{genre.Name}</Link>
+                                <Link to={getItemUrl('Genre', genre.Id)}>{genre.Name}</Link>
                             </ItemBadge>
                         ))}
                         {showMore('genres', genres.length)}
@@ -83,7 +84,7 @@ const ItemMetadataBadges = ({ item }: ItemMetadataBadgesProps) => {
                     <div className="flex flex-wrap gap-1.5">
                         {visible('directors', directors).map((person) => (
                             <ItemBadge key={person.Name} asChild>
-                                <Link to={`/person/${person.Id}`}>{person.Name}</Link>
+                                <Link to={getItemUrl('Person', person.Id)}>{person.Name}</Link>
                             </ItemBadge>
                         ))}
                         {showMore('directors', directors.length)}
@@ -99,7 +100,7 @@ const ItemMetadataBadges = ({ item }: ItemMetadataBadgesProps) => {
                     <div className="flex flex-wrap gap-1.5">
                         {visible('writers', writers).map((person) => (
                             <ItemBadge key={person.Name} asChild>
-                                <Link to={`/person/${person.Id}`}>{person.Name}</Link>
+                                <Link to={getItemUrl('Person', person.Id)}>{person.Name}</Link>
                             </ItemBadge>
                         ))}
                         {showMore('writers', writers.length)}

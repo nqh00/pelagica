@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { Heart, ListMusic, Mic2, Disc3, Music } from 'lucide-react';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import { usePlaylists } from '@/hooks/api/playlist/usePlaylists';
 import { useCurrentUser } from '@/hooks/api/useCurrentUser';
 import { useFavoriteArtists, useFavoriteAlbums, useFavoriteSongs } from '@/hooks/api/useMusicItems';
@@ -158,7 +159,7 @@ const MusicLeftSidebar = () => {
                     favoriteArtists.map((artist) => (
                         <SidebarItem
                             key={artist.Id}
-                            to={`/music/artist/${artist.Id}`}
+                            to={getItemUrl(artist.Type, artist.Id)}
                             imageUrl={getPrimaryImageUrl(artist.Id || '', {
                                 width: 64,
                                 height: 64,
@@ -182,7 +183,7 @@ const MusicLeftSidebar = () => {
                     favoriteAlbums.map((album) => (
                         <SidebarItem
                             key={album.Id}
-                            to={`/music/album/${album.Id}`}
+                            to={getItemUrl(album.Type, album.Id)}
                             imageUrl={getPrimaryImageUrl(album.Id || '', {
                                 width: 64,
                                 height: 64,

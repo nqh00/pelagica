@@ -2,6 +2,7 @@ import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { Link, useNavigate } from 'react-router';
 import { Skeleton } from './ui/skeleton';
 import { getPrimaryImageUrl, type ImageSize } from '@/utils/jellyfinUrls';
+import { getItemUrl } from '@/utils/itemUrl';
 import { useConfig } from '@/hooks/api/useConfig';
 import WatchedStateBadge from './WatchedStateBadge';
 import { useState } from 'react';
@@ -14,24 +15,6 @@ interface ScrollableSectionPosterProps {
     itemName?: string;
     itemId?: string;
     className?: string;
-}
-
-const DIRECT_PLAY_ROUTES: Record<string, string> = {
-    MusicVideo: '/play',
-    Video: '/play',
-    Photo: '/photo',
-};
-
-const MUSIC_ROUTES: Record<string, string> = {
-    MusicAlbum: '/music/album',
-    MusicArtist: '/music/artist',
-    Playlist: '/music/playlist',
-};
-
-function getItemLink(type: string | undefined, id: string | undefined): string {
-    if (type && DIRECT_PLAY_ROUTES[type]) return `${DIRECT_PLAY_ROUTES[type]}/${id}`;
-    if (type && MUSIC_ROUTES[type]) return `${MUSIC_ROUTES[type]}/${id}`;
-    return `/item/${id}`;
 }
 
 const ScrollableSectionPoster = ({
@@ -50,7 +33,8 @@ const ScrollableSectionPoster = ({
     const isSquareType = item?.Type === 'Playlist' || item?.Type === 'MusicAlbum' || isArtist;
     const isLandscapeType =
         item?.Type === 'MusicVideo' || item?.Type === 'Video' || item?.Type === 'Photo';
-    const isDirectPlay = item?.Type !== undefined && item.Type in DIRECT_PLAY_ROUTES;
+    const isDirectPlay =
+        item?.Type === 'MusicVideo' || item?.Type === 'Video' || item?.Type === 'Photo';
 
     const posterClasses = isLandscapeType
         ? 'w-64 h-36 lg:w-72 lg:h-40 2xl:w-80 2xl:h-45'
@@ -81,7 +65,7 @@ const ScrollableSectionPoster = ({
           : { width: 300, height: 450 };
 
     const id = itemId || item?.Id;
-    const linkTo = getItemLink(item?.Type, id);
+    const linkTo = getItemUrl(item?.Type, id);
 
     const watched = item?.UserData?.PlaybackPositionTicks ?? 0;
     const runtime = item?.RunTimeTicks ?? 0;

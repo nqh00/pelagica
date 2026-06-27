@@ -18,6 +18,8 @@ export interface ImageSize {
     height?: number;
     maxWidth?: number;
     maxHeight?: number;
+    fillWidth?: number;
+    fillHeight?: number;
 }
 
 export interface ItemImageOptions {
@@ -49,6 +51,8 @@ function buildItemImageUrl(
         if (size?.height) url.searchParams.append('height', size.height.toString());
         if (size?.maxWidth) url.searchParams.append('maxWidth', size.maxWidth.toString());
         if (size?.maxHeight) url.searchParams.append('maxHeight', size.maxHeight.toString());
+        if (size?.fillWidth) url.searchParams.append('fillWidth', size.fillWidth.toString());
+        if (size?.fillHeight) url.searchParams.append('fillHeight', size.fillHeight.toString());
 
         return url.toString();
     } catch {

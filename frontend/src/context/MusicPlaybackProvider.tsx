@@ -230,6 +230,7 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
 
             setCurrentTrack(track);
             setCurrentTime(0);
+            setDuration(0);
 
             startPlayback({ itemId: track.id, positionTicks: 0 });
 
@@ -245,8 +246,27 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
 
         const onPlay = () => setIsPlaying(true);
         const onPause = () => setIsPlaying(false);
-        const onTimeUpdate = () => setCurrentTime(Math.floor(audio.currentTime * 10_000_000));
-        const onLoaded = () => setDuration(Math.floor(audio.duration * 10_000_000));
+        const onTimeUpdate = () => {
+            const audioDuration = audio.duration;
+            let ticks = Math.floor(audio.currentTime * 10_000_000);
+
+            if (Number.isFinite(audioDuration) && audioDuration > 0) {
+                const maxTicks = Math.floor(audioDuration * 10_000_000);
+                ticks = Math.min(Math.max(0, ticks), maxTicks);
+            } else {
+                ticks = Math.max(0, ticks);
+            }
+
+            setCurrentTime(ticks);
+        };
+        const onLoaded = () => {
+            if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
+                setDuration(0);
+                return;
+            }
+
+            setDuration(Math.floor(audio.duration * 10_000_000));
+        };
 
         const onEnded = () => {
             if (repeat) {
@@ -259,6 +279,11 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
             if (nextIndex < queueRef.current.length) {
                 setCurrentIndex(nextIndex);
                 internalLoadTrack(queueRef.current[nextIndex], true);
+                return;
+            }
+
+            if (Number.isFinite(audio.duration) && audio.duration > 0) {
+                setCurrentTime(Math.floor(audio.duration * 10_000_000));
             }
         };
 
@@ -322,7 +347,16 @@ export const MusicPlaybackProvider = ({ children }: PropsWithChildren) => {
     }, [play, pause]);
 
     const seek = useCallback((ticks: number) => {
-        audioRef.current.currentTime = ticks / 10_000_000;
+        const audio = audioRef.current;
+        const maxTicks =
+            Number.isFinite(audio.duration) && audio.duration > 0
+                ? Math.floor(audio.duration * 10_000_000)
+                : null;
+        const clampedTicks =
+            maxTicks !== null ? Math.min(Math.max(0, ticks), maxTicks) : Math.max(0, ticks);
+
+        audio.currentTime = clampedTicks / 10_000_000;
+        setCurrentTime(clampedTicks);
     }, []);
 
     const skipNext = useCallback(() => {

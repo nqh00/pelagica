@@ -29,6 +29,7 @@ export function useItem(
                     'RemoteTrailers',
                     'MediaSources',
                     'Path',
+                    'LocalTrailerCount',
                 ],
                 enableUserData,
                 userId,

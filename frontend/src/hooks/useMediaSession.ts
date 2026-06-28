@@ -1,5 +1,6 @@
 import type { MusicPlaybackTrack } from '@/context/MusicPlaybackContext';
 import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { setSafeMediaSessionPositionState } from '@/utils/mediaSessionPosition';
 import { useEffect } from 'react';
 
 interface MediaSessionArgs {
@@ -38,9 +39,16 @@ export const useMediaSession = ({
         ms.setActionHandler('nexttrack', skipNext);
 
         ms.setActionHandler('seekto', (e) => {
-            if (e.seekTime != null) {
-                seek(Math.floor(e.seekTime * TICKS_PER_SECOND));
+            if (e.seekTime == null) return;
+
+            let ticks = Math.floor(e.seekTime * TICKS_PER_SECOND);
+            if (durationTicks > 0) {
+                ticks = Math.min(Math.max(0, ticks), durationTicks);
+            } else {
+                ticks = Math.max(0, ticks);
             }
+
+            seek(ticks);
         });
 
         ms.setActionHandler('seekbackward', (e) => {
@@ -49,7 +57,10 @@ export const useMediaSession = ({
         });
 
         ms.setActionHandler('seekforward', (e) => {
-            seek(currentTimeTicks + (e.seekOffset ?? 10) * TICKS_PER_SECOND);
+            const offset = e.seekOffset ?? 10;
+            const maxTicks =
+                durationTicks > 0 ? durationTicks : currentTimeTicks + offset * TICKS_PER_SECOND;
+            seek(Math.min(maxTicks, currentTimeTicks + offset * TICKS_PER_SECOND));
         });
 
         return () => {
@@ -61,7 +72,7 @@ export const useMediaSession = ({
             ms.setActionHandler('seekbackward', null);
             ms.setActionHandler('seekforward', null);
         };
-    }, [play, pause, seek, skipNext, skipPrevious, currentTimeTicks]);
+    }, [play, pause, seek, skipNext, skipPrevious, currentTimeTicks, durationTicks]);
 
     useEffect(() => {
         if (!('mediaSession' in navigator)) return;
@@ -112,13 +123,8 @@ export const useMediaSession = ({
     }, [isPlaying]);
 
     useEffect(() => {
-        if (!('mediaSession' in navigator)) return;
-        if (!durationTicks) return;
+        if (!track || !durationTicks) return;
 
-        navigator.mediaSession.setPositionState({
-            duration: durationTicks / TICKS_PER_SECOND,
-            playbackRate: 1,
-            position: currentTimeTicks / TICKS_PER_SECOND,
-        });
-    }, [currentTimeTicks, durationTicks]);
+        setSafeMediaSessionPositionState(currentTimeTicks, durationTicks);
+    }, [track, currentTimeTicks, durationTicks]);
 };

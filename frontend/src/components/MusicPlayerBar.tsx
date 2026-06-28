@@ -24,6 +24,7 @@ import LyricsExpandedPanel from '@/features/lyrics/shell/LyricsExpandedPanel';
 import LyricsInlinePanel from '@/features/lyrics/shell/LyricsInlinePanel';
 import { cn } from '@/lib/utils';
 import { lyricsPanelWidthClass } from '@/features/lyrics/constants';
+import EqualizerPopover from '@/features/equalizer/EqualizerPopover';
 
 const formatTime = (timeTicks: number) => {
     const timeSeconds = timeTicks / 10000000;
@@ -52,6 +53,18 @@ const MusicPlayerBar = () => {
         seek,
         volume,
         setVolume,
+        equalizerPreset,
+        setEqualizerPreset,
+        customEqualizerPresets,
+        saveCustomEqualizerPreset,
+        deleteCustomEqualizerPreset,
+        setEqualizerPreviewBands,
+        sleepFadeEnabled,
+        startSleepFade,
+        stopSleepFade,
+        sleepFadeDurationMinutes,
+        sleepFadeStartedAt,
+        equalizerAvailable,
         clearPlayback,
     } = useMusicPlayback();
     const isMobile = useIsMobile();
@@ -233,6 +246,21 @@ const MusicPlayerBar = () => {
                                 onClick={toggleMobileLyrics}
                             />
                         )}
+                        <EqualizerPopover
+                            preset={equalizerPreset}
+                            onPresetChange={setEqualizerPreset}
+                            customPresets={customEqualizerPresets}
+                            onSaveCustomPreset={saveCustomEqualizerPreset}
+                            onDeleteCustomPreset={deleteCustomEqualizerPreset}
+                            onPreviewBandsChange={setEqualizerPreviewBands}
+                            sleepFadeEnabled={sleepFadeEnabled}
+                            onStartSleepFade={startSleepFade}
+                            onStopSleepFade={stopSleepFade}
+                            sleepFadeDurationMinutes={sleepFadeDurationMinutes}
+                            sleepFadeStartedAt={sleepFadeStartedAt}
+                            isPlaying={isPlaying}
+                            equalizerAvailable={equalizerAvailable}
+                        />
                     </div>
 
                     <div className="flex items-center gap-2 w-full max-w-sm mx-auto shrink-0">
@@ -337,6 +365,21 @@ const MusicPlayerBar = () => {
                                 onClick={toggleDesktopLyrics}
                             />
                         )}
+                        <EqualizerPopover
+                            preset={equalizerPreset}
+                            onPresetChange={setEqualizerPreset}
+                            customPresets={customEqualizerPresets}
+                            onSaveCustomPreset={saveCustomEqualizerPreset}
+                            onDeleteCustomPreset={deleteCustomEqualizerPreset}
+                            onPreviewBandsChange={setEqualizerPreviewBands}
+                            sleepFadeEnabled={sleepFadeEnabled}
+                            onStartSleepFade={startSleepFade}
+                            onStopSleepFade={stopSleepFade}
+                            sleepFadeDurationMinutes={sleepFadeDurationMinutes}
+                            sleepFadeStartedAt={sleepFadeStartedAt}
+                            isPlaying={isPlaying}
+                            equalizerAvailable={equalizerAvailable}
+                        />
                         <Button
                             variant="ghost"
                             size="icon"

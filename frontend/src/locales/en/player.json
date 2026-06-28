@@ -16,5 +16,41 @@
     "showLyrics": "Show lyrics",
     "hideLyrics": "Hide lyrics",
     "noLyrics": "No lyrics available",
-    "unsyncedLyrics": "Unsynced lyrics"
+    "unsyncedLyrics": "Unsynced lyrics",
+    "equalizer": "Equalizer",
+    "equalizerPresets": {
+        "flat": "Flat",
+        "bassBoost": "Bass Boost",
+        "vocalBoost": "Vocal Boost",
+        "podcast": "Podcast",
+        "sleep": "Sleep"
+    },
+    "sleepFade": "Gradual fade",
+    "sleepFadeDescription": "Gradually fades to silence and pauses playback.",
+    "sleepFadeDuration": "Fade duration",
+    "sleepFadeDurationUnit": "min",
+    "sleepFadeStart": "Start timer",
+    "sleepFadeStartRequiresPlayback": "Start playing music to begin the sleep timer.",
+    "sleepFadeStop": "Stop timer",
+    "sleepFadeRemaining": "{{time}} remaining",
+    "sleepFadeBack": "Back to presets",
+    "equalizerUnavailable": "Equalizer unavailable for this stream. Volume fade still applies.",
+    "customPresets": "Custom",
+    "customPresetNew": "New custom preset",
+    "customPresetDefaultName": "My preset",
+    "customPresetName": "Preset name",
+    "customPresetNamePlaceholder": "Enter preset name",
+    "customPresetEditor": "Custom preset",
+    "customPresetLivePreview": "Changes preview live while you adjust.",
+    "customPresetSave": "Save",
+    "customPresetCancel": "Cancel",
+    "customPresetEdit": "Edit preset",
+    "customPresetDelete": "Delete preset",
+    "equalizerBands": {
+        "bass": "Bass",
+        "lowMid": "Low mid",
+        "mid": "Mid",
+        "highMid": "High mid",
+        "treble": "Treble"
+    }
 }

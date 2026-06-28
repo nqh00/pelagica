@@ -36,8 +36,6 @@ const EpisodeComponent = memo(
                   ? (watched / runtime) * 100
                   : 0;
 
-        console.log('Image tags: ', episode.ImageTags);
-
         return (
             <Link to={`/item/${episode.Id}`} key={episode.Id} className={'group ' + className}>
                 <div className="relative w-full aspect-video rounded-md overflow-hidden">

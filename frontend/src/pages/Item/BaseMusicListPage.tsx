@@ -174,14 +174,13 @@ const BaseMusicListPage = ({
                                     {artist.Name}
                                 </Link>
                             ))}
-                        {item.ArtistItems &&
-                            item.ArtistItems.length > MAX_ARTISTS_DISPLAYED && (
-                                <span className="text-sm text-muted-foreground">
-                                    {t('more_artists', {
-                                        count: item.ArtistItems.length - MAX_ARTISTS_DISPLAYED,
-                                    })}
-                                </span>
-                            )}
+                        {item.ArtistItems && item.ArtistItems.length > MAX_ARTISTS_DISPLAYED && (
+                            <span className="text-sm text-muted-foreground">
+                                {t('more_artists', {
+                                    count: item.ArtistItems.length - MAX_ARTISTS_DISPLAYED,
+                                })}
+                            </span>
+                        )}
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">
                         {detailItems.join(' • ')}

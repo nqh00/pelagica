@@ -143,8 +143,7 @@ const MusicItemContextMenuContent = ({
 
     const playlistDisabled = playbackDisabled || playlistItemIds.length === 0;
 
-    const showAddToSubmenu =
-        actions.queueStart || actions.queueEnd || actions.playlist;
+    const showAddToSubmenu = actions.queueStart || actions.queueEnd || actions.playlist;
 
     const handlePlayNow = () => {
         loadQueue(tracks, startIndex, true);

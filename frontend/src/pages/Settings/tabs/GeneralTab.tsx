@@ -99,6 +99,20 @@ export const GeneralTab = ({
                 }
             />
             <h2 className="mt-6 mb-2 text-xl font-semibold leading-none tracking-tight">
+                {t('login_page')}
+            </h2>
+            <p className="mb-2 text-sm text-muted-foreground">{t('login_page_description')}</p>
+            <BooleanInput
+                label={t('hide_back_to_server_button_label')}
+                checked={config.hideBackToServerButton || false}
+                onChange={(checked) =>
+                    saveConfig((prev) => ({
+                        ...prev,
+                        hideBackToServerButton: checked,
+                    }))
+                }
+            />
+            <h2 className="mt-6 mb-2 text-xl font-semibold leading-none tracking-tight">
                 {t('usage_statistics')}
             </h2>
             <p className="mb-2 text-sm text-muted-foreground">

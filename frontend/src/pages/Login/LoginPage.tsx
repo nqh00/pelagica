@@ -373,9 +373,15 @@ const LoginPage = () => {
                             >
                                 {t('quick_connect')}
                             </Button>
-                            <Button variant="link" className="w-full mt-2" onClick={onBackToServer}>
-                                {t('back_to_server')}
-                            </Button>
+                            {!(config?.serverAddress && config.hideBackToServerButton) && (
+                                <Button
+                                    variant="link"
+                                    className="w-full mt-2"
+                                    onClick={onBackToServer}
+                                >
+                                    {t('back_to_server')}
+                                </Button>
+                            )}
                         </form>
                         <Disclaimer text={branding?.LoginDisclaimer} />
                     </CardContent>

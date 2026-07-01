@@ -244,6 +244,8 @@ export interface AppConfig {
     links?: ConfigLink[];
     /** Whether to show the logo in the top bar */
     showLogoInTopBar?: boolean;
+    /** Whether to hide the "back to server" button on the login page when serverAddress is set */
+    hideBackToServerButton?: boolean;
 }
 
 const DEFAULT_ITEM_PAGE_SETTINGS: ItemPageSettings = {

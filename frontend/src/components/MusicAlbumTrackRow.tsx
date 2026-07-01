@@ -11,12 +11,13 @@ export interface MusicAlbumTrackRowProps {
     contextTracks: MusicPlaybackTrack[];
     onPlay: () => void;
     trailing?: ReactNode;
+    displayIndex?: number;
 }
 
 const MusicAlbumTrackRowTrigger = forwardRef<
     HTMLDivElement,
     Omit<MusicAlbumTrackRowProps, 'contextTracks' | 'index'> & ComponentPropsWithoutRef<'div'>
->(({ track, onPlay, trailing, className, ...props }, ref) => (
+>(({ track, onPlay, trailing, displayIndex, className, ...props }, ref) => (
     <div
         ref={ref}
         className={cn(
@@ -26,9 +27,9 @@ const MusicAlbumTrackRowTrigger = forwardRef<
         onClick={onPlay}
         {...props}
     >
-        {track.IndexNumber !== undefined && (
+        {(displayIndex ?? track.IndexNumber) !== undefined && (
             <span className="text-sm text-muted-foreground mr-8 font-mono w-4">
-                <span className="group-hover:hidden">{track.IndexNumber}</span>
+                <span className="group-hover:hidden">{displayIndex ?? track.IndexNumber}</span>
                 <span className="hidden group-hover:inline-block">▶︎</span>
             </span>
         )}
@@ -60,6 +61,7 @@ const MusicAlbumTrackRow = ({
     contextTracks,
     onPlay,
     trailing,
+    displayIndex,
     className,
     ...props
 }: MusicAlbumTrackRowProps & ComponentPropsWithoutRef<'div'>) => (
@@ -68,6 +70,7 @@ const MusicAlbumTrackRow = ({
             track={track}
             onPlay={onPlay}
             trailing={trailing}
+            displayIndex={displayIndex}
             className={className}
             {...props}
         />

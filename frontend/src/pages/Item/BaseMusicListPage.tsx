@@ -10,8 +10,10 @@ import FavoriteButton from '@/components/FavoriteButton';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { AppConfig } from '@/hooks/api/useConfig';
 import { useAlbumTracks } from '@/hooks/api/useAlbumTracks';
+import { usePlaylistItems } from '@/hooks/api/playlist/usePlaylistItems';
 import { useMusicPlayback } from '@/hooks/useMusicPlayback';
 import { useTranslation } from 'react-i18next';
+import { getUserId } from '@/utils/localstorageCredentials';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -64,11 +66,23 @@ const BaseMusicListPage = ({
     const { t } = useTranslation('item');
     const { setBackground } = usePageBackground();
     const { loadQueue } = useMusicPlayback();
+    const isPlaylist = item.Type === 'Playlist';
+    const userId = getUserId() || undefined;
     const {
-        data: albumTracks,
-        isLoading: isLoadingAlbumTracks,
-        error: albumTracksError,
-    } = useAlbumTracks(item.Id);
+        data: albumTracksData,
+        isLoading: isLoadingAlbumTracksData,
+        error: albumTracksDataError,
+    } = useAlbumTracks(isPlaylist ? undefined : item.Id);
+    const {
+        data: playlistTracksData,
+        isLoading: isLoadingPlaylistTracksData,
+        error: playlistTracksDataError,
+    } = usePlaylistItems(isPlaylist ? item.Id : undefined, userId);
+    const albumTracks = isPlaylist ? playlistTracksData : albumTracksData;
+    const isLoadingAlbumTracks = isPlaylist
+        ? isLoadingPlaylistTracksData
+        : isLoadingAlbumTracksData;
+    const albumTracksError = isPlaylist ? playlistTracksDataError : albumTracksDataError;
     const [failedCover, setFailedCover] = useState(false);
 
     const playbackTracks = useMemo(
@@ -235,13 +249,14 @@ const BaseMusicListPage = ({
                             <div className="border-b border-border mb-4" />
                             <div className="flex flex-col gap-1">
                                 {albumTracks.map((track, index) => {
-                                    if (!track.IndexNumber) return null;
+                                    if (!isPlaylist && !track.IndexNumber) return null;
 
                                     return (
                                         <MusicAlbumTrackRow
                                             key={track.Id}
                                             track={track}
                                             index={index}
+                                            displayIndex={isPlaylist ? index + 1 : undefined}
                                             contextTracks={playbackTracks}
                                             onPlay={() => handleTrackPlay(index)}
                                             trailing={<TrackMediaInfoButton track={track} t={t} />}

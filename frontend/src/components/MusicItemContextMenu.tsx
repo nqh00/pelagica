@@ -18,6 +18,7 @@ import { AddToPlaylistDialog } from '@/components/AddToPlaylistDialog';
 import type { MusicPlaybackTrack } from '@/context/MusicPlaybackContext';
 import {
     resolveMusicContextMenuActions,
+    MUSIC_CONTEXT_MENU_TRIGGER_CLASS,
     type MusicContextMenuActions,
     type MusicItemContextMenuProps,
 } from '@/components/musicItemContextMenu';
@@ -158,7 +159,9 @@ const MusicItemContextMenuContent = ({
     return (
         <>
             <ContextMenu open={contextMenuOpen} onOpenChange={setContextMenuOpen}>
-                <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
+                <ContextMenuTrigger asChild className={MUSIC_CONTEXT_MENU_TRIGGER_CLASS}>
+                    {children}
+                </ContextMenuTrigger>
                 <ContextMenuContent className="w-52">
                     {actions.playNow && (
                         <ContextMenuItem disabled={playbackDisabled} onSelect={handlePlayNow}>

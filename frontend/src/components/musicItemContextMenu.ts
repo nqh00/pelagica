@@ -39,3 +39,7 @@ export function resolveMusicContextMenuActions(
 ): Required<MusicContextMenuActions> {
     return { ...DEFAULT_MUSIC_CONTEXT_MENU_ACTIONS, ...actions };
 }
+
+/** Visual feedback while long-pressing / when the context menu is open (especially on touch). */
+export const MUSIC_CONTEXT_MENU_TRIGGER_CLASS =
+    'transition-[background-color,filter] duration-150 touch-manipulation select-none [-webkit-tap-highlight-color:transparent] active:bg-accent/80 active:brightness-[0.88] data-[state=open]:bg-accent/80 data-[state=open]:brightness-[0.88] rounded-lg';

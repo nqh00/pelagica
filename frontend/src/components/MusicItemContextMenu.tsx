@@ -21,7 +21,7 @@ import {
     MUSIC_CONTEXT_MENU_TRIGGER_CLASS,
     type MusicContextMenuActions,
     type MusicItemContextMenuProps,
-} from '@/components/musicItemContextMenu';
+} from '@/components/musicContextMenuTypes';
 import {
     getMusicContextKind,
     isCollectionScope,

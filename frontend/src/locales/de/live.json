@@ -1,0 +1,6 @@
+{
+    "title": "Live-TV",
+    "no_channels_title": "Keine Live-Kanäle gefunden",
+    "no_channels_description": "Auf diesem Server sind keine Live-TV-Kanäle verfügbar.",
+    "on_now": "Läuft jetzt: {{program}}"
+}

@@ -19,6 +19,7 @@ import {
     Settings2,
     Sun,
     TriangleAlert,
+    Tv,
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -549,6 +550,7 @@ const TopBar = ({ overlay = false }: { overlay?: boolean }) => {
         ) ?? [];
 
     const hasMusicLibrary = libraries.some((lib) => lib.CollectionType === 'music');
+    const hasLiveTvLibrary = views?.Items?.some((lib) => lib.CollectionType === 'livetv') ?? false;
 
     const validLinks = config?.links?.filter((l) => l.url && l.text) ?? [];
 
@@ -599,6 +601,15 @@ const TopBar = ({ overlay = false }: { overlay?: boolean }) => {
                                 <Link to="/music">
                                     <Music className="h-4 w-4" />
                                     {t('music')}
+                                </Link>
+                            </Button>
+                        )}
+
+                        {hasLiveTvLibrary && (
+                            <Button asChild variant="ghost" size="sm">
+                                <Link to="/live">
+                                    <Tv className="h-4 w-4" />
+                                    {t('live')}
                                 </Link>
                             </Button>
                         )}
@@ -665,6 +676,14 @@ const TopBar = ({ overlay = false }: { overlay?: boolean }) => {
                             <Button asChild variant="ghost" size="icon" className="h-8 w-8">
                                 <Link to="/music">
                                     <Music className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                        )}
+
+                        {hasLiveTvLibrary && (
+                            <Button asChild variant="ghost" size="icon" className="h-8 w-8">
+                                <Link to="/live">
+                                    <Tv className="h-4 w-4" />
                                 </Link>
                             </Button>
                         )}

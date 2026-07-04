@@ -2,5 +2,12 @@
     "title": "Live-TV",
     "no_channels_title": "Keine Live-Kanäle gefunden",
     "no_channels_description": "Auf diesem Server sind keine Live-TV-Kanäle verfügbar.",
-    "on_now": "Läuft jetzt: {{program}}"
+    "on_now": "Läuft jetzt: {{program}}",
+    "tab_channels": "Kanäle",
+    "tab_guide": "Programmführer",
+    "guide_now": "Jetzt",
+    "guide_watch_channel": "Kanal ansehen",
+    "guide_season": "Staffel {{number}}",
+    "guide_episode": "Episode {{number}}",
+    "guide_no_data": "Keine Programm Information"
 }

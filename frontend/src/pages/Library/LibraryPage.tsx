@@ -224,8 +224,8 @@ const LibraryPage = () => {
     const { data: libraries } = useUserViews();
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const sortBy = (searchParams.get('sortBy') as ItemSortBy) || 'Name';
-    const sortOrder = (searchParams.get('sortOrder') as SortOrder) || 'Ascending';
+    const sortBy = (searchParams.get('sortBy') as ItemSortBy) || 'DateCreated';
+    const sortOrder = (searchParams.get('sortOrder') as SortOrder) || 'Descending';
     const page = Number(searchParams.get('page') ?? '0') || 0;
 
     const libraryIdFromUrl = searchParams.get('library') || '';

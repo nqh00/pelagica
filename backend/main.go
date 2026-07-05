@@ -31,8 +31,6 @@ func main() {
 	app := fiber.New()
 	appconfig.Setup(app)
 
-	handlers.InitThemeStore()
-
 	job := collector.RegisterStatsJob()
 	if job != nil {
 		defer job.Stop()

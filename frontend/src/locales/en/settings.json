@@ -14,9 +14,6 @@
     "section_title_label": "Section Title",
     "section_type_label": "Section Type",
     "section_limit_label": "Item Limit",
-    "server_address_label": "Jellyfin Server Address",
-    "server_address_placeholder": "http://your-jellyfin-server",
-    "server_address_description": "When you define an address, this will be prefilled in the login screen. Leave empty to use the default behavior.",
     "streamystats_url_label": "Streamystats URL",
     "streamystats_url_placeholder": "http://your-streamystats-server",
     "streamystats_description": "To enable the streamystats recommendation rows on the home screen, you need to provide the URL of your Streamystats server and add the respective home screen sections.",
@@ -80,6 +77,7 @@
     "show_favorite_button": "Show Favorite Button",
     "show_watchlist_button": "Show Watchlist Button",
     "autoplay_trailers": "Auto Play Trailers",
+    "use_thumb_image": "Use Landscape Thumb Images",
     "title_line": "Title Line",
     "detail_line": "Detail Line",
     "accurate_sorting": "Use Accurate Sorting",
@@ -139,5 +137,8 @@
     "show_download_button_label": "Show Download Button",
     "usage_statistics_label": "Allow anonymous usage statistics collection",
     "usage_statistics": "Usage Statistics",
-    "usage_statistics_description": "We have no way to know how many people use Pelagica unless you tell us. Opting in sends a daily ping with your version and a random ID. That's it."
+    "usage_statistics_description": "We have no way to know how many people use Pelagica unless you tell us. Opting in sends a daily ping with your version and a random ID. That's it.",
+    "login_page": "Login Page",
+    "login_page_description": "Configure the behavior of the login page. This only takes effect when a server address is enforced via the SERVER_ADDRESS environment variable.",
+    "hide_back_to_server_button_label": "Hide \"Back to Server\" Button"
 }

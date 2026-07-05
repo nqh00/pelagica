@@ -26,7 +26,9 @@ export interface Colors {
 }
 
 export const fetchThemes = async (): Promise<ThemeSummary[]> => {
-    const response = await fetch('/api/themes');
+    const response = await fetch(
+        '/api/themes?jellyfin_url=' + encodeURIComponent(getServerUrl() || '')
+    );
     if (!response.ok) {
         throw new Error('Failed to fetch themes');
     }
@@ -34,7 +36,9 @@ export const fetchThemes = async (): Promise<ThemeSummary[]> => {
 };
 
 export const fetchThemeById = async (id: string): Promise<Theme> => {
-    const response = await fetch(`/api/themes/${id}`);
+    const response = await fetch(
+        `/api/themes/${id}?jellyfin_url=` + encodeURIComponent(getServerUrl() || '')
+    );
     if (!response.ok) {
         throw new Error(`Failed to fetch theme with id: ${id}`);
     }

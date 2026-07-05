@@ -42,7 +42,7 @@ export const BrandingTab = ({
         }
 
         const payload = (await response.json()) as { url?: string };
-        const uploadedUrl = payload.url ? `${payload.url}?v=${Date.now()}` : '';
+        const uploadedUrl = payload.url ? `${payload.url}&v=${Date.now()}` : '';
 
         const key = mode === 'light' ? 'logoLightUrl' : 'logoDarkUrl';
         saveConfig((prev) => ({ ...prev, [key]: uploadedUrl }));

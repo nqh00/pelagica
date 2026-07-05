@@ -13,6 +13,7 @@
     "queue": "Warteschlange",
     "queue_count": "Warteschlange ({{count}})",
     "queue_empty": "Warteschlange ist leer",
+    "remove_from_queue": "Aus Warteschlange entfernen",
     "no_playlists": "Keine Wiedergabelisten",
     "no_favorites": "Keine Favoriten",
     "no_songs_found": "Keine Lieder gefunden",
@@ -21,5 +22,13 @@
     "no_playlists_found": "Keine Wiedergabelisten gefunden",
     "untitled": "Unbenannt",
     "tracks_count": "{{count}} Titel",
-    "back_to_music": "Zurück zur Musik"
+    "back_to_music": "Zurück zur Musik",
+    "play_now": "Jetzt abspielen",
+    "shuffle_now": "Zufällig abspielen",
+    "add_to": "Hinzufügen zu...",
+    "queue_start": "Anfang der Warteschlange",
+    "queue_end": "Ende der Warteschlange",
+    "playlist": "Wiedergabeliste",
+    "search_playlists": "Wiedergabelisten suchen...",
+    "create_and_add": "Erstellen & Hinzufügen"
 }

@@ -1,9 +1,10 @@
 import { fetchThemes, type ThemeSummary } from '@/api/themes';
+import { getServerUrl } from '@/utils/localstorageCredentials';
 import { useQuery } from '@tanstack/react-query';
 
 export function useThemes() {
     return useQuery<ThemeSummary[]>({
-        queryKey: ['themes'],
+        queryKey: ['themes', getServerUrl()],
         queryFn: async (): Promise<ThemeSummary[]> => {
             return fetchThemes();
         },

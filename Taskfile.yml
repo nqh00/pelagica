@@ -28,8 +28,10 @@ tasks:
       LOG_FILE: "{{.ROOT_DIR}}/config/pelagica.log"
       COLLECTOR_PING_BASE_URL: "http://localhost:4000"
       COLLECTOR_PING_TOKEN: "2f64e07c-e930-463f-b118-556a741fb2aa"
+      SERVERS_DIR: "{{.ROOT_DIR}}/config/servers"
       ENABLE_AUTH: "true"
       LOG_LEVEL: "debug"
+      SERVER_ADDRESS: "https://jellyfin.jan.run"
     cmds:
       - go run main.go
 

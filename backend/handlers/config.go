@@ -11,45 +11,45 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func configPath() string {
-	path := os.Getenv("CONFIG_PATH")
-	if path == "" {
-		path = "config.json"
-	}
-	return path
+func configFilePath(serverKey string) string {
+	return filepath.Join(serverDataDir(serverKey), "config.json")
 }
 
 func GetConfig(c fiber.Ctx) error {
-	path := configPath()
+	var cfg models.AppConfig
 
-	data, err := os.ReadFile(path)
-	if err != nil {
-		if os.IsNotExist(err) {
-			defaultConfig := []byte(`{}`)
-
-			if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
-				slog.Error("Failed to create config directory", "error", err)
-				return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to create config directory"})
+	if serverKey, err := serverKeyFromRequest(c); err == nil {
+		data, err := os.ReadFile(configFilePath(serverKey))
+		if err != nil {
+			if !os.IsNotExist(err) {
+				slog.Error("Failed to read config file", "error", err)
+				return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to read config file"})
 			}
-
-			if err := os.WriteFile(path, defaultConfig, 0644); err != nil {
-				slog.Error("Failed to create config file", "error", err)
-				return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to save config"})
-			}
-
-			data = defaultConfig
-		} else {
-			slog.Error("Failed to read config file", "error", err)
-			return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to read config file"})
+		} else if err := json.Unmarshal(data, &cfg); err != nil {
+			slog.Error("Failed to parse config file", "error", err)
+			return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to parse config file"})
 		}
+	}
+
+	cfg.ServerAddress = os.Getenv("SERVER_ADDRESS")
+
+	out, err := json.MarshalIndent(cfg, "", "    ")
+	if err != nil {
+		slog.Error("Failed to encode config", "error", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to encode config"})
 	}
 
 	return c.Status(fiber.StatusOK).
 		Type("json").
-		Send(data)
+		Send(out)
 }
 
 func UpdateConfig(c fiber.Ctx) error {
+	serverKey, err := serverKeyFromRequest(c)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: err.Error()})
+	}
+
 	var cfg models.AppConfig
 
 	if err := c.Bind().Body(&cfg); err != nil {
@@ -69,13 +69,22 @@ func UpdateConfig(c fiber.Ctx) error {
 		}
 	}
 
+	// ServerAddress is controlled exclusively via the SERVER_ADDRESS env var, never persisted.
+	cfg.ServerAddress = ""
+
 	data, err := json.MarshalIndent(cfg, "", "    ")
 	if err != nil {
 		slog.Error("Failed to encode config", "error", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to encode config"})
 	}
 
-	if err := os.WriteFile(configPath(), data, 0644); err != nil {
+	path := configFilePath(serverKey)
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		slog.Error("Failed to create config directory", "error", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to create config directory"})
+	}
+
+	if err := os.WriteFile(path, data, 0644); err != nil {
 		slog.Error("Failed to write config file", "error", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to save config"})
 	}

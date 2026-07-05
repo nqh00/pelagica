@@ -129,5 +129,9 @@
     "image_based": "Bildbasiert",
     "original": "Original",
     "download_original_file": "Originaldatei herunterladen",
-    "open_in_new_tab": "In neuem Tab öffnen"
+    "open_in_new_tab": "In neuem Tab öffnen",
+    "trailer": "Trailer",
+    "playTrailer": "Trailer abspielen",
+    "localTrailer": "Lokaler Trailer",
+    "remoteTrailer": "Externer Trailer"
 }

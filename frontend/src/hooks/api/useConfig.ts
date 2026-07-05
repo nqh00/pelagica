@@ -86,6 +86,10 @@ export interface ItemsSection extends BaseHomeScreenSection {
     items?: SectionItemsConfig;
     /** Additional detail fields to include for each item */
     detailFields?: DetailField[];
+    /** Whether to use landscape thumb images instead of portrait posters */
+    useThumbImage?: boolean;
+    /** Whether to play trailers automatically on hover (requires useThumbImage) */
+    autoPlayTrailers?: boolean;
 }
 
 export const CONTINUE_WATCHING_TITLE_LINES = [
@@ -240,6 +244,8 @@ export interface AppConfig {
     links?: ConfigLink[];
     /** Whether to show the logo in the top bar */
     showLogoInTopBar?: boolean;
+    /** Whether to hide the "back to server" button on the login page when serverAddress is set */
+    hideBackToServerButton?: boolean;
 }
 
 const DEFAULT_ITEM_PAGE_SETTINGS: ItemPageSettings = {
@@ -333,6 +339,8 @@ const DEFAULT_CONFIG: AppConfig = {
                 types: ['Movie'],
             },
             detailFields: ['ReleaseYearAndMonth'],
+            useThumbImage: true,
+            autoPlayTrailers: true,
         },
         {
             type: 'recentlyAdded',
@@ -340,10 +348,10 @@ const DEFAULT_CONFIG: AppConfig = {
     ],
 };
 
-const CONFIG_QUERY_KEY = ['config'] as const;
-
 const fetchConfig = async (): Promise<AppConfig> => {
-    const response = await fetch('/api/config');
+    const response = await fetch(
+        '/api/config?jellyfin_url=' + encodeURIComponent(getServerUrl() || '')
+    );
     if (!response.ok) {
         console.warn('Config file not found, using default configuration');
         return DEFAULT_CONFIG;
@@ -362,7 +370,7 @@ const fetchConfig = async (): Promise<AppConfig> => {
 
 export const useConfig = () => {
     const { data, isLoading, error } = useQuery({
-        queryKey: CONFIG_QUERY_KEY,
+        queryKey: ['config', getServerUrl()],
         queryFn: fetchConfig,
         staleTime: Infinity,
         gcTime: 30 * 60 * 1000, // 30 minutes
@@ -396,7 +404,7 @@ export const useUpdateConfig = () => {
             }
         },
         onSuccess: (_data, newConfig) => {
-            queryClient.setQueryData(CONFIG_QUERY_KEY, {
+            queryClient.setQueryData(['config', getServerUrl()], {
                 ...DEFAULT_CONFIG,
                 ...newConfig,
                 itemPage: {

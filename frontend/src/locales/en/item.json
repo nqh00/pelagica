@@ -133,5 +133,9 @@
     "favorite": "Favorite",
     "unfavorite": "Unfavorite",
     "add_to_watchlist": "Add to Watchlist",
-    "remove_from_watchlist": "Remove from Watchlist"
+    "remove_from_watchlist": "Remove from Watchlist",
+    "trailer": "Trailer",
+    "playTrailer": "Play Trailer",
+    "localTrailer": "Local Trailer",
+    "remoteTrailer": "Remote Trailer"
 }

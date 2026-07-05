@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -25,21 +26,17 @@ func resolveBrandingLogoMode(mode string) (string, error) {
 	}
 }
 
-func brandingDir() string {
-	dir := os.Getenv("BRANDING_DIR")
-	if dir == "" {
-		dir = "branding"
-	}
-	return dir
+func brandingLogoPath(serverKey, mode string) string {
+	return filepath.Join(serverDataDir(serverKey), "branding", "logo-"+mode)
 }
 
-func brandingLogoPath(mode string) string {
-	return filepath.Join(brandingDir(), "branding", "logo-"+mode)
+func brandingLogoURL(jellyfinURL, mode string) string {
+	return "/api/branding/logo/" + mode + "?jellyfin_url=" + url.QueryEscape(jellyfinURL)
 }
 
-func loadAppConfig() (models.AppConfig, error) {
+func loadAppConfig(serverKey string) (models.AppConfig, error) {
 	var cfg models.AppConfig
-	data, err := os.ReadFile(configPath())
+	data, err := os.ReadFile(configFilePath(serverKey))
 	if err != nil {
 		if os.IsNotExist(err) {
 			return cfg, nil
@@ -58,12 +55,17 @@ func loadAppConfig() (models.AppConfig, error) {
 	return cfg, nil
 }
 
-func saveAppConfig(cfg models.AppConfig) error {
+func saveAppConfig(serverKey string, cfg models.AppConfig) error {
+	path := configFilePath(serverKey)
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return err
+	}
+
 	data, err := json.MarshalIndent(cfg, "", "    ")
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(configPath(), data, 0644)
+	return os.WriteFile(path, data, 0644)
 }
 
 func GetBrandingLogo(c fiber.Ctx) error {
@@ -72,7 +74,12 @@ func GetBrandingLogo(c fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: err.Error()})
 	}
 
-	logoData, err := os.ReadFile(brandingLogoPath(mode))
+	serverKey, err := serverKeyFromRequest(c)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: err.Error()})
+	}
+
+	logoData, err := os.ReadFile(brandingLogoPath(serverKey, mode))
 	if err != nil {
 		if os.IsNotExist(err) {
 			return c.Status(fiber.StatusNotFound).JSON(models.APIError{Error: "Logo not found"})
@@ -86,6 +93,12 @@ func GetBrandingLogo(c fiber.Ctx) error {
 
 func UploadBrandingLogo(c fiber.Ctx) error {
 	mode, err := resolveBrandingLogoMode(c.Params("mode"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: err.Error()})
+	}
+
+	jellyfinURL := c.Query("jellyfin_url")
+	serverKey, err := serverKeyFromURL(jellyfinURL)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: err.Error()})
 	}
@@ -114,7 +127,7 @@ func UploadBrandingLogo(c fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: "Uploaded file must be an image"})
 	}
 
-	logoPath := brandingLogoPath(mode)
+	logoPath := brandingLogoPath(serverKey, mode)
 	if err := os.MkdirAll(filepath.Dir(logoPath), 0755); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to create branding directory"})
 	}
@@ -123,19 +136,19 @@ func UploadBrandingLogo(c fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to save logo"})
 	}
 
-	cfg, err := loadAppConfig()
+	cfg, err := loadAppConfig(serverKey)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to read config"})
 	}
 
-	logoURL := "/api/branding/logo/" + mode
+	logoURL := brandingLogoURL(jellyfinURL, mode)
 	if mode == "light" {
 		cfg.LogoLightURL = logoURL
 	} else {
 		cfg.LogoDarkURL = logoURL
 	}
 
-	if err := saveAppConfig(cfg); err != nil {
+	if err := saveAppConfig(serverKey, cfg); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to update config"})
 	}
 
@@ -148,13 +161,18 @@ func ResetBrandingLogo(c fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: err.Error()})
 	}
 
-	logoPath := brandingLogoPath(mode)
+	serverKey, err := serverKeyFromRequest(c)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: err.Error()})
+	}
+
+	logoPath := brandingLogoPath(serverKey, mode)
 	err = os.Remove(logoPath)
 	if err != nil && !os.IsNotExist(err) {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to remove logo"})
 	}
 
-	cfg, err := loadAppConfig()
+	cfg, err := loadAppConfig(serverKey)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to read config"})
 	}
@@ -165,7 +183,7 @@ func ResetBrandingLogo(c fiber.Ctx) error {
 		cfg.LogoDarkURL = ""
 	}
 
-	if err := saveAppConfig(cfg); err != nil {
+	if err := saveAppConfig(serverKey, cfg); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.APIError{Error: "Failed to update config"})
 	}
 

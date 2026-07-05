@@ -32,13 +32,6 @@ export const GeneralTab = ({
             <h1 className="mb-2 mt-2 text-2xl font-bold leading-none tracking-tight">
                 {t('category_general')}
             </h1>
-            <StringInput
-                label={t('server_address_label')}
-                value={config.serverAddress || ''}
-                onChange={(value) => saveConfig((prev) => ({ ...prev, serverAddress: value }))}
-                placeholder={t('server_address_placeholder')}
-                description={t('server_address_description')}
-            />
             <h2 className="mt-6 mb-2 text-xl font-semibold leading-none tracking-tight">
                 Streamystats
             </h2>
@@ -102,6 +95,20 @@ export const GeneralTab = ({
                     saveConfig((prev) => ({
                         ...prev,
                         watchedStateBadgeSearch: checked,
+                    }))
+                }
+            />
+            <h2 className="mt-6 mb-2 text-xl font-semibold leading-none tracking-tight">
+                {t('login_page')}
+            </h2>
+            <p className="mb-2 text-sm text-muted-foreground">{t('login_page_description')}</p>
+            <BooleanInput
+                label={t('hide_back_to_server_button_label')}
+                checked={config.hideBackToServerButton || false}
+                onChange={(checked) =>
+                    saveConfig((prev) => ({
+                        ...prev,
+                        hideBackToServerButton: checked,
                     }))
                 }
             />

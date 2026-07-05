@@ -12,7 +12,7 @@ import type { TFunction } from 'i18next';
 import ScrollableSectionPoster from '@/components/ScrollableSectionPoster';
 import { getPrimaryImageUrl, getThumbUrl } from '@/utils/jellyfinUrls';
 import { buildSectionItemsLink } from '@/utils/sectionItemsLink';
-import GeneralItemContextMenu from '../../components/GeneraItemContextMenu';
+import ItemContextMenu from '@/components/ItemContextMenu';
 
 interface ItemsRowProps {
     title?: string;
@@ -157,7 +157,7 @@ const ItemsRow = ({
                 items={
                     recentItems
                         ? recentItems.map((item) => (
-                              <GeneralItemContextMenu key={item.Id} item={item}>
+                              <ItemContextMenu key={item.Id} item={item}>
                                   <ScrollableSectionPoster
                                       item={item}
                                       posterUrl={posterUrls[item.Id!]}
@@ -181,7 +181,7 @@ const ItemsRow = ({
                                               : null}
                                       </div>
                                   </ScrollableSectionPoster>
-                              </GeneralItemContextMenu>
+                              </ItemContextMenu>
                           ))
                         : Array.from({ length: 5 }).map((_, index) => (
                               <div key={index} className="w-36 lg:w-44 2xl:w-52">

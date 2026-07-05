@@ -8,7 +8,7 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { buildPlayerUrl } from '@/utils/playerUrl';
 import { getItemUrl } from '@/utils/itemUrl';
 import WatchedStateBadge from '@/components/WatchedStateBadge';
-import MusicItemContextMenu from '@/components/MusicItemContextMenu';
+import ItemContextMenu from '@/components/ItemContextMenu';
 
 const LibraryItem = ({
     item,
@@ -50,7 +50,7 @@ const LibraryItem = ({
         : 0;
     
     return (
-        <MusicItemContextMenu item={item}>
+        <ItemContextMenu item={item}>
             <Link to={itemPath} key={item.Id} className="p-0 m-0">
             <div
                 className={`relative w-full aspect-${posterAspectRatio} overflow-hidden rounded-md group`}
@@ -106,7 +106,7 @@ const LibraryItem = ({
                 </span>
             </div>
         </Link>
-        </MusicItemContextMenu>
+        </ItemContextMenu>
     );
 };
 

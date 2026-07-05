@@ -128,6 +128,7 @@ const LiveTvChannels = ({ searchTerm, categoryOptions }: LiveTvChannelsProps) =>
                                 posterUrl={posterUrls[item.Id!]}
                                 t={t}
                                 posterAspectRatio="video"
+                                posterFit="contain"
                                 detailLine={
                                     item.CurrentProgram?.Name && (
                                         <span className="flex flex-col">

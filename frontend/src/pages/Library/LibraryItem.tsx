@@ -15,6 +15,7 @@ const LibraryItem = ({
     posterUrl,
     t,
     posterAspectRatio = '2/3',
+    posterFit = 'cover',
     detailLine,
     isDirectPlay,
     itemLink,
@@ -23,6 +24,7 @@ const LibraryItem = ({
     posterUrl: string;
     t: TFunction;
     posterAspectRatio?: string;
+    posterFit?: 'cover' | 'contain';
     detailLine?: React.ReactNode;
     isDirectPlay?: boolean;
     itemLink?: string;
@@ -59,7 +61,7 @@ const LibraryItem = ({
                             key={item.Id}
                             src={posterUrl}
                             alt={item.Name || t('library:no_title')}
-                            className="w-full h-full object-cover rounded-md group-hover:opacity-75 transition-all group-hover:scale-105 z-10"
+                            className={`w-full h-full object-${posterFit} rounded-md group-hover:opacity-75 transition-all group-hover:scale-105 z-10`}
                             loading="lazy"
                             onError={() => setPosterError(true)}
                         />

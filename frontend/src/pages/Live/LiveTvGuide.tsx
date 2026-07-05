@@ -308,7 +308,7 @@ const LiveTvGuide = ({ searchTerm, categoryOptions }: LiveTvGuideProps) => {
                                     >
                                         {showNowLine && (
                                             <div
-                                                className="absolute -top-1 -bottom-1 w-px bg-primary z-10 pointer-events-none"
+                                                className="absolute top-0 bottom-0 w-px bg-primary z-10 pointer-events-none"
                                                 style={{ left: nowOffsetPx }}
                                             />
                                         )}

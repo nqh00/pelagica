@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { Link, useNavigate } from 'react-router';
-import { Tv } from 'lucide-react';
+import { SearchIcon, TriangleAlert, Tv } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -13,9 +13,9 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useLiveTvChannels } from '@/hooks/api/useLiveTvChannels';
+import { useLiveTvChannels, type UseLiveTvChannelsOptions } from '@/hooks/api/useLiveTvChannels';
 import { useLiveTvPrograms } from '@/hooks/api/useLiveTvPrograms';
-import { getPrimaryImageUrl } from '@/utils/jellyfinUrls';
+import { getPrimaryImageUrl, type ImageSize } from '@/utils/jellyfinUrls';
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { cn } from '@/lib/utils';
 
@@ -27,7 +27,7 @@ const LOOKBACK_MINUTES = 60;
 const FORWARD_HOURS = 24;
 const GUIDE_WINDOW_MINUTES = LOOKBACK_MINUTES + FORWARD_HOURS * 60;
 const GUIDE_WIDTH = GUIDE_WINDOW_MINUTES * PX_PER_MINUTE;
-const CHANNEL_LOGO_SIZE = { width: 80, height: 45 };
+const CHANNEL_LOGO_SIZE: ImageSize = { maxWidth: 80, maxHeight: 45 };
 const NOW_SCROLL_LEFT_PADDING = 80;
 
 function roundDownToHalfHour(date: Date): Date {
@@ -82,7 +82,12 @@ function formatEpisodeInfo(program: BaseItemDto, t: TFunction): string | undefin
         .join(' · ');
 }
 
-const LiveTvGuide = () => {
+interface LiveTvGuideProps {
+    searchTerm: string;
+    categoryOptions: Partial<UseLiveTvChannelsOptions>;
+}
+
+const LiveTvGuide = ({ searchTerm, categoryOptions }: LiveTvGuideProps) => {
     const { t } = useTranslation(['live', 'common']);
     const navigate = useNavigate();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -101,10 +106,20 @@ const LiveTvGuide = () => {
         [guideStart]
     );
 
-    const { data: channelsData, isLoading: isLoadingChannels } = useLiveTvChannels({
+    const {
+        data: channelsData,
+        isLoading: isLoadingChannels,
+        isError: isChannelsError,
+    } = useLiveTvChannels({
         limit: 200,
+        ...categoryOptions,
     });
-    const channels = useMemo(() => channelsData?.items ?? [], [channelsData]);
+    const allChannels = useMemo(() => channelsData?.items ?? [], [channelsData]);
+    const channels = useMemo(() => {
+        const query = searchTerm.trim().toLowerCase();
+        if (!query) return allChannels;
+        return allChannels.filter((channel) => channel.Name?.toLowerCase().includes(query));
+    }, [allChannels, searchTerm]);
     const channelIds = useMemo(
         () => channels.map((c) => c.Id).filter((id): id is string => Boolean(id)),
         [channels]
@@ -150,7 +165,21 @@ const LiveTvGuide = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoadingChannels]);
 
-    if (!isLoadingChannels && channels.length === 0) {
+    if (!isLoadingChannels && isChannelsError) {
+        return (
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <TriangleAlert />
+                    </EmptyMedia>
+                    <EmptyTitle>{t('live:channels_error_title')}</EmptyTitle>
+                    <EmptyDescription>{t('live:channels_error_description')}</EmptyDescription>
+                </EmptyHeader>
+            </Empty>
+        );
+    }
+
+    if (!isLoadingChannels && allChannels.length === 0) {
         return (
             <Empty>
                 <EmptyHeader>
@@ -159,6 +188,20 @@ const LiveTvGuide = () => {
                     </EmptyMedia>
                     <EmptyTitle>{t('live:no_channels_title')}</EmptyTitle>
                     <EmptyDescription>{t('live:no_channels_description')}</EmptyDescription>
+                </EmptyHeader>
+            </Empty>
+        );
+    }
+
+    if (!isLoadingChannels && channels.length === 0) {
+        return (
+            <Empty>
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <SearchIcon />
+                    </EmptyMedia>
+                    <EmptyTitle>{t('live:no_results_title')}</EmptyTitle>
+                    <EmptyDescription>{t('live:no_results_description')}</EmptyDescription>
                 </EmptyHeader>
             </Empty>
         );

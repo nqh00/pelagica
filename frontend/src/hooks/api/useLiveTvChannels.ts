@@ -8,6 +8,12 @@ import { getUserId } from '@/utils/localstorageCredentials';
 export type UseLiveTvChannelsOptions = {
     limit?: number;
     startIndex?: number;
+    isFavorite?: boolean;
+    isMovie?: boolean;
+    isSeries?: boolean;
+    isNews?: boolean;
+    isKids?: boolean;
+    isSports?: boolean;
 };
 
 export interface LiveTvChannelsResponse {
@@ -19,7 +25,17 @@ export function useLiveTvChannels(
     options?: UseLiveTvChannelsOptions
 ): ReturnType<typeof useQuery<LiveTvChannelsResponse>> {
     return useQuery<LiveTvChannelsResponse>({
-        queryKey: ['liveTvChannels', options?.startIndex, options?.limit],
+        queryKey: [
+            'liveTvChannels',
+            options?.startIndex,
+            options?.limit,
+            options?.isFavorite,
+            options?.isMovie,
+            options?.isSeries,
+            options?.isNews,
+            options?.isKids,
+            options?.isSports,
+        ],
         queryFn: async (): Promise<LiveTvChannelsResponse> => {
             const api = getApi();
             const liveTvApi = getLiveTvApi(api);
@@ -27,6 +43,12 @@ export function useLiveTvChannels(
                 userId: getUserId() || undefined,
                 startIndex: options?.startIndex ?? 0,
                 limit: options?.limit ?? 100,
+                isFavorite: options?.isFavorite,
+                isMovie: options?.isMovie,
+                isSeries: options?.isSeries,
+                isNews: options?.isNews,
+                isKids: options?.isKids,
+                isSports: options?.isSports,
                 enableImages: true,
                 enableUserData: true,
                 addCurrentProgram: true,

@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { useLiveTvChannels } from '../../hooks/api/useLiveTvChannels';
+import {
+    useLiveTvChannels,
+    type UseLiveTvChannelsOptions,
+} from '../../hooks/api/useLiveTvChannels';
 import { useMemo } from 'react';
-import { getPrimaryImageUrl } from '../../utils/jellyfinUrls';
+import { getPrimaryImageUrl, type ImageSize } from '../../utils/jellyfinUrls';
 import { Skeleton } from '../../components/ui/skeleton';
 import {
     Empty,
@@ -10,10 +13,10 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from '../../components/ui/empty';
-import { Tv } from 'lucide-react';
+import { SearchIcon, TriangleAlert, Tv } from 'lucide-react';
 import LibraryItem from '../Library/LibraryItem';
 
-const CHANNEL_POSTER_SIZE = { width: 500, height: 281 };
+const CHANNEL_POSTER_SIZE: ImageSize = { maxWidth: 500, maxHeight: 281 };
 const GRID_COLS = 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6';
 
 function formatTime(date: string): string {
@@ -28,9 +31,21 @@ function getProgramTimeRange(
     return `${formatTime(startDate)} - ${formatTime(endDate)}`;
 }
 
-const LiveTvChannels = () => {
+interface LiveTvChannelsProps {
+    searchTerm: string;
+    categoryOptions: Partial<UseLiveTvChannelsOptions>;
+}
+
+const LiveTvChannels = ({ searchTerm, categoryOptions }: LiveTvChannelsProps) => {
     const { t } = useTranslation(['live', 'common']);
-    const { data, isLoading } = useLiveTvChannels();
+    const { data, isLoading, isError } = useLiveTvChannels(categoryOptions);
+
+    const filteredItems = useMemo(() => {
+        if (!data) return [];
+        const query = searchTerm.trim().toLowerCase();
+        if (!query) return data.items;
+        return data.items.filter((item) => item.Name?.toLowerCase().includes(query));
+    }, [data, searchTerm]);
 
     const posterUrls = useMemo(() => {
         if (!data) return {};
@@ -62,7 +77,18 @@ const LiveTvChannels = () => {
                     ))}
                 </div>
             )}
-            {!isLoading && data && data.items.length === 0 && (
+            {!isLoading && isError && (
+                <Empty>
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <TriangleAlert />
+                        </EmptyMedia>
+                        <EmptyTitle>{t('live:channels_error_title')}</EmptyTitle>
+                        <EmptyDescription>{t('live:channels_error_description')}</EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
+            )}
+            {!isLoading && !isError && data && data.items.length === 0 && (
                 <Empty>
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
@@ -73,9 +99,24 @@ const LiveTvChannels = () => {
                     </EmptyHeader>
                 </Empty>
             )}
-            {!isLoading && data && data.items.length > 0 && (
+            {!isLoading &&
+                !isError &&
+                data &&
+                data.items.length > 0 &&
+                filteredItems.length === 0 && (
+                    <Empty>
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <SearchIcon />
+                            </EmptyMedia>
+                            <EmptyTitle>{t('live:no_results_title')}</EmptyTitle>
+                            <EmptyDescription>{t('live:no_results_description')}</EmptyDescription>
+                        </EmptyHeader>
+                    </Empty>
+                )}
+            {!isLoading && !isError && filteredItems.length > 0 && (
                 <div className={`w-full gap-4 mt-2 grid ${GRID_COLS}`}>
-                    {data.items.map((item) => {
+                    {filteredItems.map((item) => {
                         const timeRange = getProgramTimeRange(
                             item.CurrentProgram?.StartDate,
                             item.CurrentProgram?.EndDate

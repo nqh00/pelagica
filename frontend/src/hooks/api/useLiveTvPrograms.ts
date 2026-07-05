@@ -40,6 +40,8 @@ export function useLiveTvPrograms({
             return response.data.Items || [];
         },
         enabled: channelIds.length > 0,
+        staleTime: 15 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
         ...getRetryConfig(),
     });
 }

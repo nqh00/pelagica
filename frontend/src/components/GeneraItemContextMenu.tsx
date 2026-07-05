@@ -1,5 +1,5 @@
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
-import { useRef, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import {
     ContextMenu,
     ContextMenuContent,
@@ -7,10 +7,7 @@ import {
     ContextMenuSeparator,
     ContextMenuTrigger,
 } from './ui/context-menu';
-import ManageImageButton from './ManageImageButton';
-import RefreshItemMetadataButton from './RefreshItemMetadataButton';
-import EditItemMetadataButton from './EditItemMetadataButton';
-import MediaDeleteButton from './MediaDeleteButton';
+import { useAdminItemDialogs } from '../context/AdminItemDialogsContext';
 import { useCurrentUser } from '../hooks/api/useCurrentUser';
 import { useTranslation } from 'react-i18next';
 import {
@@ -41,6 +38,7 @@ const GeneralItemContextMenu = ({ item, playLink, children }: GeneralItemContext
     const { t } = useTranslation('item');
     const { config } = useConfig();
     const { data: currentUser } = useCurrentUser();
+    const { openDialog } = useAdminItemDialogs();
 
     const { isFavorite, toggleFavorite, isLoading: isFavoriteLoading } = useFavorite(item.Id);
     const showFavoriteToggle = item.Type && config?.itemPage?.favoriteButton?.includes(item.Type);
@@ -56,11 +54,6 @@ const GeneralItemContextMenu = ({ item, playLink, children }: GeneralItemContext
         DOWNLOADABLE_ITEM_TYPES.includes(item.Type) &&
         config?.itemPage?.showDownloadButton;
 
-    const manageImagesTriggerRef = useRef<HTMLButtonElement>(null);
-    const refreshMetadataTriggerRef = useRef<HTMLButtonElement>(null);
-    const deleteTriggerRef = useRef<HTMLButtonElement>(null);
-    const editMetadataTriggerRef = useRef<HTMLButtonElement>(null);
-
     const isAdmin = currentUser?.Policy?.IsAdministrator ?? false;
     const hasItemsAbove =
         Boolean(playLink) ||
@@ -69,107 +62,67 @@ const GeneralItemContextMenu = ({ item, playLink, children }: GeneralItemContext
         Boolean(showDownloadButton);
 
     return (
-        <>
-            <ContextMenu>
-                <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
-                <ContextMenuContent className="w-52">
-                    {playLink && (
-                        <ContextMenuItem asChild>
-                            <Link to={playLink}>
-                                <Play />
-                                {t('play')}
-                            </Link>
-                        </ContextMenuItem>
-                    )}
-                    {showFavoriteToggle && (
-                        <ContextMenuItem
-                            onClick={() => toggleFavorite(!isFavorite)}
-                            disabled={isFavoriteLoading}
+        <ContextMenu>
+            <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
+            <ContextMenuContent className="w-52">
+                {playLink && (
+                    <ContextMenuItem asChild>
+                        <Link to={playLink}>
+                            <Play />
+                            {t('play')}
+                        </Link>
+                    </ContextMenuItem>
+                )}
+                {showFavoriteToggle && (
+                    <ContextMenuItem
+                        onClick={() => toggleFavorite(!isFavorite)}
+                        disabled={isFavoriteLoading}
+                    >
+                        <Heart fill={isFavorite ? 'currentColor' : 'none'} />
+                        {isFavorite ? t('unfavorite') : t('favorite')}
+                    </ContextMenuItem>
+                )}
+                {showWatchlistToggle && (
+                    <ContextMenuItem onClick={() => toggleLike(!isLiked)} disabled={isLoading}>
+                        <Bookmark fill={isLiked ? 'currentColor' : 'none'} />
+                        {isLiked ? t('remove_from_watchlist') : t('add_to_watchlist')}
+                    </ContextMenuItem>
+                )}
+                {showDownloadButton && (
+                    <ContextMenuItem asChild>
+                        <a
+                            href={getDownloadurl(item.Id || '')}
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
-                            <Heart fill={isFavorite ? 'currentColor' : 'none'} />
-                            {isFavorite ? t('unfavorite') : t('favorite')}
-                        </ContextMenuItem>
-                    )}
-                    {showWatchlistToggle && (
-                        <ContextMenuItem onClick={() => toggleLike(!isLiked)} disabled={isLoading}>
-                            <Bookmark fill={isLiked ? 'currentColor' : 'none'} />
-                            {isLiked ? t('remove_from_watchlist') : t('add_to_watchlist')}
-                        </ContextMenuItem>
-                    )}
-                    {showDownloadButton && (
-                        <ContextMenuItem asChild>
-                            <a
-                                href={getDownloadurl(item.Id || '')}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Download />
-                                {t('download')}
-                            </a>
-                        </ContextMenuItem>
-                    )}
-                    {isAdmin && (
-                        <>
-                            {hasItemsAbove && <ContextMenuSeparator />}
-                            <ContextMenuItem
-                                onClick={() => {
-                                    setTimeout(() => manageImagesTriggerRef.current?.click(), 0);
-                                }}
-                            >
-                                <Image />
-                                {t('manage_images')}
-                            </ContextMenuItem>
-                            <ContextMenuItem
-                                onClick={() => {
-                                    setTimeout(() => refreshMetadataTriggerRef.current?.click(), 0);
-                                }}
-                            >
-                                <RotateCcw />
-                                {t('refreshMetadata')}
-                            </ContextMenuItem>
-                            <ContextMenuItem
-                                onClick={() => {
-                                    setTimeout(() => editMetadataTriggerRef.current?.click(), 0);
-                                }}
-                            >
-                                <PencilLine />
-                                {t('editMetadata')}
-                            </ContextMenuItem>
-                            <ContextMenuItem
-                                onClick={() => {
-                                    setTimeout(() => deleteTriggerRef.current?.click(), 0);
-                                }}
-                            >
-                                <Trash2 />
-                                {t('deleteItem')}
-                            </ContextMenuItem>
-                        </>
-                    )}
-                </ContextMenuContent>
-            </ContextMenu>
-            <div style={{ display: 'none' }}>
+                            <Download />
+                            {t('download')}
+                        </a>
+                    </ContextMenuItem>
+                )}
                 {isAdmin && (
                     <>
-                        <ManageImageButton
-                            item={item}
-                            trigger={<button ref={manageImagesTriggerRef} />}
-                        />
-                        <RefreshItemMetadataButton
-                            item={item}
-                            trigger={<button ref={refreshMetadataTriggerRef} />}
-                        />
-                        <EditItemMetadataButton
-                            item={item}
-                            trigger={<button ref={editMetadataTriggerRef} />}
-                        />
-                        <MediaDeleteButton
-                            item={item}
-                            trigger={<button ref={deleteTriggerRef} />}
-                        />
+                        {hasItemsAbove && <ContextMenuSeparator />}
+                        <ContextMenuItem onClick={() => openDialog(item, 'manageImages')}>
+                            <Image />
+                            {t('manage_images')}
+                        </ContextMenuItem>
+                        <ContextMenuItem onClick={() => openDialog(item, 'refreshMetadata')}>
+                            <RotateCcw />
+                            {t('refreshMetadata')}
+                        </ContextMenuItem>
+                        <ContextMenuItem onClick={() => openDialog(item, 'editMetadata')}>
+                            <PencilLine />
+                            {t('editMetadata')}
+                        </ContextMenuItem>
+                        <ContextMenuItem onClick={() => openDialog(item, 'delete')}>
+                            <Trash2 />
+                            {t('deleteItem')}
+                        </ContextMenuItem>
                     </>
                 )}
-            </div>
-        </>
+            </ContextMenuContent>
+        </ContextMenu>
     );
 };
 

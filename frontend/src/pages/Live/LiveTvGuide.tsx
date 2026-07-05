@@ -82,6 +82,36 @@ function formatEpisodeInfo(program: BaseItemDto, t: TFunction): string | undefin
         .join(' · ');
 }
 
+const ChannelLogo = ({
+    channelId,
+    imageTag,
+    alt,
+}: {
+    channelId: string;
+    imageTag?: string | undefined;
+    alt: string;
+}) => {
+    const [error, setError] = useState(false);
+
+    if (error) {
+        return (
+            <div className="w-10 h-5.5 shrink-0 flex items-center justify-center rounded bg-muted">
+                <Tv className="w-3.5 h-3.5 text-muted-foreground" />
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={getPrimaryImageUrl(channelId, CHANNEL_LOGO_SIZE, imageTag)}
+            alt={alt}
+            className="w-10 h-5.5 object-contain shrink-0"
+            loading="lazy"
+            onError={() => setError(true)}
+        />
+    );
+};
+
 interface LiveTvGuideProps {
     searchTerm: string;
     categoryOptions: Partial<UseLiveTvChannelsOptions>;
@@ -265,15 +295,10 @@ const LiveTvGuide = ({ searchTerm, categoryOptions }: LiveTvGuideProps) => {
                                         style={{ width: CHANNEL_COL_WIDTH }}
                                         onClick={() => navigate(`/play/${channel.Id}`)}
                                     >
-                                        <img
-                                            src={getPrimaryImageUrl(
-                                                channel.Id!,
-                                                CHANNEL_LOGO_SIZE,
-                                                channel.ImageTags?.Primary
-                                            )}
+                                        <ChannelLogo
+                                            channelId={channel.Id!}
+                                            imageTag={channel.ImageTags?.Primary}
                                             alt=""
-                                            className="w-10 h-5.5 object-contain shrink-0"
-                                            loading="lazy"
                                         />
                                         <span className="text-sm line-clamp-2">{channel.Name}</span>
                                     </div>

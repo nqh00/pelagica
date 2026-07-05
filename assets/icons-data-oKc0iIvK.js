@@ -1,1 +1,0 @@
-import{t as e}from"./SettingsPage-EIzySCez.js";export{e as iconsData};

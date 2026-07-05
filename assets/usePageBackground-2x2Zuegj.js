@@ -1,0 +1,1 @@
+import{r as e}from"./rolldown-runtime-QTnfLwEv.js";import{r as t}from"./createLucideIcon-C8bdPDXm.js";var n=e(t(),1),r=(0,n.createContext)(void 0),i=()=>{let e=(0,n.useContext)(r);if(e===void 0)throw Error(`usePageBackground must be used within a PageBackgroundProvider`);return e};export{r as n,i as t};

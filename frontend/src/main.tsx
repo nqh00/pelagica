@@ -34,7 +34,7 @@ const MusicPlaylistView = lazy(() => import('./pages/Music/MusicPlaylistView.tsx
 const MusicArtistView = lazy(() => import('./pages/Music/MusicArtistView.tsx'));
 const GenrePage = lazy(() => import('./pages/Genre/GenrePage.tsx'));
 const ItemsSectionPage = lazy(() => import('./pages/Items/ItemsSectionPage.tsx'));
-const LiveChannelsPage = lazy(() => import('./pages/Live/LiveChannelsPage.tsx'));
+const LivetvPage = lazy(() => import('./pages/Live/LiveTvPage.tsx'));
 
 const queryClient = new QueryClient();
 
@@ -63,7 +63,7 @@ createRoot(document.getElementById('root')!).render(
                                 <Route path="/settings" element={<SettingsPage />} />
                                 <Route path="/browse-themes" element={<ThemeBrowserPage />} />
                                 <Route path="/search" element={<SearchPage />} />
-                                <Route path="/live" element={<LiveChannelsPage />} />
+                                <Route path="/live" element={<LivetvPage />} />
                                 <Route path="/photo/:itemId" element={<PhotoViewerPage />} />
                                 <Route path="/music" element={<MusicLayout />}>
                                     <Route index element={<MusicMainContent />} />

@@ -304,8 +304,12 @@ export function getPlaybackStreamUrl(
         const path = options.transcodingUrl.startsWith('/')
             ? options.transcodingUrl
             : `/${options.transcodingUrl}`;
+        const url = new URL(`${base}${path}`);
+        if (options.audioStreamIndex !== undefined) {
+            url.searchParams.set('AudioStreamIndex', options.audioStreamIndex.toString());
+        }
         return {
-            url: `${base}${path}`,
+            url: url.toString(),
             mimeType: 'application/x-mpegURL',
         };
     }

@@ -334,57 +334,52 @@ const LiveTvGuide = ({ searchTerm, categoryOptions }: LiveTvGuideProps) => {
                                                             </span>
                                                         </button>
                                                     </PopoverTrigger>
-                                                    <PopoverContent className="w-100 flex-col gap-2 p-4">
-                                                        <div className="flex items-start gap-3">
-                                                            <div className="relative aspect-2/3 w-28 shrink-0 rounded-xl overflow-hidden border border-white/10 bg-muted flex items-center justify-center">
-                                                                <Skeleton className="absolute inset-0 w-full h-full rounded-xl" />
-                                                                <img
-                                                                    src={getPrimaryImageUrl(
-                                                                        program.Id! || '',
-                                                                        {
-                                                                            width: 300,
-                                                                            height: 450,
-                                                                        },
-                                                                        program.ImageTags?.Primary
-                                                                    )}
-                                                                    alt={program.Name + ' Primary'}
-                                                                    className={[
-                                                                        'object-cover rounded-xl w-full h-full relative z-10',
-                                                                        'transition-[filter,opacity] duration-700 ease-out blur-0 opacity-100',
-                                                                    ].join(' ')}
-                                                                />
-                                                            </div>
-                                                            <div className="flex-1 min-w-0">
-                                                                <p className="font-medium mb-1">
-                                                                    {program.Name}
-                                                                </p>
-                                                                <p className="text-xs text-muted-foreground mb-2">
-                                                                    {formatRange(
-                                                                        program.StartDate,
-                                                                        program.EndDate
-                                                                    )}
-                                                                </p>
-                                                                {episodeInfo && (
-                                                                    <p className="text-sm mb-2">
-                                                                        {episodeInfo}
-                                                                    </p>
+                                                    <PopoverContent className="w-100 p-0 overflow-hidden">
+                                                        <div className="relative w-full aspect-video bg-muted flex items-center justify-center">
+                                                            <Skeleton className="absolute inset-0 w-full h-full" />
+                                                            <img
+                                                                src={getPrimaryImageUrl(
+                                                                    program.Id! || '',
+                                                                    { maxHeight: 300 },
+                                                                    program.ImageTags?.Primary
                                                                 )}
-                                                                {program.Overview && (
-                                                                    <p className="text-sm line-clamp-3 text-muted-foreground">
-                                                                        {program.Overview}
-                                                                    </p>
-                                                                )}
-                                                            </div>
+                                                                alt={program.Name + ' Primary'}
+                                                                className={[
+                                                                    'object-cover w-full h-full relative z-10',
+                                                                    'transition-[filter,opacity] duration-700 ease-out blur-0 opacity-100',
+                                                                ].join(' ')}
+                                                            />
                                                         </div>
-                                                        <Button
-                                                            size="sm"
-                                                            className="mt-3 w-full"
-                                                            asChild
-                                                        >
-                                                            <Link to={`/play/${channel.Id}`}>
-                                                                {t('live:guide_watch_channel')}
-                                                            </Link>
-                                                        </Button>
+                                                        <div className="flex flex-col gap-2 p-4">
+                                                            <p className="font-medium">
+                                                                {program.Name}
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground -mt-1">
+                                                                {formatRange(
+                                                                    program.StartDate,
+                                                                    program.EndDate
+                                                                )}
+                                                            </p>
+                                                            {episodeInfo && (
+                                                                <p className="text-sm">
+                                                                    {episodeInfo}
+                                                                </p>
+                                                            )}
+                                                            {program.Overview && (
+                                                                <p className="text-sm line-clamp-3 text-muted-foreground">
+                                                                    {program.Overview}
+                                                                </p>
+                                                            )}
+                                                            <Button
+                                                                size="sm"
+                                                                className="mt-1 w-full"
+                                                                asChild
+                                                            >
+                                                                <Link to={`/play/${channel.Id}`}>
+                                                                    {t('live:guide_watch_channel')}
+                                                                </Link>
+                                                            </Button>
+                                                        </div>
                                                     </PopoverContent>
                                                 </Popover>
                                             );

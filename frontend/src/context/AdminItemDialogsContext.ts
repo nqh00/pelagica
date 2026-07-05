@@ -13,6 +13,7 @@ export const AdminItemDialogsContext = createContext<AdminItemDialogsContextType
 
 export const useAdminItemDialogs = () => {
     const context = useContext(AdminItemDialogsContext);
-    if (!context) throw new Error('useAdminItemDialogs must be used within AdminItemDialogsProvider');
+    if (!context)
+        throw new Error('useAdminItemDialogs must be used within AdminItemDialogsProvider');
     return context;
 };

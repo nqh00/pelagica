@@ -59,26 +59,17 @@ createRoot(document.getElementById('root')!).render(
                                     <Route path="/item/:itemId" element={<ItemPage />} />
                                     <Route path="/person/:itemId" element={<PersonPage />} />
                                     <Route path="/genre/:itemId" element={<GenrePage />} />
-                                    <Route
-                                        path="/items/section"
-                                        element={<ItemsSectionPage />}
-                                    />
+                                    <Route path="/items/section" element={<ItemsSectionPage />} />
                                     <Route path="/login" element={<LoginPage />} />
                                     <Route path="/play/:itemId" element={<PlayerPage />} />
                                     <Route path="/settings" element={<SettingsPage />} />
-                                    <Route
-                                        path="/browse-themes"
-                                        element={<ThemeBrowserPage />}
-                                    />
+                                    <Route path="/browse-themes" element={<ThemeBrowserPage />} />
                                     <Route path="/search" element={<SearchPage />} />
                                     <Route path="/live" element={<LivetvPage />} />
                                     <Route path="/photo/:itemId" element={<PhotoViewerPage />} />
                                     <Route path="/music" element={<MusicLayout />}>
                                         <Route index element={<MusicMainContent />} />
-                                        <Route
-                                            path="album/:itemId"
-                                            element={<MusicAlbumView />}
-                                        />
+                                        <Route path="album/:itemId" element={<MusicAlbumView />} />
                                         <Route
                                             path="playlist/:itemId"
                                             element={<MusicPlaylistView />}

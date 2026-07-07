@@ -1,5 +1,6 @@
 import { getBackdropUrl, getLogoUrl } from '@/utils/jellyfinUrls';
 import { useState } from 'react';
+import ItemBackdropTrailer from './ItemBackdropTrailer';
 
 interface BaseMediaPageProps {
     itemId: string;
@@ -9,6 +10,7 @@ interface BaseMediaPageProps {
     topPadding?: boolean;
     topPaddingMinHeight?: string;
     logo?: React.ReactNode;
+    hasLocalTrailers?: boolean;
 }
 
 const BaseMediaPage = ({
@@ -19,6 +21,7 @@ const BaseMediaPage = ({
     topPadding = true,
     topPaddingMinHeight = '45dvh',
     logo,
+    hasLocalTrailers = false,
 }: BaseMediaPageProps) => {
     const [failedBackdrop, setFailedBackdrop] = useState(false);
     const [failedLogo, setFailedLogo] = useState(false);
@@ -46,6 +49,7 @@ const BaseMediaPage = ({
                             onLoad={() => setIsBgLoaded(true)}
                             onError={() => setFailedBackdrop(true)}
                         />
+                        <ItemBackdropTrailer itemId={itemId} enabled={hasLocalTrailers} />
                         {/* Left-to-right dark fade to ensure text readability */}
                         <div className="absolute inset-0 bg-linear-to-r from-background via-background/75 to-transparent" />
                         {/* Bottom-to-top fade to background */}

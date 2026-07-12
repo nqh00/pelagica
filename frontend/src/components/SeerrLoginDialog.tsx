@@ -59,12 +59,18 @@ export const SeerrLoginDialog = ({ trigger }: { trigger: React.ReactNode }) => {
                 <div className="flex flex-col gap-4">
                     <div>
                         <Label className="mb-2 text-sm font-medium">{t('username')}</Label>
-                        <Input value={user?.Name || ''} disabled readOnly />
+                        <Input
+                            placeholder={t('username') || ''}
+                            value={user?.Name || ''}
+                            disabled
+                            readOnly
+                        />
                     </div>
                     <div>
                         <Label className="mb-2 text-sm font-medium">{t('password')}</Label>
                         <Input
                             type="password"
+                            placeholder={t('password') || ''}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             onKeyDown={(e) => {

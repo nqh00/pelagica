@@ -11,6 +11,7 @@ import {
     House,
     Laptop,
     Library,
+    LogIn,
     LogOut,
     Moon,
     Music,
@@ -18,6 +19,7 @@ import {
     Settings,
     Settings2,
     Sun,
+    Telescope,
     TriangleAlert,
     Tv,
 } from 'lucide-react';
@@ -76,7 +78,9 @@ import i18n from 'i18next';
 import { useUpdateUserConfiguration } from '@/hooks/api/playbackPreferences/useUpdateUserConfiguration';
 import { useAuthorizeQuickConnect } from '@/hooks/api/useQuickConnect';
 import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
+import { useSeerrLogout } from '@/hooks/api/useSeerrLogout';
 import { SeerrLoginDialog } from '@/components/SeerrLoginDialog';
+import { toast } from 'sonner';
 import { iso6392 } from 'iso-639-2';
 import { cn } from '@/lib/utils';
 import {
@@ -284,6 +288,7 @@ const UserMenu = () => {
     const { data: themes, isLoading: isLoadingThemes } = useThemes();
     const { config } = useConfig();
     const { data: isSeerrLoggedIn } = useSeerrLoginStatus();
+    const seerrLogout = useSeerrLogout();
 
     const onAuthorizeQuickConnect = (code: string) => {
         setQuickConnectLoading(true);
@@ -346,23 +351,6 @@ const UserMenu = () => {
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
-
-                {config?.seerrUrl && isSeerrLoggedIn === false && (
-                    <>
-                        <SeerrLoginDialog
-                            trigger={
-                                <DropdownMenuItem
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="text-amber-500 focus:text-amber-500"
-                                >
-                                    <TriangleAlert className="text-amber-500" />
-                                    {t('seerr_not_connected')}
-                                </DropdownMenuItem>
-                            }
-                        />
-                        <DropdownMenuSeparator />
-                    </>
-                )}
 
                 {/* Theme */}
                 <DropdownMenuSub>
@@ -504,6 +492,58 @@ const UserMenu = () => {
                 </Dialog>
 
                 <DropdownMenuSeparator />
+
+                {config?.seerrUrl && (
+                    <>
+                        <DropdownMenuSub>
+                            <DropdownMenuSubTrigger
+                                className={
+                                    isSeerrLoggedIn === false
+                                        ? 'text-amber-500 focus:text-amber-500 data-[state=open]:text-amber-500'
+                                        : undefined
+                                }
+                            >
+                                {isSeerrLoggedIn === false ? (
+                                    <TriangleAlert className="text-amber-500" />
+                                ) : (
+                                    <Telescope className="text-muted-foreground" />
+                                )}
+                                {isSeerrLoggedIn === false
+                                    ? t('seerr_not_connected')
+                                    : t('seerr_connected')}
+                            </DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                                <DropdownMenuSubContent>
+                                    {isSeerrLoggedIn === false ? (
+                                        <SeerrLoginDialog
+                                            trigger={
+                                                <DropdownMenuItem
+                                                    onSelect={(e) => e.preventDefault()}
+                                                >
+                                                    <LogIn className="text-muted-foreground" />
+                                                    {t('seerr_login_action')}
+                                                </DropdownMenuItem>
+                                            }
+                                        />
+                                    ) : (
+                                        <DropdownMenuItem
+                                            onClick={() =>
+                                                seerrLogout.mutate(undefined, {
+                                                    onSuccess: () =>
+                                                        toast.success(t('seerr_logout_success')),
+                                                })
+                                            }
+                                        >
+                                            <LogOut className="text-muted-foreground" />
+                                            {t('seerr_logout_action')}
+                                        </DropdownMenuItem>
+                                    )}
+                                </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                        </DropdownMenuSub>
+                        <DropdownMenuSeparator />
+                    </>
+                )}
 
                 <AuthorizeQuickConnectDialog
                     onAuthorize={onAuthorizeQuickConnect}

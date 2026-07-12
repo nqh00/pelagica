@@ -178,6 +178,11 @@ func GetSeerMovieRecommendations(c fiber.Ctx) error {
 	return proxySeerRequest(c, "/api/v1/movie/"+tmdbId+"/recommendations")
 }
 
+func GetSeerTvRecommendations(c fiber.Ctx) error {
+	tvId := c.Params("tvId")
+	return proxySeerRequest(c, "/api/v1/tv/"+tvId+"/recommendations")
+}
+
 type seerrStatusResponse struct {
 	LoggedIn bool `json:"loggedIn"`
 }

@@ -2,15 +2,16 @@ import SectionScroller from '@/components/SectionScroller';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSeerrRecommendations } from '@/hooks/api/useSeerrRecommendations';
 import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
+import type { SeerrMediaType } from '@/api/seerr/types';
 import { ImageOff } from 'lucide-react';
 import { memo, useMemo, useState } from 'react';
 import type React from 'react';
-
-const TMDB_POSTER_BASE = 'https://image.tmdb.org/t/p/w342';
+import { getSeerrItemPosterUrl, getSeerrItemUrl } from '../../utils/seerUrls';
 
 interface SeerrRecommendationsRowProps {
     title?: React.ReactNode;
     tmdbId: string;
+    mediaType: SeerrMediaType;
     seerrUrl: string;
 }
 
@@ -25,12 +26,14 @@ const skeletonItems = Array.from({ length: 5 }, (_, index) => (
 const SeerrRecommendationPoster = ({
     seerrUrl,
     tmdbId,
+    mediaType,
     title,
     posterPath,
     year,
 }: {
     seerrUrl: string;
     tmdbId: number;
+    mediaType: SeerrMediaType;
     title: string;
     posterPath?: string;
     year?: string;
@@ -39,7 +42,7 @@ const SeerrRecommendationPoster = ({
 
     return (
         <a
-            href={`${seerrUrl.replace(/\/$/, '')}/movie/${tmdbId}`}
+            href={getSeerrItemUrl({ seerrUrl, tmdbId, mediaType })}
             target="_blank"
             rel="noopener noreferrer"
             className="w-36 lg:w-44 2xl:w-52 shrink-0"
@@ -47,7 +50,7 @@ const SeerrRecommendationPoster = ({
             <div className="relative overflow-hidden rounded-md group w-36 h-54 lg:w-44 lg:h-64 2xl:w-52 2xl:h-80 bg-muted">
                 {posterPath && !posterFailed ? (
                     <img
-                        src={`${TMDB_POSTER_BASE}${posterPath}`}
+                        src={getSeerrItemPosterUrl(posterPath)}
                         alt={title}
                         className="w-full h-full object-cover rounded-md group-hover:opacity-75 transition-all group-hover:scale-105 transform-gpu will-change-transform"
                         loading="lazy"
@@ -68,29 +71,31 @@ const SeerrRecommendationPoster = ({
 };
 
 const SeerrRecommendationsRow: React.FC<SeerrRecommendationsRowProps> = memo(
-    ({ title, tmdbId, seerrUrl }) => {
+    ({ title, tmdbId, mediaType, seerrUrl }) => {
         const { data: isLoggedIn, isLoading: isLoadingLoginStatus } = useSeerrLoginStatus();
         const { data: recommendations, isLoading } = useSeerrRecommendations(
+            mediaType,
             isLoggedIn ? tmdbId : undefined
         );
 
         const itemElements = useMemo(() => {
             if (!recommendations) return [];
-            return recommendations.map((movie) => (
+            return recommendations.map((item) => (
                 <SeerrRecommendationPoster
-                    key={movie.id}
+                    key={item.id}
                     seerrUrl={seerrUrl}
-                    tmdbId={movie.id}
-                    title={movie.title}
-                    posterPath={movie.posterPath}
+                    tmdbId={item.id}
+                    mediaType={mediaType}
+                    title={item.title}
+                    posterPath={item.posterPath}
                     year={
-                        movie.releaseDate
-                            ? new Date(movie.releaseDate).getFullYear().toString()
+                        item.releaseDate
+                            ? new Date(item.releaseDate).getFullYear().toString()
                             : undefined
                     }
                 />
             ));
-        }, [recommendations, seerrUrl]);
+        }, [recommendations, seerrUrl, mediaType]);
 
         if (isLoadingLoginStatus || !isLoggedIn) {
             return null;

@@ -29,7 +29,12 @@ export function useLogin() {
             const userId = res.data.User?.Id || '';
 
             saveCredentials(server, userId, accessToken);
-            await loginToSeerr(server, username, password);
+            try {
+                await loginToSeerr(server, username, password);
+            } catch (e) {
+                // seerr login is best effort and shouldn't block jellyfin login
+                console.warn('Seerr login failed:', e);
+            }
             await queryClient.invalidateQueries({ queryKey: ['seerrLoginStatus'] });
 
             return { api, user: res.data.User };

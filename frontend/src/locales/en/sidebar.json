@@ -23,5 +23,13 @@
     "select_theme": "Select theme",
     "server_default": "Server Default",
     "pelagica_default": "Pelagica Default",
-    "seerr_not_connected": "Not connected to Seerr"
+    "seerr_not_connected": "Not connected to Seerr",
+    "seerr_login_title": "Log in to Seerr",
+    "seerr_login_description": "Enter your Jellyfin password to connect Seerr and enable personalized recommendations.",
+    "seerr_login_success": "Connected to Seerr!",
+    "seerr_login_failed": "Failed to log in to Seerr. Please check your password and try again.",
+    "username": "Username",
+    "password": "Password",
+    "login": "Login",
+    "logging_in": "Logging in..."
 }

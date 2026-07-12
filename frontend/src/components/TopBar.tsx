@@ -76,6 +76,7 @@ import i18n from 'i18next';
 import { useUpdateUserConfiguration } from '@/hooks/api/playbackPreferences/useUpdateUserConfiguration';
 import { useAuthorizeQuickConnect } from '@/hooks/api/useQuickConnect';
 import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
+import { SeerrLoginDialog } from '@/components/SeerrLoginDialog';
 import { iso6392 } from 'iso-639-2';
 import { cn } from '@/lib/utils';
 import {
@@ -348,10 +349,17 @@ const UserMenu = () => {
 
                 {config?.seerrUrl && isSeerrLoggedIn === false && (
                     <>
-                        <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-amber-500">
-                            <TriangleAlert size={16} />
-                            {t('seerr_not_connected')}
-                        </div>
+                        <SeerrLoginDialog
+                            trigger={
+                                <DropdownMenuItem
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="text-amber-500 focus:text-amber-500"
+                                >
+                                    <TriangleAlert className="text-amber-500" />
+                                    {t('seerr_not_connected')}
+                                </DropdownMenuItem>
+                            }
+                        />
                         <DropdownMenuSeparator />
                     </>
                 )}

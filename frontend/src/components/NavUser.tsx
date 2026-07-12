@@ -32,6 +32,7 @@ import {
 import { useCurrentUser } from '@/hooks/api/useCurrentUser';
 import { useConfig } from '@/hooks/api/useConfig';
 import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
+import { SeerrLoginDialog } from '@/components/SeerrLoginDialog';
 import { Link, useNavigate } from 'react-router';
 import { logout } from '@/api/logout';
 import { useTheme } from './theme-provider';
@@ -379,10 +380,17 @@ export function NavUser() {
                         <DropdownMenuSeparator />
                         {config?.seerrUrl && isSeerrLoggedIn === false && (
                             <>
-                                <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-amber-500">
-                                    <TriangleAlert size={16} />
-                                    {t('seerr_not_connected')}
-                                </div>
+                                <SeerrLoginDialog
+                                    trigger={
+                                        <DropdownMenuItem
+                                            onSelect={(e) => e.preventDefault()}
+                                            className="text-amber-500 focus:text-amber-500"
+                                        >
+                                            <TriangleAlert className="text-amber-500" />
+                                            {t('seerr_not_connected')}
+                                        </DropdownMenuItem>
+                                    }
+                                />
                                 <DropdownMenuSeparator />
                             </>
                         )}

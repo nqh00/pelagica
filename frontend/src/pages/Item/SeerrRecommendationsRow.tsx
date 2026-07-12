@@ -1,6 +1,7 @@
 import SectionScroller from '@/components/SectionScroller';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSeerrRecommendations } from '@/hooks/api/useSeerrRecommendations';
+import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
 import { ImageOff } from 'lucide-react';
 import { memo, useMemo, useState } from 'react';
 import type React from 'react';
@@ -68,7 +69,10 @@ const SeerrRecommendationPoster = ({
 
 const SeerrRecommendationsRow: React.FC<SeerrRecommendationsRowProps> = memo(
     ({ title, tmdbId, seerrUrl }) => {
-        const { data: recommendations, isLoading } = useSeerrRecommendations(tmdbId);
+        const { data: isLoggedIn, isLoading: isLoadingLoginStatus } = useSeerrLoginStatus();
+        const { data: recommendations, isLoading } = useSeerrRecommendations(
+            isLoggedIn ? tmdbId : undefined
+        );
 
         const itemElements = useMemo(() => {
             if (!recommendations) return [];
@@ -87,6 +91,10 @@ const SeerrRecommendationsRow: React.FC<SeerrRecommendationsRowProps> = memo(
                 />
             ));
         }, [recommendations, seerrUrl]);
+
+        if (isLoadingLoginStatus || !isLoggedIn) {
+            return null;
+        }
 
         if (isLoading) {
             return <SectionScroller title={title} items={skeletonItems} />;

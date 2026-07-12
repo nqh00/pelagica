@@ -68,6 +68,7 @@ func main() {
 	api.Post("/seerr/login", handlers.SeerLogin)
 	api.Post("/seerr/logout", handlers.SeerLogout)
 	api.Get("/seerr/movie/:tmdbId/recommendations", handlers.GetSeerMovieRecommendations)
+	api.Get("/seerr/status", handlers.GetSeerrStatus)
 
 	slog.Info("Server starting", "port", getPort(), "fiber", fiber.Version)
 	if err := app.Listen(getPort(), fiber.ListenConfig{

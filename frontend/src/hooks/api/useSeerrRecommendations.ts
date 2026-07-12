@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import type { SeerrMovieRecommendation } from '@/api/seer/types';
+import type { SeerrMovieRecommendation } from '@/api/seerr/types';
 import { getServerUrl } from '@/utils/localstorageCredentials';
-import { getSeerrMovieRecommendations } from '@/api/seer/recommendations';
+import { getSeerrMovieRecommendations } from '@/api/seerr/recommendations';
 
 export function useSeerrRecommendations(tmdbId: string | undefined) {
     return useQuery<SeerrMovieRecommendation[]>({

@@ -1,4 +1,4 @@
-import { logoutFromSeerr } from '@/api/seer/logout';
+import { logoutFromSeerr } from '@/api/seerr/logout';
 import { clearDeviceId } from './deviceId';
 import { clearCredentials } from './localstorageCredentials';
 

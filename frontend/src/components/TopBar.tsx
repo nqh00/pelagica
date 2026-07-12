@@ -75,6 +75,7 @@ import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
 import { useUpdateUserConfiguration } from '@/hooks/api/playbackPreferences/useUpdateUserConfiguration';
 import { useAuthorizeQuickConnect } from '@/hooks/api/useQuickConnect';
+import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
 import { iso6392 } from 'iso-639-2';
 import { cn } from '@/lib/utils';
 import {
@@ -280,6 +281,8 @@ const UserMenu = () => {
         getLocalTheme() ?? LOCAL_THEME_SERVER_DEFAULT
     );
     const { data: themes, isLoading: isLoadingThemes } = useThemes();
+    const { config } = useConfig();
+    const { data: isSeerrLoggedIn } = useSeerrLoginStatus();
 
     const onAuthorizeQuickConnect = (code: string) => {
         setQuickConnectLoading(true);
@@ -342,6 +345,16 @@ const UserMenu = () => {
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
+
+                {config?.seerrUrl && isSeerrLoggedIn === false && (
+                    <>
+                        <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-amber-500">
+                            <TriangleAlert size={16} />
+                            {t('seerr_not_connected')}
+                        </div>
+                        <DropdownMenuSeparator />
+                    </>
+                )}
 
                 {/* Theme */}
                 <DropdownMenuSub>

@@ -99,9 +99,7 @@ func SeerLogin(c fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).Type("json").Send(body)
 }
 
-func SeerLogout(c fiber.Ctx) error {
-	session := c.Cookies(seerSessionCookieName)
-
+func clearSeerSessionCookie(c fiber.Ctx) {
 	c.Cookie(&fiber.Cookie{
 		Name:     seerSessionCookieName,
 		Value:    "",
@@ -110,6 +108,12 @@ func SeerLogout(c fiber.Ctx) error {
 		SameSite: "Lax",
 		Expires:  time.Unix(0, 0),
 	})
+}
+
+func SeerLogout(c fiber.Ctx) error {
+	session := c.Cookies(seerSessionCookieName)
+
+	clearSeerSessionCookie(c)
 
 	if session == "" {
 		return c.SendStatus(fiber.StatusNoContent)
@@ -172,4 +176,42 @@ func proxySeerRequest(c fiber.Ctx, seerPath string) error {
 func GetSeerMovieRecommendations(c fiber.Ctx) error {
 	tmdbId := c.Params("tmdbId")
 	return proxySeerRequest(c, "/api/v1/movie/"+tmdbId+"/recommendations")
+}
+
+type seerrStatusResponse struct {
+	LoggedIn bool `json:"loggedIn"`
+}
+
+func GetSeerrStatus(c fiber.Ctx) error {
+	session := c.Cookies(seerSessionCookieName)
+	if session == "" {
+		return c.JSON(seerrStatusResponse{LoggedIn: false})
+	}
+
+	seerURL, err := getSeerURL(c)
+	if err != nil {
+		return c.JSON(seerrStatusResponse{LoggedIn: false})
+	}
+
+	req, err := http.NewRequest(http.MethodGet, seerURL+"/api/v1/auth/me", nil)
+	if err != nil {
+		slog.Error("Failed to build Seer status request", "error", err)
+		return c.JSON(seerrStatusResponse{LoggedIn: false})
+	}
+	req.AddCookie(&http.Cookie{Name: "connect.sid", Value: session})
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		slog.Error("Seer status check failed", "error", err)
+		return c.JSON(seerrStatusResponse{LoggedIn: false})
+	}
+	defer resp.Body.Close()
+	io.Copy(io.Discard, resp.Body)
+
+	if resp.StatusCode != http.StatusOK {
+		clearSeerSessionCookie(c)
+		return c.JSON(seerrStatusResponse{LoggedIn: false})
+	}
+
+	return c.JSON(seerrStatusResponse{LoggedIn: true})
 }

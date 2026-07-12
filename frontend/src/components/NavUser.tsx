@@ -30,6 +30,8 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 import { useCurrentUser } from '@/hooks/api/useCurrentUser';
+import { useConfig } from '@/hooks/api/useConfig';
+import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
 import { Link, useNavigate } from 'react-router';
 import { logout } from '@/api/logout';
 import { useTheme } from './theme-provider';
@@ -285,6 +287,8 @@ export function NavUser() {
         getLocalTheme() ?? LOCAL_THEME_SERVER_DEFAULT
     );
     const { data: themes, isLoading: isLoadingThemes } = useThemes();
+    const { config } = useConfig();
+    const { data: isSeerrLoggedIn } = useSeerrLoginStatus();
 
     const onAuthorizeQuickConnect = (code: string) => {
         setAuthorizeQuickConnectLoading(true);
@@ -373,6 +377,15 @@ export function NavUser() {
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
+                        {config?.seerrUrl && isSeerrLoggedIn === false && (
+                            <>
+                                <div className="flex items-center gap-2 px-2 py-1.5 text-sm text-amber-500">
+                                    <TriangleAlert size={16} />
+                                    {t('seerr_not_connected')}
+                                </div>
+                                <DropdownMenuSeparator />
+                            </>
+                        )}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">

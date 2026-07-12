@@ -221,7 +221,7 @@ export interface AppConfig {
     /** Optional URL for Streamystats integration */
     streamystatsUrl?: string;
     /** Optional URL for Seer integration */
-    seerUrl?: string;
+    seerrUrl?: string;
     /** Whether to show the Streamystats button in the user menu */
     showStreamystatsButton?: boolean;
     /** Whether to show the watched state badge for items on the home screen */

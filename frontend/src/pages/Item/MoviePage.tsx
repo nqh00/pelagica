@@ -6,6 +6,7 @@ import PeopleRow from './PeopleRow';
 import { useTranslation } from 'react-i18next';
 import { Skeleton } from '@/components/ui/skeleton';
 import MoreLikeThisRow from './MoreLikeThisRow';
+import SeerRecommendationsRow from './SeerrRecommendationsRow';
 import type { AppConfig } from '@/hooks/api/useConfig';
 import DetailBadges from './DetailBadges';
 import MediaInfoDialog from '../../components/MediaInfoDialog';
@@ -143,6 +144,13 @@ const MoviePage = ({ item, config }: MoviePageProps) => {
                     title={<h3 className="text-3xl font-bold">{t('more_like_this')}</h3>}
                     itemId={item.Id || ''}
                 />
+                {config.seerrUrl && item.ProviderIds?.Tmdb && (
+                    <SeerRecommendationsRow
+                        title={<h3 className="text-3xl font-bold">{t('recommendations')}</h3>}
+                        tmdbId={item.ProviderIds.Tmdb}
+                        seerrUrl={config.seerrUrl}
+                    />
+                )}
             </div>
         </BaseMediaPage>
     );

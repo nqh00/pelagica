@@ -65,6 +65,10 @@ func main() {
 	api.Get("/stats-consent", handlers.GetStatsConsent)
 	api.Post("/stats-consent", handlers.PostStatsConsent)
 
+	api.Post("/seerr/login", handlers.SeerLogin)
+	api.Post("/seerr/logout", handlers.SeerLogout)
+	api.Get("/seerr/movie/:tmdbId/recommendations", handlers.GetSeerMovieRecommendations)
+
 	slog.Info("Server starting", "port", getPort(), "fiber", fiber.Version)
 	if err := app.Listen(getPort(), fiber.ListenConfig{
 		DisableStartupMessage: true,

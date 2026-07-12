@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createApi } from '../../api/jellyfinClient';
 import { getUserApi } from '@jellyfin/sdk/lib/utils/api/user-api';
 import { saveCredentials } from '@/utils/localstorageCredentials';
+import { loginToSeerr } from '@/api/seer/login';
 
 export function useLogin() {
     return useMutation({
@@ -26,6 +27,7 @@ export function useLogin() {
             const userId = res.data.User?.Id || '';
 
             saveCredentials(server, userId, accessToken);
+            await loginToSeerr(server, username, password);
 
             return { api, user: res.data.User };
         },

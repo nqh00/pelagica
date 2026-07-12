@@ -7,6 +7,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -181,6 +182,14 @@ func GetSeerMovieRecommendations(c fiber.Ctx) error {
 func GetSeerTvRecommendations(c fiber.Ctx) error {
 	tvId := c.Params("tvId")
 	return proxySeerRequest(c, "/api/v1/tv/"+tvId+"/recommendations")
+}
+
+func GetSeerSearch(c fiber.Ctx) error {
+	query := c.Query("query")
+	if query == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(models.APIError{Error: "Query is required"})
+	}
+	return proxySeerRequest(c, "/api/v1/search?query="+url.QueryEscape(query))
 }
 
 type seerrStatusResponse struct {

@@ -34,3 +34,24 @@ export interface SeerrRecommendationItem {
     posterPath?: string;
     releaseDate?: string;
 }
+
+export interface SeerrSearchResult {
+    id: number;
+    mediaType: SeerrMediaType | 'person';
+    title?: string;
+    name?: string;
+    posterPath?: string;
+    releaseDate?: string;
+    firstAirDate?: string;
+}
+
+export interface SeerrSearchResponse {
+    page: number;
+    totalPages: number;
+    totalResults: number;
+    results: SeerrSearchResult[];
+}
+
+export interface SeerrSearchResultItem extends SeerrRecommendationItem {
+    mediaType: SeerrMediaType;
+}

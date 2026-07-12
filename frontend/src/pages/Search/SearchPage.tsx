@@ -37,7 +37,11 @@ import {
 } from '@/components/ui/empty';
 import { useTranslation } from 'react-i18next';
 import GenresGrid from './GenresGrid';
+import SeerrSearchGrid from './SeerrSearchGrid';
 import { getUserId } from '@/utils/localstorageCredentials';
+import { useConfig } from '@/hooks/api/useConfig';
+import { useSeerrLoginStatus } from '@/hooks/api/useSeerrLoginStatus';
+import { useSeerrSearch } from '@/hooks/api/useSeerrSearch';
 
 const ITEM_TYPE_GROUPS = {
     episodes: ['Episode'] as BaseItemKind[],
@@ -93,6 +97,13 @@ const SearchPage = () => {
         isLoading,
         error,
     } = useSearchItems(debouncedQuery, { itemTypes, limit: 50, userId: getUserId() || undefined });
+
+    const { config } = useConfig();
+    const { data: isSeerrLoggedIn } = useSeerrLoginStatus();
+    const showSeerrResults = !!config?.seerrUrl && isSeerrLoggedIn && typeFilter !== 'music';
+    const { data: seerrResults, isLoading: isLoadingSeerrResults } = useSeerrSearch(
+        showSeerrResults ? debouncedQuery : undefined
+    );
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -194,9 +205,7 @@ const SearchPage = () => {
                     if (groupKey === 'moviesTv') {
                         return (
                             <div key={groupKey} className="mt-4">
-                                <h2 className="text-xl font-semibold mb-2">
-                                    {t('group_moviesTv')}
-                                </h2>
+                                <h2 className="text-2xl font-bold mb-2">{t('group_moviesTv')}</h2>
                                 <MovieTvGrid items={groupResults} />
                             </div>
                         );
@@ -205,7 +214,7 @@ const SearchPage = () => {
                     if (groupKey === 'music') {
                         return (
                             <div key={groupKey} className="mt-4">
-                                <h2 className="text-xl font-semibold mb-2">{t('group_music')}</h2>
+                                <h2 className="text-2xl font-bold mb-2">{t('group_music')}</h2>
                                 <MusicGrid items={groupResults} />
                             </div>
                         );
@@ -214,7 +223,7 @@ const SearchPage = () => {
                     if (groupKey === 'people') {
                         return (
                             <div key={groupKey} className="mt-4">
-                                <h2 className="text-xl font-semibold mb-2">{t('group_people')}</h2>
+                                <h2 className="text-2xl font-bold mb-2">{t('group_people')}</h2>
                                 <PeopleGrid items={groupResults} />
                             </div>
                         );
@@ -223,9 +232,7 @@ const SearchPage = () => {
                     if (groupKey === 'episodes') {
                         return (
                             <div key={groupKey} className="mt-4">
-                                <h2 className="text-xl font-semibold mb-2">
-                                    {t('group_episodes')}
-                                </h2>
+                                <h2 className="text-2xl font-bold mb-2">{t('group_episodes')}</h2>
                                 <EpisodesGrid items={groupResults} />
                             </div>
                         );
@@ -233,6 +240,26 @@ const SearchPage = () => {
 
                     return null;
                 })}
+            {showSeerrResults &&
+            debouncedQuery &&
+            (isLoadingSeerrResults || seerrResults?.length) ? (
+                <div className="mt-4">
+                    <h2 className="text-2xl font-bold mb-2">{t('group_seerr')}</h2>
+                    {isLoadingSeerrResults ? (
+                        <div className="w-full gap-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-9">
+                            {[1, 2, 3, 4, 5, 6, 7].map((item) => (
+                                <div key={item} className="space-y-2">
+                                    <Skeleton className="aspect-2/3 w-full rounded-lg" />
+                                    <Skeleton className="h-4 w-3/4" />
+                                    <Skeleton className="h-3 w-1/2" />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <SeerrSearchGrid items={seerrResults || []} seerrUrl={config!.seerrUrl!} />
+                    )}
+                </div>
+            ) : null}
             {!debouncedQuery && !isLoading && <GenresGrid />}
         </Page>
     );

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import type { SeerrMediaInfo, SeerrMediaType } from '@/api/seerr/types';
+import { SeerrMediaStatus, type SeerrMediaInfo, type SeerrMediaType } from '@/api/seerr/types';
 import { useSeerrItemDialog } from '@/context/SeerrItemDialogContext';
 
 export function useSeerrItemClick() {
@@ -7,7 +7,11 @@ export function useSeerrItemClick() {
     const { openDialog } = useSeerrItemDialog();
 
     return (item: { id: number; mediaType: SeerrMediaType; mediaInfo?: SeerrMediaInfo }) => {
-        if (item.mediaInfo?.jellyfinMediaId) {
+        // Only skip the modal for fully available items since seasons can be partially available (e.g. only one season)
+        if (
+            item.mediaInfo?.jellyfinMediaId &&
+            item.mediaInfo.status === SeerrMediaStatus.AVAILABLE
+        ) {
             navigate(`/item/${item.mediaInfo.jellyfinMediaId}`);
             return;
         }

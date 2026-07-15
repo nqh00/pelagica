@@ -17,6 +17,7 @@
     "seerr_request_seasons_count": "Request {{count}} Season",
     "seerr_request_seasons_count_plural": "Request {{count}} Seasons",
     "seerr_open_in_seerr": "Open in Seerr",
+    "seerr_open_in_library": "Open in Library",
     "seerr_watch_trailer": "Watch Trailer",
     "seerr_request_success": "Request submitted",
     "seerr_request_failed": "Failed to submit request",

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import {
     Check,
@@ -9,6 +10,7 @@ import {
     ExternalLink,
     Film,
     ImageOff,
+    Library,
     TvMinimalPlay,
 } from 'lucide-react';
 import {
@@ -89,6 +91,7 @@ const mediaStatusBadge = (
 
 const SeerrItemDialog = ({ item, open, onOpenChange }: SeerrItemDialogProps) => {
     const { t } = useTranslation('seerr');
+    const navigate = useNavigate();
     const { config } = useConfig();
     const seerrUrl = config?.seerrUrl;
 
@@ -396,6 +399,18 @@ const SeerrItemDialog = ({ item, open, onOpenChange }: SeerrItemDialogProps) => 
                                     {t('seerr_open_in_seerr')}
                                     <ExternalLink />
                                 </a>
+                            </Button>
+                        )}
+                        {details?.mediaInfo?.jellyfinMediaId && (
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    onOpenChange(false);
+                                    navigate(`/item/${details.mediaInfo!.jellyfinMediaId}`);
+                                }}
+                            >
+                                <Library />
+                                {t('seerr_open_in_library')}
                             </Button>
                         )}
                         {!isLoading && !isError && showRequestButton && (

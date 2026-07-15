@@ -106,9 +106,9 @@ export function BaseContinueRow({
                                           ? 'thumb'
                                           : item.BackdropImageTags?.length
                                             ? 'backdrop'
-                                              : item.ImageTags?.Primary
+                                            : item.ImageTags?.Primary
                                               ? 'primary'
-                                            : 'failed');
+                                              : 'failed');
 
                                   const imageSrc =
                                       currentState === 'thumb'

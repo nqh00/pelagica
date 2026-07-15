@@ -35,5 +35,6 @@
     "username": "Username",
     "password": "Password",
     "login": "Login",
-    "logging_in": "Logging in..."
+    "logging_in": "Logging in...",
+    "seerr_open": "Open Seerr"
 }

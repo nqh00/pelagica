@@ -6,6 +6,7 @@ import {
     ChevronDown,
     ChevronsUpDown,
     DotIcon,
+    ExternalLink,
     Fingerprint,
     Globe,
     House,
@@ -514,6 +515,17 @@ const UserMenu = () => {
                             </DropdownMenuSubTrigger>
                             <DropdownMenuPortal>
                                 <DropdownMenuSubContent>
+                                    <DropdownMenuItem asChild>
+                                        <a
+                                            href={config.seerrUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <ExternalLink />
+                                            {t('seerr_open')}
+                                        </a>
+                                    </DropdownMenuItem>
                                     {isSeerrLoggedIn === false ? (
                                         <SeerrLoginDialog
                                             trigger={

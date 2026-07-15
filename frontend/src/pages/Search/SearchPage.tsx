@@ -52,7 +52,7 @@ const ITEM_TYPE_GROUPS = {
 } as const;
 
 const LoadingSkeleton = memo(() => (
-    <div className="space-y-8 mt-4">
+    <div className="space-y-8 mt-4 w-full">
         {[1, 2].map((section) => (
             <div key={section}>
                 <Skeleton className="h-7 w-40 mb-4" />
@@ -212,7 +212,7 @@ const SearchPage = () => {
 
                     if (groupKey === 'moviesTv') {
                         return (
-                            <div key={groupKey} className="mt-4">
+                            <div key={groupKey} className="mt-4 w-full">
                                 <h2 className="text-2xl font-bold mb-2">{t('group_moviesTv')}</h2>
                                 <MovieTvGrid items={groupResults} />
                             </div>
@@ -221,7 +221,7 @@ const SearchPage = () => {
 
                     if (groupKey === 'music') {
                         return (
-                            <div key={groupKey} className="mt-4">
+                            <div key={groupKey} className="mt-4 w-full">
                                 <h2 className="text-2xl font-bold mb-2">{t('group_music')}</h2>
                                 <MusicGrid items={groupResults} />
                             </div>
@@ -230,7 +230,7 @@ const SearchPage = () => {
 
                     if (groupKey === 'people') {
                         return (
-                            <div key={groupKey} className="mt-4">
+                            <div key={groupKey} className="mt-4 w-full">
                                 <h2 className="text-2xl font-bold mb-2">{t('group_people')}</h2>
                                 <PeopleGrid items={groupResults} />
                             </div>
@@ -239,7 +239,7 @@ const SearchPage = () => {
 
                     if (groupKey === 'episodes') {
                         return (
-                            <div key={groupKey} className="mt-4">
+                            <div key={groupKey} className="mt-4 w-full">
                                 <h2 className="text-2xl font-bold mb-2">{t('group_episodes')}</h2>
                                 <EpisodesGrid items={groupResults} />
                             </div>
@@ -251,7 +251,7 @@ const SearchPage = () => {
             {showSeerrResults &&
             debouncedQuery &&
             (isLoadingSeerrResults || visibleSeerrResults?.length) ? (
-                <div className="mt-4">
+                <div className="mt-4 w-full">
                     <h2 className="text-2xl font-bold mb-2">{t('group_seerr')}</h2>
                     {isLoadingSeerrResults ? (
                         <div className="w-full gap-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-9">

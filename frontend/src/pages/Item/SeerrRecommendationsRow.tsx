@@ -45,7 +45,7 @@ const SeerrRecommendationPoster = ({
         <button
             type="button"
             onClick={() => handleClick({ id: tmdbId, mediaType, mediaInfo })}
-            className="w-36 lg:w-44 2xl:w-52 shrink-0 text-left"
+            className="w-36 lg:w-44 2xl:w-52 shrink-0 text-left cursor-pointer"
         >
             <div className="relative overflow-hidden rounded-md group w-36 h-54 lg:w-44 lg:h-64 2xl:w-52 2xl:h-80 bg-muted">
                 {posterPath && !posterFailed ? (

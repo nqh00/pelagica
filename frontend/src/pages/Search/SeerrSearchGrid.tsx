@@ -14,7 +14,11 @@ const SeerrSearchGridItem = ({ item }: { item: SeerrSearchResultItem }) => {
     const handleClick = useSeerrItemClick();
 
     return (
-        <button type="button" onClick={() => handleClick(item)} className="p-0 m-0 text-left">
+        <button
+            type="button"
+            onClick={() => handleClick(item)}
+            className="p-0 m-0 text-left cursor-pointer"
+        >
             <div className="relative w-full aspect-2/3 overflow-hidden rounded-md group bg-muted">
                 {item.posterPath && !posterFailed ? (
                     <img

@@ -36,7 +36,7 @@ interface SeerrItemDialogProps {
 }
 
 const ItemTypeBadge = ({ mediaType }: { mediaType: SeerrMediaType }) => {
-    const { t } = useTranslation('search');
+    const { t } = useTranslation('seerr');
     console.log('mediaType', mediaType);
     const label = mediaType === 'movie' ? t('seerr_movie') : t('seerr_tv_show');
     const icon = mediaType === 'movie' ? <Clapperboard /> : <TvMinimalPlay />;
@@ -88,7 +88,7 @@ const mediaStatusBadge = (
 };
 
 const SeerrItemDialog = ({ item, open, onOpenChange }: SeerrItemDialogProps) => {
-    const { t } = useTranslation('search');
+    const { t } = useTranslation('seerr');
     const { config } = useConfig();
     const seerrUrl = config?.seerrUrl;
 

@@ -24,5 +24,6 @@
     "seerr_loading_details": "Loading details...",
     "seerr_failed_to_load": "Failed to load details",
     "seerr_movie": "Movie",
-    "seerr_tv_show": "TV Show"
+    "seerr_tv_show": "TV Show",
+    "seerr_button_label": "View on Seerr"
 }

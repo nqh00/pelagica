@@ -15,6 +15,7 @@ import WatchListButton from '../../components/WatchlistButton';
 import PlayStateButton from '../../components/PlayStateButton';
 import { getUserId } from '@/utils/localstorageCredentials';
 import ItemAdminButton from '@/components/ItemAdminButton';
+import SeerrItemButton from '@/components/SeerrItemButton';
 import { useState } from 'react';
 import { TrailerButton } from '../../components/TrailerButton';
 import ItemDownloadButton from '../../components/ItemDownloadButton';
@@ -127,6 +128,12 @@ const MoviePage = ({ item, config }: MoviePageProps) => {
                                 showDownloadButton={config.itemPage?.showDownloadButton}
                             />
                             <MediaInfoDialog streams={item.MediaStreams || []} path={item.Path} />
+                            {config.seerrUrl && item.ProviderIds?.Tmdb && (
+                                <SeerrItemButton
+                                    tmdbId={item.ProviderIds.Tmdb}
+                                    mediaType="movie"
+                                />
+                            )}
                             <ItemAdminButton item={item} showSubtitlesButton={true} />
                         </div>
 

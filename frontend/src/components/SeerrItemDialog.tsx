@@ -130,9 +130,13 @@ const SeerrItemDialog = ({ item, open, onOpenChange }: SeerrItemDialogProps) => 
         return map;
     }, [details, requestedSeasonNumbers]);
 
-    // Season 0 (Specials) aren't requestable through seer it seems
+    // Season 0 (Specials) aren't requestable through seer it seems, and seasons
+    // with 0 episodes (e.g. an announced-but-unaired season) aren't useful to show
     const visibleSeasons = useMemo(
-        () => details?.seasons?.filter((season) => season.seasonNumber !== 0) ?? [],
+        () =>
+            details?.seasons?.filter(
+                (season) => season.seasonNumber !== 0 && season.episodeCount !== 0
+            ) ?? [],
         [details]
     );
 

@@ -28,6 +28,7 @@ import WatchListButton from '../../components/WatchlistButton';
 import PlayStateButton from '../../components/PlayStateButton';
 import { getUserId } from '@/utils/localstorageCredentials';
 import ItemAdminButton from '@/components/ItemAdminButton';
+import SeerrItemButton from '@/components/SeerrItemButton';
 import { TrailerButton } from '../../components/TrailerButton';
 import { useUpcomingEpisodes } from '../../hooks/api/useUpcomingEpisodes';
 import UpcomingEpisodeComponent from './UpcomingEpisodeComponent';
@@ -172,6 +173,9 @@ const SeriesPage = ({ item, config }: SeriesPageProps) => {
                                 showWatchlistButton={config.itemPage?.showWatchlistButton}
                             />
                             <PlayStateButton itemId={item.Id || ''} userId={getUserId() || ''} />
+                            {config.seerrUrl && item.ProviderIds?.Tmdb && (
+                                <SeerrItemButton tmdbId={item.ProviderIds.Tmdb} mediaType="tv" />
+                            )}
                             <ItemAdminButton item={item} />
                         </div>
 

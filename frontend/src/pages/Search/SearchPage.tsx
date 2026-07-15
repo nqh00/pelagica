@@ -173,22 +173,26 @@ const SearchPage = () => {
                     </EmptyHeader>
                 </Empty>
             )}
-            {!isLoading && !error && results && results.length === 0 && (
-                <Empty>
-                    <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                            <CircleQuestionMark />
-                        </EmptyMedia>
-                        <EmptyTitle>{t('no_results')}</EmptyTitle>
-                        <EmptyDescription>{t('no_results_description')}</EmptyDescription>
-                        <EmptyContent>
-                            <Button variant={'link'} onClick={() => setQuery('')}>
-                                {t('clear_search')}
-                            </Button>
-                        </EmptyContent>
-                    </EmptyHeader>
-                </Empty>
-            )}
+            {!isLoading &&
+                !error &&
+                results &&
+                results.length === 0 &&
+                (!showSeerrResults || (!isLoadingSeerrResults && !visibleSeerrResults?.length)) && (
+                    <Empty>
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <CircleQuestionMark />
+                            </EmptyMedia>
+                            <EmptyTitle>{t('no_results')}</EmptyTitle>
+                            <EmptyDescription>{t('no_results_description')}</EmptyDescription>
+                            <EmptyContent>
+                                <Button variant={'link'} onClick={() => setQuery('')}>
+                                    {t('clear_search')}
+                                </Button>
+                            </EmptyContent>
+                        </EmptyHeader>
+                    </Empty>
+                )}
             {results &&
                 Object.keys(ITEM_TYPE_GROUPS).map((groupKey) => {
                     const groupItemTypes =

@@ -39,7 +39,6 @@ interface SeerrItemDialogProps {
 
 const ItemTypeBadge = ({ mediaType }: { mediaType: SeerrMediaType }) => {
     const { t } = useTranslation('seerr');
-    console.log('mediaType', mediaType);
     const label = mediaType === 'movie' ? t('seerr_movie') : t('seerr_tv_show');
     const icon = mediaType === 'movie' ? <Clapperboard /> : <TvMinimalPlay />;
     return (

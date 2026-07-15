@@ -194,6 +194,18 @@ func GetSeerTvDetails(c fiber.Ctx) error {
 	return proxySeerRequest(c, "/api/v1/tv/"+tvId)
 }
 
+func GetSeerDiscoverTrending(c fiber.Ctx) error {
+	return proxySeerRequest(c, "/api/v1/discover/trending")
+}
+
+func GetSeerDiscoverMovies(c fiber.Ctx) error {
+	return proxySeerRequest(c, "/api/v1/discover/movies")
+}
+
+func GetSeerDiscoverTv(c fiber.Ctx) error {
+	return proxySeerRequest(c, "/api/v1/discover/tv")
+}
+
 func PostSeerRequest(c fiber.Ctx) error {
 	body := c.Body()
 

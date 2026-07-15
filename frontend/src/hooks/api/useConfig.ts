@@ -160,6 +160,16 @@ export interface StudiosSection extends BaseHomeScreenSection {
     limit?: number;
 }
 
+export const SEERR_DISCOVER_VARIANTS = ['trending', 'popularMovies', 'popularSeries'] as const;
+export type SeerrDiscoverVariant = (typeof SEERR_DISCOVER_VARIANTS)[number];
+
+/** A section showing a Seerr discovery list (trending, popular movies, popular series) */
+export interface SeerrDiscoverSection extends BaseHomeScreenSection {
+    type: 'seerrDiscover';
+    /** Which Seerr discovery list to show */
+    variant?: SeerrDiscoverVariant;
+}
+
 export type HomeScreenSection =
     | MediaBarSection
     | RecentlyAddedSection
@@ -170,7 +180,8 @@ export type HomeScreenSection =
     | ResumeSection
     | GenresSection
     | LibrariesSection
-    | StudiosSection;
+    | StudiosSection
+    | SeerrDiscoverSection;
 
 export const EPISODE_DISPLAYS = ['grid', 'row'] as const;
 export type EpisodeDisplay = (typeof EPISODE_DISPLAYS)[number];

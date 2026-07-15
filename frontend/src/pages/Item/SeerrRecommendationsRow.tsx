@@ -24,7 +24,7 @@ const skeletonItems = Array.from({ length: 5 }, (_, index) => (
     </div>
 ));
 
-const SeerrRecommendationPoster = ({
+export const SeerrRecommendationPoster = ({
     tmdbId,
     mediaType,
     title,

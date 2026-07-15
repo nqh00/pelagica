@@ -61,6 +61,9 @@ type HomeScreenSection struct {
 	RecommendationType RecommendationTypeFilter `json:"recommendationType,omitempty"`
 	ShowBasedOn        *bool                    `json:"showBasedOn,omitempty"`
 	ShowSimilarity     *bool                    `json:"showSimilarity,omitempty"`
+
+	// SeerrDiscover
+	Variant string `json:"variant,omitempty"`
 }
 
 type ItemPageSettings struct {
@@ -110,4 +113,5 @@ const (
 	SectionRecommended   = "streamystatsRecommended"
 	SectionGenres        = "genres"
 	SectionLibraries     = "libraries"
+	SectionSeerrDiscover = "seerrDiscover"
 )

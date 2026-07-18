@@ -21,6 +21,7 @@ interface VideoPlayerProps {
     subtitles?: SubtitleTrack[];
     subtitleFonts?: string[];
     onReady?: (player: VideoJsPlayer) => void;
+    onPlaybackError?: (error: MediaError | null) => void;
     isAudioSwitchRef: React.MutableRefObject<boolean>;
     subtitleTrackIndex: number | null;
 }
@@ -33,6 +34,7 @@ const VideoPlayer = ({
     subtitles,
     subtitleFonts,
     onReady,
+    onPlaybackError,
     isAudioSwitchRef,
     subtitleTrackIndex,
 }: VideoPlayerProps) => {
@@ -40,6 +42,11 @@ const VideoPlayer = ({
     const playerRef = useRef<VideoJsPlayer | null>(null);
     const hasSeekedRef = useRef(false);
     const assRendererRef = useRef<JASSUB | null>(null);
+    const onPlaybackErrorRef = useRef(onPlaybackError);
+
+    useEffect(() => {
+        onPlaybackErrorRef.current = onPlaybackError;
+    }, [onPlaybackError]);
 
     useEffect(() => {
         if (!videoRef.current) return;
@@ -59,6 +66,12 @@ const VideoPlayer = ({
         });
 
         playerRef.current = player;
+
+        player.on('error', () => {
+            const mediaError = player.error() as unknown as MediaError | null;
+            console.error('video.js playback error:', mediaError);
+            onPlaybackErrorRef.current?.(mediaError);
+        });
 
         player.ready(() => {
             onReady?.(player);

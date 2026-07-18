@@ -49,6 +49,7 @@ If you want to suggest new features or report bugs, please use the [GitHub Issue
 
 ### Integrated Services
 
+- **Seerr:** Discover new movies and TV shows to watch, and request them without leaving Pelagica.
 - **Streamystats:** Get your streamystats recommendations directly on your home page.
 - **kefintweaks Watchlist:** View and manage your kefintweaks watchlist within Pelagica.
 
